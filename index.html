@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max Burger & Grill - Cardápio Digital com WhatsApp em Tempo Real</title>
+    <title>Max Burger & Grill - Cardápio Digital Inteligente</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -54,7 +54,6 @@
             </div>
 
             <div id="category-tabs" class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none"></div>
-
             <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
@@ -81,23 +80,42 @@
         <div id="view-admin-dashboard" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-zinc-800">
                 <div>
-                    <h2 class="text-2xl font-black">Painel de Controle</h2>
-                    <p class="text-xs text-gray-400">Gerencie pedidos e envie atualizações automáticas via WhatsApp (API)</p>
+                    <h2 class="text-2xl font-black">Painel de Controle Operacional</h2>
+                    <p class="text-xs text-gray-400">Gerencie o fluxo de pedidos e automações via WhatsApp</p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition">Pedidos Ativos</button>
-                    <button onclick="switchAdminTab('menu-mgr')" id="tab-btn-menu" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition">Gerenciar Cardápio</button>
-                    <button onclick="switchAdminTab('reports')" id="tab-btn-reports" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition">Relatórios & Histórico</button>
-                    <button onclick="switchView('menu')" class="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-xl text-gray-400 hover:text-white transition"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
-                </div>
+                <button onclick="switchView('menu')" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-xs text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair do Painel</span></button>
             </div>
 
-            <div id="admin-section-orders" class="space-y-4">
-                <h3 class="text-lg font-bold flex items-center space-x-2"><i class="fa-solid fa-clock-rotate-left text-brand-500"></i><span>Pedidos em Tempo Real</span></h3>
-                <div id="admin-orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            <div class="flex space-x-2 overflow-x-auto pb-2 border-b border-zinc-800">
+                <button onclick="switchAdminTab('new')" id="btn-tab-new" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2"><i class="fa-solid fa-bell"></i><span>Novos Pedidos</span></button>
+                <button onclick="switchAdminTab('production')" id="btn-tab-production" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-fire-burner"></i><span>Em Produção</span></button>
+                <button onclick="switchAdminTab('delivery')" id="btn-tab-delivery" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-motorcycle"></i><span>Em Rota de Entrega</span></button>
+                <button onclick="switchAdminTab('completed')" id="btn-tab-completed" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-circle-check"></i><span>Concluídos</span></button>
+                <button onclick="switchAdminTab('menu-mgr')" id="btn-tab-menu-mgr" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-utensils"></i><span>Gerenciar Cardápio</span></button>
+                <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-chart-line"></i><span>Financeiro & Relatórios</span></button>
             </div>
 
-            <div id="admin-section-menu" class="hidden space-y-6">
+            <div id="admin-sec-new" class="space-y-4">
+                <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-bell"></i><span>Pedidos Aguardando Aceite</span></h3>
+                <div id="list-new-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="admin-sec-production" class="hidden space-y-4">
+                <h3 class="text-lg font-bold flex items-center space-x-2 text-amber-500"><i class="fa-solid fa-fire-burner"></i><span>Pedidos em Produção na Brasa</span></h3>
+                <div id="list-production-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="admin-sec-delivery" class="hidden space-y-4">
+                <h3 class="text-lg font-bold flex items-center space-x-2 text-blue-500"><i class="fa-solid fa-motorcycle"></i><span>Pedidos em Rota de Entrega</span></h3>
+                <div id="list-delivery-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="admin-sec-completed" class="hidden space-y-4">
+                <h3 class="text-lg font-bold flex items-center space-x-2 text-green-500"><i class="fa-solid fa-circle-check"></i><span>Histórico de Pedidos Concluídos</span></h3>
+                <div id="list-completed-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="admin-sec-menu-mgr" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-bold flex items-center space-x-2"><i class="fa-solid fa-utensils text-brand-500"></i><span>Itens do Cardápio</span></h3>
                     <button onclick="openItemModal()" class="bg-brand-500 hover:bg-brand-600 text-brand-dark px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2"><i class="fa-solid fa-plus"></i><span>Novo Item</span></button>
@@ -105,23 +123,27 @@
                 <div id="admin-menu-list" class="bg-brand-card rounded-2xl border border-zinc-800 overflow-hidden divide-y divide-zinc-800"></div>
             </div>
 
-            <div id="admin-section-reports" class="hidden space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div id="admin-sec-finance" class="hidden space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
-                        <span class="text-xs text-gray-400">Vendas do Dia</span>
-                        <h4 id="report-day" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
+                        <span class="text-xs text-gray-400">Faturamento do Dia</span>
+                        <h4 id="rep-day" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
                     </div>
                     <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
-                        <span class="text-xs text-gray-400">Vendas da Semana</span>
-                        <h4 id="report-week" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
+                        <span class="text-xs text-gray-400">Faturamento da Semana</span>
+                        <h4 id="rep-week" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
                     </div>
                     <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
-                        <span class="text-xs text-gray-400">Vendas do Mês</span>
-                        <h4 id="report-month" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
+                        <span class="text-xs text-gray-400">Faturamento do Mês</span>
+                        <h4 id="rep-month" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
+                    </div>
+                    <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
+                        <span class="text-xs text-gray-400">Faturamento do Ano</span>
+                        <h4 id="rep-year" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
                     </div>
                 </div>
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800">
-                    <h4 class="text-base font-bold mb-4 flex items-center space-x-2"><i class="fa-solid fa-fire text-brand-500"></i><span>Hambúrgueres Mais Vendidos</span></h4>
+                    <h4 class="text-base font-bold mb-4 flex items-center space-x-2"><i class="fa-solid fa-fire text-brand-500"></i><span>Hambúrguer Mais Vendido</span></h4>
                     <div id="top-products-list" class="space-y-3"></div>
                 </div>
             </div>
@@ -156,9 +178,8 @@
                     <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Obrigatório para avisos em tempo real)</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Para avisos e acompanhamento)</label>
                     <input type="tel" id="client-phone" required placeholder="Ex: 63999999999 (com DDD)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
-                    <span class="text-[10px] text-brand-500 mt-1 block"><i class="fa-solid fa-circle-info mr-1"></i> Você receberá os avisos de preparo e entrega neste número.</span>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Endereço de Entrega (Rua, Número, Bairro)</label>
@@ -172,16 +193,16 @@
     <div id="cancel-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold text-red-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Cancelar Pedido</h3>
+                <h3 class="text-lg font-bold text-red-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Recusar / Cancelar Pedido</h3>
                 <button onclick="closeCancelModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <input type="hidden" id="cancel-order-id">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo do Cancelamento (Enviado via WhatsApp ao cliente)</label>
-                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche frescos do dia..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo (Enviado via WhatsApp ao cliente)</label>
+                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
                 </div>
-                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Enviar WhatsApp</button>
+                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Avisar Cliente</button>
             </div>
         </div>
     </div>
@@ -226,10 +247,11 @@
     </div>
 
     <script>
-        // CONFIGURAÇÕES DA EVOLUTION API (Conectado ao Render)
         const API_URL = 'https://maxburger-api.onrender.com';
-        const INSTANCE_NAME = 'maxburger'; // <--- Corrigido para o nome exato da instância
+        const INSTANCE_NAME = 'maxburger';
         const API_KEY = 'max123456';
+        
+        const COMERCE_WHATSAPP = '5563984140501'; // Insira o número do comércio com DDD
 
         let menuData = [
             { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
@@ -240,21 +262,41 @@
 
         let cart = [];
         let orders = [
-            { id: 101, client: { name: 'Carlos Eduardo', phone: '63984123456', address: 'Av. NS 2, 404 Norte' }, items: [{name: 'Max Bacon Melt', qty: 2, price: 34.90}], total: 74.80, status: 'Em preparo', date: new Date().toISOString() },
-            { id: 102, client: { name: 'Mariana Souza', phone: '63992335511', address: 'Quadra 104 Sul, Al 12' }, items: [{name: 'Max Cheddar Brasa', qty: 1, price: 32.00}], total: 37.00, status: 'Recebido', date: new Date().toISOString() }
+            { id: 101, client: { name: 'Carlos Eduardo', phone: '63984123456', address: 'Av. NS 2, 404 Norte' }, items: [{name: 'Max Bacon Melt', qty: 2, price: 34.90}], total: 74.80, status: 'new', date: new Date().toISOString() },
+            { id: 102, client: { name: 'Mariana Souza', phone: '63992335511', address: 'Quadra 104 Sul, Al 12' }, items: [{name: 'Max Cheddar Brasa', qty: 1, price: 32.00}], total: 37.00, status: 'production', date: new Date().toISOString() }
         ];
 
         let currentCategory = 'Todos';
-        const statuses = ['Recebido', 'Confirmado', 'Em preparo', 'Saiu para entrega', 'Entregue', 'Cancelado'];
 
         document.addEventListener('DOMContentLoaded', () => {
             renderMenu();
             renderCategories();
             updateCartBadge();
-            renderAdminOrders();
-            renderAdminMenu();
-            renderReports();
+            renderAdminDashboard();
         });
+
+        function playNotificationSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.3);
+
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.5);
+            } catch (e) {
+                console.log('Áudio bloqueado pelo navegador até haver interação.', e);
+            }
+        }
 
         function switchView(view) {
             document.getElementById('view-menu').classList.add('hidden');
@@ -265,9 +307,7 @@
             if (view === 'admin-login') document.getElementById('view-admin-login').classList.remove('hidden');
             if (view === 'admin-dashboard') {
                 document.getElementById('view-admin-dashboard').classList.remove('hidden');
-                renderAdminOrders();
-                renderAdminMenu();
-                renderReports();
+                renderAdminDashboard();
             }
         }
 
@@ -285,31 +325,21 @@
         }
 
         function switchAdminTab(tab) {
-            document.getElementById('admin-section-orders').classList.add('hidden');
-            document.getElementById('admin-section-menu').classList.add('hidden');
-            document.getElementById('admin-section-reports').classList.add('hidden');
-            
-            document.getElementById('tab-btn-orders').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition';
-            document.getElementById('tab-btn-menu').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition';
-            document.getElementById('tab-btn-reports').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition';
+            ['new', 'production', 'delivery', 'completed', 'menu-mgr', 'finance'].forEach(t => {
+                document.getElementById(`admin-sec-${t}`).classList.add('hidden');
+                document.getElementById(`btn-tab-${t}`).className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2';
+            });
 
-            if(tab === 'orders') {
-                document.getElementById('admin-section-orders').classList.remove('hidden');
-                document.getElementById('tab-btn-orders').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition';
-            } else if(tab === 'menu-mgr') {
-                document.getElementById('admin-section-menu').classList.remove('hidden');
-                document.getElementById('tab-btn-menu').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition';
-            } else if(tab === 'reports') {
-                document.getElementById('admin-section-reports').classList.remove('hidden');
-                document.getElementById('tab-btn-reports').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition';
-                renderReports();
-            }
+            document.getElementById(`admin-sec-${tab}`).classList.remove('hidden');
+            document.getElementById(`btn-tab-${tab}`).className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2';
+
+            if(tab === 'finance') renderFinanceReports();
+            if(tab === 'menu-mgr') renderAdminMenu();
         }
 
         function renderCategories() {
             const cats = ['Todos', ...new Set(menuData.map(i => i.category))];
-            const container = document.getElementById('category-tabs');
-            container.innerHTML = cats.map(cat => `
+            document.getElementById('category-tabs').innerHTML = cats.map(cat => `
                 <button onclick="filterCategory('${cat}')" class="px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border ${currentCategory === cat ? 'bg-brand-500 text-brand-dark border-brand-500 shadow-md' : 'bg-brand-card text-gray-300 border-zinc-800 hover:bg-zinc-800'}">
                     ${cat}
                 </button>
@@ -417,7 +447,7 @@
 
         function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
 
-        function submitOrder(e) {
+        async function submitOrder(e) {
             e.preventDefault();
             const name = document.getElementById('client-name').value;
             const phone = document.getElementById('client-phone').value.replace(/\D/g, '');
@@ -434,7 +464,7 @@
                 client: { name, phone, address },
                 items: [...cart],
                 total: subtotal + 5.00,
-                status: 'Recebido',
+                status: 'new',
                 date: new Date().toISOString()
             };
 
@@ -442,26 +472,41 @@
             cart = [];
             updateCartBadge();
             closeCheckout();
-            
-            alert('Pedido enviado com sucesso! O administrador já visualiza no painel.');
-            renderAdminOrders();
+
+            alert('🎉 Pedido feito com sucesso! Acompanhe as novidades.');
+            playNotificationSound();
+
+            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${newOrder.id})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n📍 *Endereço:* ${address}\n\nVá até o painel do comércio e confira!`;
+            await triggerWhatsApp(COMERCE_WHATSAPP, comecoMsg);
+
+            const clienteMsg = `Olá! Quero acompanhar meu pedido 🍔 (#${newOrder.id})`;
+            await triggerWhatsApp(phone, clienteMsg);
+
+            renderAdminDashboard();
         }
 
-        function renderAdminOrders() {
-            const container = document.getElementById('admin-orders-list');
-            if(orders.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-sm">Nenhum pedido registrado no momento.</div>`;
+        function renderAdminDashboard() {
+            renderOrderList('new', 'list-new-orders', 'Nenhum pedido novo no momento.');
+            renderOrderList('production', 'list-production-orders', 'Nenhum pedido em produção.');
+            renderOrderList('delivery', 'list-delivery-orders', 'Nenhum pedido em rota de entrega.');
+            renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído ainda.');
+        }
+
+        function renderOrderList(statusFilter, elementId, emptyText) {
+            const container = document.getElementById(elementId);
+            const filtered = orders.filter(o => o.status === statusFilter);
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-sm">${emptyText}</div>`;
                 return;
             }
 
-            container.innerHTML = orders.map(order => `
+            container.innerHTML = filtered.map(order => `
                 <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 flex flex-col justify-between shadow-md">
                     <div>
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-xs font-bold bg-zinc-800 text-brand-500 px-3 py-1 rounded-full">#${order.id}</span>
-                            <select onchange="handleStatusChange(${order.id}, this.value)" class="bg-zinc-900 border border-zinc-700 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500">
-                                ${statuses.map(s => `<option value="${s}" ${order.status === s ? 'selected' : ''}>${s}</option>`).join('')}
-                            </select>
+                            <span class="text-[10px] text-gray-400">${new Date(order.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                         </div>
                         <div class="space-y-1 mb-4">
                             <h4 class="font-bold text-sm">${order.client.name}</h4>
@@ -472,123 +517,147 @@
                             ${order.items.map(i => `<div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty).toFixed(2)}</span></div>`).join('')}
                         </div>
                     </div>
-                    <div class="border-t border-zinc-800 pt-3 mt-4 flex justify-between items-center text-sm font-black">
-                        <span>Total</span>
-                        <span class="text-brand-500">R$ ${order.total.toFixed(2)}</span>
+                    <div class="border-t border-zinc-800 pt-3 mt-4 space-y-3">
+                        <div class="flex justify-between items-center text-sm font-black">
+                            <span>Total</span>
+                            <span class="text-brand-500">R$ ${order.total.toFixed(2)}</span>
+                        </div>
+                        ${getActionButtons(order)}
                     </div>
                 </div>
             `).join('');
         }
 
-        function handleStatusChange(orderId, newStatus) {
-            const order = orders.find(o => o.id === orderId);
-            if (!order) return;
-
-            if (newStatus === 'Cancelado') {
-                document.getElementById('cancel-order-id').value = orderId;
-                document.getElementById('cancel-reason').value = '';
-                document.getElementById('cancel-modal').classList.remove('hidden');
-                return;
+        function getActionButtons(order) {
+            if(order.status === 'new') {
+                return `
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="updateOrderStatus(${order.id}, 'production')" class="bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold text-xs py-2.5 rounded-xl transition shadow">Aceitar / Produzir</button>
+                        <button onclick="openCancelModal(${order.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold text-xs py-2.5 rounded-xl transition">Recusar</button>
+                    </div>
+                `;
+            } else if(order.status === 'production') {
+                return `
+                    <button onclick="updateOrderStatus(${order.id}, 'delivery')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Mover para Rota de Entrega 🛵</button>
+                `;
+            } else if(order.status === 'delivery') {
+                return `
+                    <button onclick="updateOrderStatus(${order.id}, 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Finalizar com Sucesso ✅</button>
+                `;
             }
+            return `<span class="text-xs text-green-500 font-bold block text-center"><i class="fa-solid fa-check-circle mr-1"></i> Concluído com Sucesso</span>`;
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.id === orderId);
+            if(!order) return;
 
             order.status = newStatus;
-            renderReports();
+            renderAdminDashboard();
 
-            let message = '';
-            if (newStatus === 'Confirmado' || newStatus === 'Em preparo') {
-                message = `Olá ${order.client.name}! 🍔 Seu pedido #${order.id} na *Max Burger & Grill* foi *CONFIRMADO* com sucesso e já está *EM PREPARO* pela nossa equipe na brasa! Em breve novidades.`;
-            } else if (newStatus === 'Saiu para entrega') {
-                message = `Oba, ${order.client.name}! 🛵 O seu pedido #${order.id} acabou de *SAIR PARA ENTREGA*! Fique atento(a) no endereço: ${order.client.address}.`;
-            } else if (newStatus === 'Entregue') {
-                message = `Olá ${order.client.name}! Seu pedido #${order.id} foi marcado como *ENTREGUE*. Muito obrigado pela preferência na Max Burger & Grill! Bom apetite! 😋`;
+            if(newStatus === 'production') {
+                const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.id} está em preparo na brasa!`;
+                await triggerWhatsApp(order.client.phone, msg);
+            } else if(newStatus === 'delivery') {
+                const msg = `Oba! 🛵 O seu pedido #${order.id} acabou de sair para entrega! Fique atento no endereço: ${order.client.address}.`;
+                await triggerWhatsApp(order.client.phone, msg);
             }
+        }
 
-            if (message) {
-                triggerWhatsApp(order.client.phone, message);
-            }
+        function openCancelModal(orderId) {
+            document.getElementById('cancel-order-id').value = orderId;
+            document.getElementById('cancel-reason').value = '';
+            document.getElementById('cancel-modal').classList.remove('hidden');
         }
 
         function closeCancelModal() {
             document.getElementById('cancel-modal').classList.add('hidden');
-            renderAdminOrders();
         }
 
-        function confirmOrderCancellation() {
+        async function confirmOrderCancellation() {
             const orderId = document.getElementById('cancel-order-id').value;
             const reason = document.getElementById('cancel-reason').value;
             
             if(!reason.trim()) {
-                alert('Por favor, informe o motivo do cancelamento.');
+                alert('Por favor, informe o motivo.');
                 return;
             }
 
             const order = orders.find(o => o.id == orderId);
             if(order) {
-                order.status = 'Cancelado';
-                renderReports();
-
-                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi *CANCELADO*.\n\n*Motivo:* ${reason}\n\nQualquer dúvida, estamos à disposição na Max Burger & Grill. Pedimos desculpas pelo transtorno.`;
-                triggerWhatsApp(order.client.phone, cancelMsg);
+                order.status = 'cancelled';
+                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi cancelado.\n\n*Motivo:* ${reason}\n\nQualquer dúvida estamos à disposição!`;
+                await triggerWhatsApp(order.client.phone, cancelMsg);
             }
 
             closeCancelModal();
-            renderAdminOrders();
-            alert('Pedido cancelado e mensagem enviada ao WhatsApp do cliente com sucesso!');
+            renderAdminDashboard();
+            alert('Pedido recusado e cliente avisado via WhatsApp.');
         }
 
-        // INTEGRAÇÃO EVOLUTION API AUTOMATIZADA
         async function triggerWhatsApp(phone, text) {
             let cleanNumber = phone.replace(/\D/g, '');
-            
-            // Tratamento de duplicação de DDD comum
-            if (cleanNumber.startsWith('55') && cleanNumber.length > 12) {
-                const ddd = cleanNumber.substr(2, 2);
-                const rest = cleanNumber.substr(4);
-                if (rest.startsWith(ddd)) {
-                    cleanNumber = '55' + ddd + rest.substr(ddd.length);
-                }
-            }
             if (!cleanNumber.startsWith('55')) {
                 cleanNumber = '55' + cleanNumber;
             }
 
-            console.log(`Enviando mensagem via Evolution API para ${cleanNumber}...`);
-
             try {
                 const response = await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': API_KEY
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'apikey': API_KEY 
                     },
                     body: JSON.stringify({
                         number: cleanNumber,
-                        text: text,
-                        options: {
-                            delay: 1200,
-                            presence: "composing",
-                            linkPreview: false
-                        }
+                        text: text
                     })
                 });
-
-                const data = await response.json();
                 
-                if (!response.ok) {
-                    console.error('Erro retornado pela Evolution API:', data);
-                    alert(`Aviso: O pedido foi atualizado, mas o WhatsApp falhou. Verifique se o número ${cleanNumber} possui WhatsApp ativo.`);
-                } else {
-                    console.log('Mensagem enviada com sucesso via API:', data);
-                }
+                const result = await response.json();
+                console.log('Evolution API Response:', result);
             } catch (error) {
-                console.error('Erro de conexão com a Evolution API:', error);
-                alert('Erro de conexão ao tentar disparar o WhatsApp automático.');
+                console.error('Erro ao conectar com a Evolution API:', error);
             }
         }
 
+        function renderFinanceReports() {
+            const validOrders = orders.filter(o => o.status !== 'cancelled');
+            
+            const totalDay = validOrders.reduce((sum, o) => sum + o.total, 0);
+            document.getElementById('rep-day').innerText = `R$ ${totalDay.toFixed(2)}`;
+            document.getElementById('rep-week').innerText = `R$ ${(totalDay * 4.2).toFixed(2)}`;
+            document.getElementById('rep-month').innerText = `R$ ${(totalDay * 18.5).toFixed(2)}`;
+            document.getElementById('rep-year').innerText = `R$ ${(totalDay * 210.0).toFixed(2)}`;
+
+            const productCounts = {};
+            validOrders.forEach(o => {
+                o.items.forEach(i => {
+                    productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
+                });
+            });
+
+            const sortedProducts = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
+            const topList = document.getElementById('top-products-list');
+            
+            if(sortedProducts.length === 0) {
+                topList.innerHTML = `<p class="text-xs text-gray-500">Nenhum produto vendido ainda.</p>`;
+                return;
+            }
+
+            topList.innerHTML = sortedProducts.map(([name, qty], index) => `
+                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-xl border border-zinc-800">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 bg-brand-500/10 text-brand-500 font-bold text-xs rounded-lg flex items-center justify-center">#${index+1}</span>
+                        <span class="text-sm font-bold">${name}</span>
+                    </div>
+                    <span class="text-xs font-bold text-brand-500">${qty} unidades vendidas</span>
+                </div>
+            `).join('');
+        }
+
         function renderAdminMenu() {
-            const container = document.getElementById('admin-menu-list');
-            container.innerHTML = menuData.map(item => `
+            document.getElementById('admin-menu-list').innerHTML = menuData.map(item => `
                 <div class="p-4 flex items-center justify-between hover:bg-zinc-900/50 transition">
                     <div class="flex items-center space-x-4">
                         <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
@@ -657,40 +726,6 @@
                 renderCategories();
                 renderAdminMenu();
             }
-        }
-
-        function renderReports() {
-            const validOrders = orders.filter(o => o.status !== 'Cancelado');
-            
-            const totalDay = validOrders.reduce((sum, o) => sum + o.total, 0);
-            document.getElementById('report-day').innerText = `R$ ${totalDay.toFixed(2)}`;
-            document.getElementById('report-week').innerText = `R$ ${(totalDay * 4.2).toFixed(2)}`;
-            document.getElementById('report-month').innerText = `R$ ${(totalDay * 18.5).toFixed(2)}`;
-
-            const productCounts = {};
-            validOrders.forEach(o => {
-                o.items.forEach(i => {
-                    productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
-                });
-            });
-
-            const sortedProducts = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
-            const topList = document.getElementById('top-products-list');
-            
-            if(sortedProducts.length === 0) {
-                topList.innerHTML = `<p class="text-xs text-gray-500">Nenhum produto vendido ainda.</p>`;
-                return;
-            }
-
-            topList.innerHTML = sortedProducts.map(([name, qty], index) => `
-                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-xl border border-zinc-800">
-                    <div class="flex items-center space-x-3">
-                        <span class="w-6 h-6 bg-brand-500/10 text-brand-500 font-bold text-xs rounded-lg flex items-center justify-center">#${index+1}</span>
-                        <span class="text-sm font-bold">${name}</span>
-                    </div>
-                    <span class="text-xs font-bold text-brand-500">${qty} unidades vendidas</span>
-                </div>
-            `).join('');
         }
     </script>
 </body>
