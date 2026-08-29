@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max Burger & Grill - Painel Integrado à Evolution API</title>
+    <title>Max Burger & Grill - Cardápio Digital com WhatsApp em Tempo Real</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -20,14 +20,13 @@
 </head>
 <body class="bg-brand-dark text-gray-100 font-sans min-h-screen flex flex-col">
 
-    <!-- HEADER -->
     <header class="bg-brand-card border-b border-gray-800 sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('menu')">
                 <div class="bg-brand-500 text-brand-dark p-2.5 rounded-xl font-black text-xl shadow-md"><i class="fa-solid fa-burger"></i></div>
                 <div>
                     <h1 class="text-xl font-bold tracking-wide">Max Burger & Grill</h1>
-                    <p class="text-xs text-brand-500">API Conectada & Ativa</p>
+                    <p class="text-xs text-brand-500">Artesanal & Irresistível</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -43,29 +42,27 @@
         </div>
     </header>
 
-    <!-- MAIN APP CONTAINER -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
 
-        <!-- VIEW: CARDÁPIO (CLIENTE) -->
         <div id="view-menu" class="space-y-6">
             <div class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center">
                 <div class="relative z-10 max-w-lg">
-                    <span class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via Evolution API</span>
+                    <span class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via WhatsApp</span>
                     <h2 class="text-2xl sm:text-4xl font-black text-white mb-2">O Verdadeiro Sabor Artesanal</h2>
-                    <p class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Peça e receba atualizações automáticas no WhatsApp!</p>
+                    <p class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
                 </div>
             </div>
 
             <div id="category-tabs" class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none"></div>
+
             <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- VIEW: LOGIN ADMIN -->
         <div id="view-admin-login" class="hidden max-w-md mx-auto mt-12 bg-brand-card p-8 rounded-2xl border border-zinc-800 shadow-2xl">
             <div class="text-center mb-6">
                 <div class="bg-brand-500/10 text-brand-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3 class="text-xl font-bold">Painel Administrativo</h3>
-                <p class="text-xs text-gray-400 mt-1">WhatsApp Conectado: 63984140501</p>
+                <p class="text-xs text-gray-400 mt-1">Gerenciamento conectado via Evolution API</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
@@ -81,12 +78,11 @@
             </form>
         </div>
 
-        <!-- VIEW: PAINEL ADMINISTRADOR -->
         <div id="view-admin-dashboard" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-zinc-800">
                 <div>
                     <h2 class="text-2xl font-black">Painel de Controle</h2>
-                    <p class="text-xs text-gray-400">Com API Oficial do WhatsApp Integrada</p>
+                    <p class="text-xs text-gray-400">Gerencie pedidos e envie atualizações automáticas via WhatsApp (API)</p>
                 </div>
                 <div class="flex items-center space-x-2">
                     <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition">Pedidos Ativos</button>
@@ -96,16 +92,11 @@
                 </div>
             </div>
 
-            <!-- SEÇÃO: PEDIDOS ATIVOS -->
             <div id="admin-section-orders" class="space-y-4">
-                <div class="flex justify-between items-center bg-brand-card p-4 rounded-xl border border-zinc-800">
-                    <h3 class="text-sm font-bold flex items-center space-x-2"><i class="fa-solid fa-bell text-brand-500 animate-bounce"></i><span>Alarme Sonoro e API Ativos</span></h3>
-                    <button onclick="testSoundAlert()" class="bg-zinc-800 hover:bg-zinc-700 text-xs px-3 py-1.5 rounded-lg border border-zinc-700">Testar Alarme</button>
-                </div>
+                <h3 class="text-lg font-bold flex items-center space-x-2"><i class="fa-solid fa-clock-rotate-left text-brand-500"></i><span>Pedidos em Tempo Real</span></h3>
                 <div id="admin-orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- SEÇÃO: GERENCIAR CARDÁPIO -->
             <div id="admin-section-menu" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-bold flex items-center space-x-2"><i class="fa-solid fa-utensils text-brand-500"></i><span>Itens do Cardápio</span></h3>
@@ -114,7 +105,6 @@
                 <div id="admin-menu-list" class="bg-brand-card rounded-2xl border border-zinc-800 overflow-hidden divide-y divide-zinc-800"></div>
             </div>
 
-            <!-- SEÇÃO: RELATÓRIOS E HISTÓRICO -->
             <div id="admin-section-reports" class="hidden space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
@@ -138,7 +128,6 @@
         </div>
     </main>
 
-    <!-- MODAL DO CARRINHO -->
     <div id="cart-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex justify-end backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md h-full flex flex-col p-6 border-l border-zinc-800 shadow-2xl">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800">
@@ -155,7 +144,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CHECKOUT -->
     <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -168,19 +156,19 @@
                     <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Para receber o andamento)</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Obrigatório para avisos em tempo real)</label>
                     <input type="tel" id="client-phone" required placeholder="Ex: 63999999999 (com DDD)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                    <span class="text-[10px] text-brand-500 mt-1 block"><i class="fa-solid fa-circle-info mr-1"></i> Você receberá os avisos de preparo e entrega neste número.</span>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Endereço de Entrega (Rua, Número, Bairro)</label>
                     <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000 - Centro" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-4">Enviar Pedido Via API</button>
+                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-4">Enviar Pedido Agora</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DE MOTIVO DE CANCELAMENTO -->
     <div id="cancel-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -190,15 +178,14 @@
             <input type="hidden" id="cancel-order-id">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo do Cancelamento</label>
-                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo do Cancelamento (Enviado via WhatsApp ao cliente)</label>
+                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche frescos do dia..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
                 </div>
-                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento</button>
+                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Enviar WhatsApp</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE CADASTRO/EDIÇÃO DE ITEM (ADMIN) -->
     <div id="item-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -238,13 +225,11 @@
         </div>
     </div>
 
-    <!-- SCRIPT COM INTEGRAÇÃO DA EVOLUTION API -->
     <script>
-        // CONFIGURAÇÕES DA SUA API NO RENDER
-        const API_URL = "https://maxburger-api.onrender.com";
-        const INSTANCE_NAME = "maxburger";
-        const API_KEY = "Max123456";
-        const ADMIN_WHATSAPP = "556384140501";
+        // CONFIGURAÇÕES DA EVOLUTION API (Conectado ao Render)
+        const API_URL = 'https://maxburger-api.onrender.com';
+        const INSTANCE_NAME = 'maxburger'; // <--- Corrigido para o nome exato da instância
+        const API_KEY = 'max123456';
 
         let menuData = [
             { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
@@ -255,11 +240,12 @@
 
         let cart = [];
         let orders = [
-            { id: 101, client: { name: 'Carlos Eduardo', phone: '63984123456', address: 'Av. NS 2, 404 Norte' }, items: [{name: 'Max Bacon Melt', qty: 2, price: 34.90}], total: 74.80, status: 'Em preparo', date: new Date().toISOString() }
+            { id: 101, client: { name: 'Carlos Eduardo', phone: '63984123456', address: 'Av. NS 2, 404 Norte' }, items: [{name: 'Max Bacon Melt', qty: 2, price: 34.90}], total: 74.80, status: 'Em preparo', date: new Date().toISOString() },
+            { id: 102, client: { name: 'Mariana Souza', phone: '63992335511', address: 'Quadra 104 Sul, Al 12' }, items: [{name: 'Max Cheddar Brasa', qty: 1, price: 32.00}], total: 37.00, status: 'Recebido', date: new Date().toISOString() }
         ];
 
         let currentCategory = 'Todos';
-        const adminStatuses = ['Em preparo', 'Saiu para entrega', 'Cancelado'];
+        const statuses = ['Recebido', 'Confirmado', 'Em preparo', 'Saiu para entrega', 'Entregue', 'Cancelado'];
 
         document.addEventListener('DOMContentLoaded', () => {
             renderMenu();
@@ -318,55 +304,6 @@
                 document.getElementById('tab-btn-reports').className = 'px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition';
                 renderReports();
             }
-        }
-
-        // FUNÇÃO DE ENVIO AUTOMÁTICO VIA EVOLUTION API
-        async function sendWhatsAppMessage(number, text) {
-            try {
-                // Formata o número (garante que tenha o DDI 55)
-                let cleanNumber = number.replace(/\D/g, '');
-                if (!cleanNumber.startsWith('55')) cleanNumber = '55' + cleanNumber;
-
-                const response = await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': API_KEY
-                    },
-                    body: JSON.stringify({
-                        number: cleanNumber,
-                        text: text
-                    })
-                });
-
-                const data = await response.json();
-                console.log('Mensagem enviada via API:', data);
-            } catch (error) {
-                console.error('Erro ao enviar mensagem pela API:', error);
-            }
-        }
-
-        function playAlarmSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.4);
-            } catch(e) {
-                console.log("Áudio bloqueado até interação.");
-            }
-        }
-
-        function testSoundAlert() {
-            playAlarmSound();
-            alert('Alarme sonoro acionado!');
         }
 
         function renderCategories() {
@@ -480,28 +417,24 @@
 
         function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
 
-        // ENVIO DO PEDIDO VIA API
-        async function submitOrder(e) {
+        function submitOrder(e) {
             e.preventDefault();
             const name = document.getElementById('client-name').value;
             const phone = document.getElementById('client-phone').value.replace(/\D/g, '');
             const address = document.getElementById('client-address').value;
 
             if(phone.length < 10) {
-                alert('Informe um número de WhatsApp válido com DDD!');
+                alert('Por favor, informe um número de WhatsApp válido com DDD!');
                 return;
             }
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            const itemsListText = cart.map(i => `• ${i.qty}x ${i.name} (R$ ${(i.price * i.qty).toFixed(2)})`).join('\n');
-            const totalFinal = subtotal + 5.00;
-
             const newOrder = {
                 id: Math.floor(100 + Math.random() * 900),
                 client: { name, phone, address },
                 items: [...cart],
-                total: totalFinal,
-                status: 'Em preparo',
+                total: subtotal + 5.00,
+                status: 'Recebido',
                 date: new Date().toISOString()
             };
 
@@ -509,21 +442,15 @@
             cart = [];
             updateCartBadge();
             closeCheckout();
-
-            playAlarmSound();
-
-            // Mensagem para o Dono enviada direto pela API
-            const ownerMsg = `🚨 *NOVO PEDIDO RECEBIDO!* (#${newOrder.id})\n\n👤 *Cliente:* ${name}\n📞 *WhatsApp:* ${phone}\n📍 *Endereço:* ${address}\n\n🛒 *Itens:* \n${itemsListText}\n\n🛵 *Taxa de Entrega:* R$ 5,00\n💰 *TOTAL:* R$ ${totalFinal.toFixed(2)}`;
-            await sendWhatsAppMessage(ADMIN_WHATSAPP, ownerMsg);
-
-            alert('Pedido realizado com sucesso! O alarme tocou e a API enviou o aviso automaticamente.');
+            
+            alert('Pedido enviado com sucesso! O administrador já visualiza no painel.');
             renderAdminOrders();
         }
 
         function renderAdminOrders() {
             const container = document.getElementById('admin-orders-list');
             if(orders.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-sm">Nenhum pedido ativo no momento.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-sm">Nenhum pedido registrado no momento.</div>`;
                 return;
             }
 
@@ -532,8 +459,8 @@
                     <div>
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-xs font-bold bg-zinc-800 text-brand-500 px-3 py-1 rounded-full">#${order.id}</span>
-                            <select onchange="handleAdminStatusChange(${order.id}, this.value)" class="bg-zinc-900 border border-zinc-700 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500">
-                                ${adminStatuses.map(s => `<option value="${s}" ${order.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+                            <select onchange="handleStatusChange(${order.id}, this.value)" class="bg-zinc-900 border border-zinc-700 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500">
+                                ${statuses.map(s => `<option value="${s}" ${order.status === s ? 'selected' : ''}>${s}</option>`).join('')}
                             </select>
                         </div>
                         <div class="space-y-1 mb-4">
@@ -553,8 +480,7 @@
             `).join('');
         }
 
-        // ALTERAÇÃO DE STATUS VIA API
-        async function handleAdminStatusChange(orderId, newStatus) {
+        function handleStatusChange(orderId, newStatus) {
             const order = orders.find(o => o.id === orderId);
             if (!order) return;
 
@@ -568,15 +494,17 @@
             order.status = newStatus;
             renderReports();
 
-            let clientMessage = '';
-            if (newStatus === 'Em preparo') {
-                clientMessage = `Olá ${order.client.name}! 🍔 Seu pedido #${order.id} foi confirmado e já está *EM PREPARO* na nossa brasa!`;
+            let message = '';
+            if (newStatus === 'Confirmado' || newStatus === 'Em preparo') {
+                message = `Olá ${order.client.name}! 🍔 Seu pedido #${order.id} na *Max Burger & Grill* foi *CONFIRMADO* com sucesso e já está *EM PREPARO* pela nossa equipe na brasa! Em breve novidades.`;
             } else if (newStatus === 'Saiu para entrega') {
-                clientMessage = `Oba, ${order.client.name}! 🛵 O seu pedido #${order.id} acabou de *SAIR PARA ENTREGA* para o endereço: ${order.client.address}.`;
+                message = `Oba, ${order.client.name}! 🛵 O seu pedido #${order.id} acabou de *SAIR PARA ENTREGA*! Fique atento(a) no endereço: ${order.client.address}.`;
+            } else if (newStatus === 'Entregue') {
+                message = `Olá ${order.client.name}! Seu pedido #${order.id} foi marcado como *ENTREGUE*. Muito obrigado pela preferência na Max Burger & Grill! Bom apetite! 😋`;
             }
 
-            if (clientMessage) {
-                await sendWhatsAppMessage(order.client.phone, clientMessage);
+            if (message) {
+                triggerWhatsApp(order.client.phone, message);
             }
         }
 
@@ -585,12 +513,12 @@
             renderAdminOrders();
         }
 
-        async function confirmOrderCancellation() {
+        function confirmOrderCancellation() {
             const orderId = document.getElementById('cancel-order-id').value;
             const reason = document.getElementById('cancel-reason').value;
             
             if(!reason.trim()) {
-                alert('Informe o motivo do cancelamento.');
+                alert('Por favor, informe o motivo do cancelamento.');
                 return;
             }
 
@@ -599,13 +527,63 @@
                 order.status = 'Cancelado';
                 renderReports();
 
-                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi *CANCELADO*.\n\n*Motivo:* ${reason}\n\nQualquer dúvida, estamos à disposição na Max Burger & Grill.`;
-                await sendWhatsAppMessage(order.client.phone, cancelMsg);
+                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi *CANCELADO*.\n\n*Motivo:* ${reason}\n\nQualquer dúvida, estamos à disposição na Max Burger & Grill. Pedimos desculpas pelo transtorno.`;
+                triggerWhatsApp(order.client.phone, cancelMsg);
             }
 
             closeCancelModal();
             renderAdminOrders();
-            alert('Pedido cancelado e aviso disparado ao cliente pela API!');
+            alert('Pedido cancelado e mensagem enviada ao WhatsApp do cliente com sucesso!');
+        }
+
+        // INTEGRAÇÃO EVOLUTION API AUTOMATIZADA
+        async function triggerWhatsApp(phone, text) {
+            let cleanNumber = phone.replace(/\D/g, '');
+            
+            // Tratamento de duplicação de DDD comum
+            if (cleanNumber.startsWith('55') && cleanNumber.length > 12) {
+                const ddd = cleanNumber.substr(2, 2);
+                const rest = cleanNumber.substr(4);
+                if (rest.startsWith(ddd)) {
+                    cleanNumber = '55' + ddd + rest.substr(ddd.length);
+                }
+            }
+            if (!cleanNumber.startsWith('55')) {
+                cleanNumber = '55' + cleanNumber;
+            }
+
+            console.log(`Enviando mensagem via Evolution API para ${cleanNumber}...`);
+
+            try {
+                const response = await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': API_KEY
+                    },
+                    body: JSON.stringify({
+                        number: cleanNumber,
+                        text: text,
+                        options: {
+                            delay: 1200,
+                            presence: "composing",
+                            linkPreview: false
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    console.error('Erro retornado pela Evolution API:', data);
+                    alert(`Aviso: O pedido foi atualizado, mas o WhatsApp falhou. Verifique se o número ${cleanNumber} possui WhatsApp ativo.`);
+                } else {
+                    console.log('Mensagem enviada com sucesso via API:', data);
+                }
+            } catch (error) {
+                console.error('Erro de conexão com a Evolution API:', error);
+                alert('Erro de conexão ao tentar disparar o WhatsApp automático.');
+            }
         }
 
         function renderAdminMenu() {
@@ -673,7 +651,7 @@
         }
 
         function deleteMenuItem(id) {
-            if(confirm('Deseja excluir este item?')) {
+            if(confirm('Tem certeza que deseja excluir este item?')) {
                 menuData = menuData.filter(i => i.id !== id);
                 renderMenu();
                 renderCategories();
