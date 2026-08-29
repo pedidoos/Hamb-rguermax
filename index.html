@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max Burger & Grill - Painel Profissional & Alarme Sonoro</title>
+    <title>Max Burger & Grill - Painel Integrado à Evolution API</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -27,7 +27,7 @@
                 <div class="bg-brand-500 text-brand-dark p-2.5 rounded-xl font-black text-xl shadow-md"><i class="fa-solid fa-burger"></i></div>
                 <div>
                     <h1 class="text-xl font-bold tracking-wide">Max Burger & Grill</h1>
-                    <p class="text-xs text-brand-500">Artesanal & Irresistível</p>
+                    <p class="text-xs text-brand-500">API Conectada & Ativa</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -50,9 +50,9 @@
         <div id="view-menu" class="space-y-6">
             <div class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center">
                 <div class="relative z-10 max-w-lg">
-                    <span class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos com Alerta ao Dono</span>
+                    <span class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via Evolution API</span>
                     <h2 class="text-2xl sm:text-4xl font-black text-white mb-2">O Verdadeiro Sabor Artesanal</h2>
-                    <p class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Peça e receba atualizações direto no seu WhatsApp!</p>
+                    <p class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Peça e receba atualizações automáticas no WhatsApp!</p>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
             <div class="text-center mb-6">
                 <div class="bg-brand-500/10 text-brand-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3 class="text-xl font-bold">Painel Administrativo</h3>
-                <p class="text-xs text-gray-400 mt-1">Loja WhatsApp configurada: 63984140501</p>
+                <p class="text-xs text-gray-400 mt-1">WhatsApp Conectado: 63984140501</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
@@ -86,7 +86,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-zinc-800">
                 <div>
                     <h2 class="text-2xl font-black">Painel de Controle</h2>
-                    <p class="text-xs text-gray-400">Com Alerta Sonoro Ativo para Novos Pedidos</p>
+                    <p class="text-xs text-gray-400">Com API Oficial do WhatsApp Integrada</p>
                 </div>
                 <div class="flex items-center space-x-2">
                     <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="px-4 py-2 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition">Pedidos Ativos</button>
@@ -99,7 +99,7 @@
             <!-- SEÇÃO: PEDIDOS ATIVOS -->
             <div id="admin-section-orders" class="space-y-4">
                 <div class="flex justify-between items-center bg-brand-card p-4 rounded-xl border border-zinc-800">
-                    <h3 class="text-sm font-bold flex items-center space-x-2"><i class="fa-solid fa-bell text-brand-500 animate-bounce"></i><span>Alerta Sonoro Ativo (Aguardando novos pedidos...)</span></h3>
+                    <h3 class="text-sm font-bold flex items-center space-x-2"><i class="fa-solid fa-bell text-brand-500 animate-bounce"></i><span>Alarme Sonoro e API Ativos</span></h3>
                     <button onclick="testSoundAlert()" class="bg-zinc-800 hover:bg-zinc-700 text-xs px-3 py-1.5 rounded-lg border border-zinc-700">Testar Alarme</button>
                 </div>
                 <div id="admin-orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -168,14 +168,14 @@
                     <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Obrigatório para receber o andamento)</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Para receber o andamento)</label>
                     <input type="tel" id="client-phone" required placeholder="Ex: 63999999999 (com DDD)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Endereço de Entrega (Rua, Número, Bairro)</label>
                     <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000 - Centro" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-4">Enviar Pedido Agora</button>
+                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-4">Enviar Pedido Via API</button>
             </form>
         </div>
     </div>
@@ -190,7 +190,7 @@
             <input type="hidden" id="cancel-order-id">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo do Cancelamento (Enviado ao WhatsApp do cliente)</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo do Cancelamento</label>
                     <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
                 </div>
                 <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento</button>
@@ -238,9 +238,13 @@
         </div>
     </div>
 
-    <!-- SCRIPT DO SISTEMA COM ALARME SONORO E WHATSAPP AUTOMÁTICO -->
+    <!-- SCRIPT COM INTEGRAÇÃO DA EVOLUTION API -->
     <script>
-        const ADMIN_WHATSAPP = "63984140501";
+        // CONFIGURAÇÕES DA SUA API NO RENDER
+        const API_URL = "https://maxburger-api.onrender.com";
+        const INSTANCE_NAME = "maxburger";
+        const API_KEY = "Max123456";
+        const ADMIN_WHATSAPP = "556384140501";
 
         let menuData = [
             { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
@@ -255,7 +259,6 @@
         ];
 
         let currentCategory = 'Todos';
-        // Apenas as 3 opções solicitadas para o admin gerenciar
         const adminStatuses = ['Em preparo', 'Saiu para entrega', 'Cancelado'];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -317,22 +320,47 @@
             }
         }
 
-        // SISTEMA DE ALARME SONORO DO NAVEGADOR
+        // FUNÇÃO DE ENVIO AUTOMÁTICO VIA EVOLUTION API
+        async function sendWhatsAppMessage(number, text) {
+            try {
+                // Formata o número (garante que tenha o DDI 55)
+                let cleanNumber = number.replace(/\D/g, '');
+                if (!cleanNumber.startsWith('55')) cleanNumber = '55' + cleanNumber;
+
+                const response = await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': API_KEY
+                    },
+                    body: JSON.stringify({
+                        number: cleanNumber,
+                        text: text
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Mensagem enviada via API:', data);
+            } catch (error) {
+                console.error('Erro ao enviar mensagem pela API:', error);
+            }
+        }
+
         function playAlarmSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // Dó
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // Lá
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.4);
             } catch(e) {
-                console.log("Áudio bloqueado pelo navegador até haver interação.");
+                console.log("Áudio bloqueado até interação.");
             }
         }
 
@@ -452,8 +480,8 @@
 
         function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
 
-        // ENVIO DO PEDIDO: DISPARA ALARME NO PAINEL E ENVIA WHATSAPP AUTOMÁTICO PARA O DONO (63984140501)
-        function submitOrder(e) {
+        // ENVIO DO PEDIDO VIA API
+        async function submitOrder(e) {
             e.preventDefault();
             const name = document.getElementById('client-name').value;
             const phone = document.getElementById('client-phone').value.replace(/\D/g, '');
@@ -473,7 +501,7 @@
                 client: { name, phone, address },
                 items: [...cart],
                 total: totalFinal,
-                status: 'Em preparo', // Já inicia direto em preparo conforme solicitado
+                status: 'Em preparo',
                 date: new Date().toISOString()
             };
 
@@ -482,18 +510,13 @@
             updateCartBadge();
             closeCheckout();
 
-            // Toca o alarme sonoro se o painel estiver aberto na mesma sessão
             playAlarmSound();
 
-            // MONTAGEM DA MENSAGEM AUTOMÁTICA PARA O WHATSAPP DO DONO (63984140501)
-            const ownerMsg = `🚨 *NOVO PEDIDO RECEBIDO!* (#${newOrder.id})\n\n👤 *Cliente:* ${name}\n📞 *WhatsApp:* ${phone}\n📍 *Endereço:* ${address}\n\n🛒 *Itens:* \n${itemsListText}\n\n🛵 *Taxa de Entrega:* R$ 5,00\n💰 *TOTAL:* R$ ${totalFinal.toFixed(2)}\n\n_Acesse o painel para gerenciar o andamento._`;
-            
-            const encodedOwnerMsg = encodeURIComponent(ownerMsg);
-            
-            // Abre o WhatsApp do dono com a mensagem pronta para enviar de forma automática
-            window.open(`https://wa.me/55${ADMIN_WHATSAPP}?text=${encodedOwnerMsg}`, '_blank');
+            // Mensagem para o Dono enviada direto pela API
+            const ownerMsg = `🚨 *NOVO PEDIDO RECEBIDO!* (#${newOrder.id})\n\n👤 *Cliente:* ${name}\n📞 *WhatsApp:* ${phone}\n📍 *Endereço:* ${address}\n\n🛒 *Itens:* \n${itemsListText}\n\n🛵 *Taxa de Entrega:* R$ 5,00\n💰 *TOTAL:* R$ ${totalFinal.toFixed(2)}`;
+            await sendWhatsAppMessage(ADMIN_WHATSAPP, ownerMsg);
 
-            alert('Pedido realizado com sucesso! O alarme foi acionado no painel e o aviso foi enviado para o seu WhatsApp.');
+            alert('Pedido realizado com sucesso! O alarme tocou e a API enviou o aviso automaticamente.');
             renderAdminOrders();
         }
 
@@ -515,7 +538,7 @@
                         </div>
                         <div class="space-y-1 mb-4">
                             <h4 class="font-bold text-sm">${order.client.name}</h4>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1 text-brand-500"></i> <a href="https://wa.me/55${order.client.phone}" target="_blank" class="underline hover:text-white">${order.client.phone}</a></p>
+                            <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1 text-brand-500"></i> ${order.client.phone}</p>
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address}</p>
                         </div>
                         <div class="border-t border-zinc-800 pt-3 space-y-1 text-xs text-gray-300">
@@ -530,8 +553,8 @@
             `).join('');
         }
 
-        // ALTERAÇÃO DE STATUS COM AS 3 OPÇÕES SOLICITADAS
-        function handleAdminStatusChange(orderId, newStatus) {
+        // ALTERAÇÃO DE STATUS VIA API
+        async function handleAdminStatusChange(orderId, newStatus) {
             const order = orders.find(o => o.id === orderId);
             if (!order) return;
 
@@ -553,7 +576,7 @@
             }
 
             if (clientMessage) {
-                window.open(`https://wa.me/55${order.client.phone}?text=${encodeURIComponent(clientMessage)}`, '_blank');
+                await sendWhatsAppMessage(order.client.phone, clientMessage);
             }
         }
 
@@ -562,7 +585,7 @@
             renderAdminOrders();
         }
 
-        function confirmOrderCancellation() {
+        async function confirmOrderCancellation() {
             const orderId = document.getElementById('cancel-order-id').value;
             const reason = document.getElementById('cancel-reason').value;
             
@@ -577,15 +600,14 @@
                 renderReports();
 
                 const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi *CANCELADO*.\n\n*Motivo:* ${reason}\n\nQualquer dúvida, estamos à disposição na Max Burger & Grill.`;
-                window.open(`https://wa.me/55${order.client.phone}?text=${encodeURIComponent(cancelMsg)}`, '_blank');
+                await sendWhatsAppMessage(order.client.phone, cancelMsg);
             }
 
             closeCancelModal();
             renderAdminOrders();
-            alert('Pedido cancelado e aviso enviado ao cliente!');
+            alert('Pedido cancelado e aviso disparado ao cliente pela API!');
         }
 
-        // PAINEL: GERENCIAR CARDÁPIO
         function renderAdminMenu() {
             const container = document.getElementById('admin-menu-list');
             container.innerHTML = menuData.map(item => `
@@ -659,7 +681,6 @@
             }
         }
 
-        // RELATÓRIOS
         function renderReports() {
             const validOrders = orders.filter(o => o.status !== 'Cancelado');
             
