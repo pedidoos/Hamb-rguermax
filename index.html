@@ -214,7 +214,6 @@
         </div>
     </main>
 
-    <!-- Modal de Primeiro Acesso / Cadastro Administrativo -->
     <div id="first-access-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -231,6 +230,45 @@
                     <input type="password" id="fa-pass" required minlength="6" placeholder="******" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                 </div>
                 <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Cadastrar Administrador</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="item-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
+                <h3 id="item-modal-title" class="text-lg font-bold text-brand-500">Novo Item do Cardápio</h3>
+                <button onclick="closeItemModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleSaveItem(event)" class="space-y-4">
+                <input type="hidden" id="item-edit-id">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Nome do Item</label>
+                    <input type="text" id="item-name" required placeholder="Ex: Double Max Burger" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Categoria</label>
+                    <input type="text" id="item-category" required placeholder="Ex: Burgers" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Preço (R$)</label>
+                        <input type="number" step="0.01" id="item-price" required placeholder="29.90" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">ID Único (Numérico)</label>
+                        <input type="number" id="item-numeric-id" required placeholder="Ex: 1" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem</label>
+                    <input type="url" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Descrição</label>
+                    <textarea id="item-desc" required rows="3" placeholder="Ingredientes e detalhes..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Salvar Item</button>
             </form>
         </div>
     </div>
@@ -355,7 +393,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update, remove, push } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
@@ -515,6 +552,7 @@
                 }
                 evaluateStoreStatus();
                 updateStoreStatusUI();
+                renderAdminStatusUI();
             });
 
             setInterval(evaluateStoreStatus, 30000);
@@ -535,11 +573,13 @@
                 if (data) menuData = Array.isArray(data) ? data : Object.values(data);
                 renderCategories();
                 renderMenu();
+                renderAdminMenuMgr();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/motoboys'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) motoboys = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                renderMotoboyDeliveriesSummary();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/orders'), (snapshot) => {
@@ -567,6 +607,7 @@
             }
             storeStatus.isCurrentlyOpen = storeStatus.manualOpen && scheduleOpen;
             updateStoreStatusUI();
+            renderAdminStatusUI();
         }
 
         function updateStoreStatusUI() {
@@ -589,6 +630,28 @@
                 if(bannerBadge) bannerBadge.innerText = 'Fechado no momento';
                 if(closedBanner) closedBanner.classList.remove('hidden');
             }
+        }
+
+        function renderAdminStatusUI() {
+            const label = document.getElementById('manual-status-label');
+            const btn = document.getElementById('manual-toggle-btn');
+            if(!label || !btn) return;
+            if(storeStatus.manualOpen) {
+                label.innerText = 'Aberto Manualmente';
+                label.className = 'text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30';
+                btn.innerText = 'Fechar Loja';
+                btn.className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30';
+            } else {
+                label.innerText = 'Fechado Manualmente';
+                label.className = 'text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30';
+                btn.innerText = 'Abrir Loja';
+                btn.className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30';
+            }
+        }
+
+        async function toggleStoreManualStatus() {
+            storeStatus.manualOpen = !storeStatus.manualOpen;
+            await window.dbSet(window.dbRef(window.db, 'maxburger/storeStatus'), storeStatus);
         }
 
         function switchView(view) {
@@ -775,11 +838,14 @@
             renderOrderList('production', 'list-production-orders', 'Nenhum pedido em produção.');
             renderOrderList('delivery', 'list-delivery-orders', 'Nenhum pedido em rota.');
             renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído.');
+            renderAdminMenuMgr();
+            renderFinanceReport();
         }
 
         function renderOrderList(status, elementId, emptyText) {
             const filtered = orders.filter(o => o.status === status);
             const container = document.getElementById(elementId);
+            if(!container) return;
             if(filtered.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-6">${emptyText}</p>`; return; }
             container.innerHTML = filtered.map(o => `
                 <div class="bg-brand-card p-4 rounded-2xl border border-zinc-800 space-y-3">
@@ -787,10 +853,150 @@
                     <div class="text-xs text-gray-300">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</div>
                     <div class="flex justify-between items-center pt-2 border-t border-zinc-800">
                         <span class="font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
+                        <div class="flex space-x-2">
+                            ${status === 'new' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'production')" class="bg-amber-500 text-brand-dark px-3 py-1 rounded-lg text-xs font-bold">Produzir</button>` : ''}
+                            ${status === 'production' ? `<button onclick="openAssignMotoboyModal('${o.firebaseKey}')" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Entregar</button>` : ''}
+                            ${status === 'delivery' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'completed')" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Concluir</button>` : ''}
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
+
+        async function updateOrderStatus(key, newStatus) {
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${key}`), { status: newStatus });
+        }
+
+        function openItemModal(isEdit = false, item = null) {
+            document.getElementById('item-modal-title').innerText = isEdit ? 'Editar Item do Cardápio' : 'Novo Item do Cardápio';
+            document.getElementById('item-edit-id').value = isEdit ? item.firebaseKey : '';
+            document.getElementById('item-name').value = isEdit ? item.name : '';
+            document.getElementById('item-category').value = isEdit ? item.category : '';
+            document.getElementById('item-price').value = isEdit ? item.price : '';
+            document.getElementById('item-numeric-id').value = isEdit ? item.id : '';
+            document.getElementById('item-image').value = isEdit ? item.image : '';
+            document.getElementById('item-desc').value = isEdit ? item.desc : '';
+            document.getElementById('item-modal').classList.remove('hidden');
+        }
+
+        function closeItemModal() {
+            document.getElementById('item-modal').classList.add('hidden');
+        }
+
+        async function handleSaveItem(e) {
+            e.preventDefault();
+            const editKey = document.getElementById('item-edit-id').value;
+            const itemObj = {
+                id: parseInt(document.getElementById('item-numeric-id').value),
+                name: document.getElementById('item-name').value,
+                category: document.getElementById('item-category').value,
+                price: parseFloat(document.getElementById('item-price').value),
+                image: document.getElementById('item-image').value,
+                desc: document.getElementById('item-desc').value
+            };
+
+            if(editKey) {
+                await window.dbUpdate(window.dbRef(window.db, `maxburger/menu/${editKey}`), itemObj);
+            } else {
+                await window.dbSet(window.dbPush(window.dbRef(window.db, 'maxburger/menu')), itemObj);
+            }
+            closeItemModal();
+        }
+
+        function renderAdminMenuMgr() {
+            const container = document.getElementById('admin-menu-list');
+            if(!container) return;
+            if(menuData.length === 0) { container.innerHTML = `<p class="p-6 text-center text-gray-500">Nenhum item cadastrado.</p>`; return; }
+            container.innerHTML = menuData.map((item, idx) => `
+                <div class="p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">${item.name}</h4>
+                            <span class="text-xs text-brand-500">R$ ${item.price.toFixed(2)} • ${item.category}</span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick='openItemModal(true, ${JSON.stringify(item).replace(/'/g, "&#39;")})' class="bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-300">Editar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function handleSaveMotoboy(e) {
+            e.preventDefault();
+            const name = document.getElementById('motoboy-name').value;
+            const whatsapp = document.getElementById('motoboy-whatsapp').value.replace(/\D/g, '');
+            await window.dbSet(window.dbPush(window.dbRef(window.db, 'maxburger/motoboys')), { name, whatsapp });
+            document.getElementById('motoboy-name').value = '';
+            document.getElementById('motoboy-whatsapp').value = '';
+            alert('Motoboy cadastrado com sucesso!');
+        }
+
+        function openAssignMotoboyModal(orderKey) {
+            document.getElementById('assign-order-key').value = orderKey;
+            const select = document.getElementById('select-motoboy-target');
+            select.innerHTML = motoboys.map(m => `<option value="${m.name}">${m.name} (${m.whatsapp})</option>`).join('');
+            document.getElementById('assign-motoboy-modal').classList.remove('hidden');
+        }
+
+        function closeAssignMotoboyModal() {
+            document.getElementById('assign-motoboy-modal').classList.add('hidden');
+        }
+
+        async function confirmAssignMotoboy() {
+            const orderKey = document.getElementById('assign-order-key').value;
+            const motoboyName = document.getElementById('select-motoboy-target').value;
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${orderKey}`), {
+                status: 'delivery',
+                motoboy: motoboyName
+            });
+            closeAssignMotoboyModal();
+        }
+
+        function renderMotoboyDeliveriesSummary() {
+            const container = document.getElementById('motoboy-summary-container');
+            if(!container) return;
+            if(motoboys.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-6">Nenhum motoboy cadastrado.</p>`; return; }
+            container.innerHTML = motoboys.map(m => {
+                const assignedOrders = orders.filter(o => o.motoboy === m.name && o.status === 'delivery');
+                const totalFees = assignedOrders.reduce((sum, o) => sum + (o.deliveryFee || 0), 0);
+                return `
+                    <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 space-y-3">
+                        <h4 class="font-bold text-sm text-brand-500">${m.name}</h4>
+                        <p class="text-xs text-gray-400">WhatsApp: ${m.whatsapp}</p>
+                        <div class="pt-2 border-t border-zinc-800 flex justify-between text-xs">
+                            <span class="text-gray-300">Entregas ativas: ${assignedOrders.length}</span>
+                            <span class="font-bold text-green-400">Taxas: R$ ${totalFees.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderFinanceReport() {
+            const completed = orders.filter(o => o.status === 'completed');
+            const totalDay = completed.reduce((sum, o) => sum + o.total, 0);
+            const repDay = document.getElementById('rep-day');
+            if(repDay) repDay.innerText = `R$ ${totalDay.toFixed(2)}`;
+
+            const listContainer = document.getElementById('finance-orders-list');
+            if(listContainer) {
+                if(completed.length === 0) {
+                    listContainer.innerHTML = `<p class="text-center text-gray-500 py-4">Nenhum pedido concluído registrado hoje.</p>`;
+                } else {
+                    listContainer.innerHTML = completed.map(o => `
+                        <div class="py-2.5 flex justify-between items-center text-xs">
+                            <div><span class="font-bold text-white">#${o.dailyId} - ${o.client.name}</span><span class="block text-gray-400">${new Date(o.date).toLocaleTimeString()} • ${o.client.payment}</span></div>
+                            <span class="font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function enableAudioAlerts() { alert('Alarme sonoro ativado.'); }
+        function saveAudioSettings() {}
     </script>
 </body>
 </html>
