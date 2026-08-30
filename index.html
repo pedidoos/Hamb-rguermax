@@ -90,6 +90,7 @@
                 <button onclick="switchAdminTab('new')" id="btn-tab-new" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-bell"></i><span>Novos Pedidos</span></button>
                 <button onclick="switchAdminTab('production')" id="btn-tab-production" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-fire-burner"></i><span>Em Produção</span></button>
                 <button onclick="switchAdminTab('delivery')" id="btn-tab-delivery" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-motorcycle"></i><span>Em Rota de Entrega</span></button>
+                <button onclick="switchAdminTab('settings')" id="btn-tab-settings" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-gears text-brand-500"></i><span>Config. & Taxas</span></button>
                 <button onclick="switchAdminTab('motoboys')" id="btn-tab-motoboys" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-id-card-clip text-brand-500"></i><span>Cadastrar Motoboys</span></button>
                 <button onclick="switchAdminTab('motoboy-deliveries')" id="btn-tab-motoboy-deliveries" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-route text-blue-400"></i><span>Entregas por Motoboy</span></button>
                 <button onclick="switchAdminTab('completed')" id="btn-tab-completed" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-circle-check"></i><span>Concluídos</span></button>
@@ -100,7 +101,7 @@
             <div id="admin-sec-new" class="space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-bell"></i><span>Pedidos Aguardando Aceite</span></h3>
-                    <button onclick="enableAudioAlerts()" class="bg-brand-500/20 text-brand-500 hover:bg-brand-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition border border-brand-500/30"><i class="fa-solid fa-volume-high mr-1"></i> Ativar Som de Alarme</button>
+                    <button onclick="enableAudioAlerts()" class="bg-brand-500/20 text-brand-500 hover:bg-brand-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition border border-brand-500/30"><i class="fa-solid fa-volume-high mr-1"></i> Testar Alarme Sonoro</button>
                 </div>
                 <div id="list-new-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
@@ -113,6 +114,71 @@
             <div id="admin-sec-delivery" class="hidden space-y-4">
                 <h3 class="text-lg font-bold flex items-center space-x-2 text-blue-500"><i class="fa-solid fa-motorcycle"></i><span>Pedidos em Rota de Entrega</span></h3>
                 <div id="list-delivery-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- Seção de Configurações, Som e Taxas de Entrega -->
+            <div id="admin-sec-settings" class="hidden space-y-6">
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
+                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-volume-high"></i><span>Configuração de Som de Notificação</span></h3>
+                    <div class="flex items-center justify-between bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Alarme Sonoro de Novos Pedidos</h4>
+                            <p class="text-xs text-gray-400">Ativar ou desativar o toque sonoro automático quando chegar um novo pedido.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="setting-sound-toggle" onchange="saveAudioSettings()" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-6">
+                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-motorcycle"></i><span>Gestão de Taxas de Entrega em Tempo Real</span></h3>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-2">Modelo de Cobrança do Frete</label>
+                        <select id="delivery-mode-select" onchange="handleDeliveryModeChange()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
+                            <option value="sector">Taxa por Setor / Bairro</option>
+                            <option value="fixed">Taxa Fixa Única</option>
+                            <option value="free">Entrega Grátis (R$ 0,00)</option>
+                        </select>
+                    </div>
+
+                    <!-- Configuração para Taxa Fixa -->
+                    <div id="mode-config-fixed" class="hidden bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-3">
+                        <h4 class="font-bold text-sm text-white">Valor da Taxa Fixa</h4>
+                        <div class="flex gap-2">
+                            <input type="number" step="0.01" id="fixed-rate-input" placeholder="Ex: 7.00" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white">
+                            <button onclick="saveFixedRate()" class="bg-brand-500 hover:bg-brand-600 text-brand-dark px-5 py-2.5 rounded-xl font-bold text-xs transition">Salvar</button>
+                        </div>
+                    </div>
+
+                    <!-- Configuração para Taxa por Setor -->
+                    <div id="mode-config-sector" class="space-y-4">
+                        <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-4">
+                            <h4 class="font-bold text-sm text-white">Cadastrar / Editar Setor e Valor</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <input type="hidden" id="sector-edit-id">
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">Nome do Setor / Bairro</label>
+                                    <input type="text" id="sector-name-input" placeholder="Ex: Centro" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">Valor da Taxa (R$)</label>
+                                    <input type="number" step="0.01" id="sector-price-input" placeholder="Ex: 5.00" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white">
+                                </div>
+                                <div class="flex items-end">
+                                    <button onclick="saveSectorRate()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-2.5 rounded-xl transition text-xs shadow">Salvar Setor</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Setores Cadastrados</h4>
+                            <div id="sectors-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="admin-sec-motoboys" class="hidden space-y-6">
@@ -219,7 +285,7 @@
         </div>
     </main>
 
-    <!-- Subpágina / Modal de Detalhes do Produto (Com Adicionais e Minimizar) -->
+    <!-- Modal de Detalhes do Produto -->
     <div id="product-detail-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden my-auto">
             <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/50 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center z-10 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -235,9 +301,7 @@
 
                 <div class="border-t border-zinc-800 pt-4 space-y-3">
                     <h4 class="text-xs font-bold text-brand-500 uppercase tracking-wider"><i class="fa-solid fa-plus-circle mr-1"></i> Escolha os Adicionais (Opcional)</h4>
-                    <div id="detail-addons-list" class="space-y-2.5 max-h-40 overflow-y-auto pr-1">
-                        <!-- Inserido via JS -->
-                    </div>
+                    <div id="detail-addons-list" class="space-y-2.5 max-h-40 overflow-y-auto pr-1"></div>
                 </div>
 
                 <div class="border-t border-zinc-800 pt-4 flex items-center justify-between">
@@ -277,8 +341,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Escolha o Entregador Cadastrado</label>
-                    <select id="select-motoboy-target" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
-                    </select>
+                    <select id="select-motoboy-target" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></select>
                 </div>
                 <p class="text-xs text-gray-400">Ao confirmar, o cupom detalhado de entrega será enviado automaticamente via WhatsApp para o motoboy selecionado!</p>
                 <button onclick="confirmAssignMotoboy()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar e Enviar Cupom ao Motoboy</button>
@@ -296,7 +359,7 @@
             <div id="cart-items" class="flex-grow overflow-y-auto py-4 space-y-3 divide-y divide-zinc-800/50"></div>
             <div class="pt-4 border-t border-zinc-800 space-y-3">
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-bold">R$ 0,00</span></div>
-                <div class="flex justify-between text-sm"><span class="text-gray-400">Taxa de Entrega</span><span class="font-bold text-brand-500">R$ 5,00</span></div>
+                <div class="flex justify-between text-sm"><span class="text-gray-400">Taxa de Entrega</span><span id="cart-delivery-display" class="font-bold text-brand-500">R$ 0,00</span></div>
                 <div class="flex justify-between text-base font-black pt-2 border-t border-zinc-800"><span>Total</span><span id="cart-total" class="text-brand-500">R$ 0,00</span></div>
                 <button onclick="openCheckout()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
             </div>
@@ -312,10 +375,7 @@
             </div>
             
             <form onsubmit="submitOrder(event)" class="space-y-4">
-                <!-- Cupom Resumo Superior -->
-                <div id="checkout-order-summary" class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-2 max-h-40 overflow-y-auto">
-                    <!-- Inserido via JS -->
-                </div>
+                <div id="checkout-order-summary" class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-2 max-h-40 overflow-y-auto"></div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
@@ -328,9 +388,17 @@
                     </div>
                 </div>
 
+                <!-- Seletor de Setor dinâmico para taxa de entrega -->
+                <div id="checkout-sector-group">
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Setor / Bairro de Entrega</label>
+                    <select id="client-sector" onchange="updateCartBadge(); renderCartItems(); renderCheckoutSummary();" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
+
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Endereço Completo (Rua, Número, Bairro, Ponto de Referência)</label>
-                    <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000 - Centro" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Endereço Completo (Rua, Número, Ponto de Referência)</label>
+                    <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -460,12 +528,12 @@
         let menuData = [];
         let orders = [];
         let motoboys = [];
+        let sectors = [];
+        let deliverySettings = { mode: 'sector', fixedRate: 5.00, soundEnabled: true };
         let cart = [];
         let currentCategory = 'Todos';
-        let isInitialLoadOrders = true;
         let alarmInterval = null;
 
-        // Adicionais padrão disponíveis
         const availableAddons = [
             { id: 'bacon', name: 'Bacon Extra Crocante', price: 5.00 },
             { id: 'cheddar', name: 'Cheddar Cremoso Extra', price: 4.50 },
@@ -476,7 +544,6 @@
         let selectedProductForDetail = null;
         let currentDetailQty = 1;
 
-        // Fila global de envio com espaçamento de segurança (Anti-Ban WhatsApp)
         let messageQueue = [];
         let isProcessingQueue = false;
         const MESSAGE_DELAY_MS = 15000;
@@ -516,23 +583,44 @@
             try {
                 const response = await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json', 
-                        'apikey': API_KEY 
-                    },
-                    body: JSON.stringify({
-                        number: cleanNumber,
-                        text: text
-                    })
+                    headers: { 'Content-Type': 'application/json', 'apikey': API_KEY },
+                    body: JSON.stringify({ number: cleanNumber, text: text })
                 });
-                const result = await response.json();
-                console.log('Evolution API Response:', result);
+                await response.json();
             } catch (error) {
                 console.error('Erro ao conectar com a Evolution API:', error);
             }
         }
 
         async function initFirebaseListeners() {
+            // Configurações e Taxas
+            window.dbOnValue(window.dbRef(window.db, 'maxburger/settings'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    deliverySettings = { ...deliverySettings, ...data };
+                } else {
+                    window.dbSet(window.dbRef(window.db, 'maxburger/settings'), deliverySettings);
+                }
+                updateSettingsUI();
+            });
+
+            // Setores
+            window.dbOnValue(window.dbRef(window.db, 'maxburger/sectors'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    sectors = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                } else {
+                    sectors = [
+                        { firebaseKey: '1', name: 'Centro', price: 5.00 },
+                        { firebaseKey: '2', name: 'Plano Diretor Sul', price: 7.00 },
+                        { firebaseKey: '3', name: 'Plano Diretor Norte', price: 6.00 }
+                    ];
+                    window.dbSet(window.dbRef(window.db, 'maxburger/sectors'), sectors);
+                }
+                renderSectorsList();
+                populateCheckoutSectors();
+            });
+
             window.dbOnValue(window.dbRef(window.db, 'maxburger/menu'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -574,11 +662,11 @@
                 orders = newOrdersList;
 
                 const hasPendingOrders = orders.some(o => o.status === 'new');
-                if (hasPendingOrders) {
+                if (hasPendingOrders && deliverySettings.soundEnabled) {
                     if (!alarmInterval) {
                         playNotificationSound();
                         alarmInterval = setInterval(() => {
-                            playNotificationSound();
+                            if(deliverySettings.soundEnabled) playNotificationSound();
                         }, 4000);
                     }
                 } else {
@@ -587,8 +675,6 @@
                         alarmInterval = null;
                     }
                 }
-
-                isInitialLoadOrders = false;
 
                 if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
                     renderAdminDashboard();
@@ -599,9 +685,7 @@
         function playNotificationSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
                 function playTone(frequency, startTime, duration) {
                     const oscillator = audioCtx.createOscillator();
                     const gainNode = audioCtx.createGain();
@@ -624,7 +708,133 @@
 
         function enableAudioAlerts() {
             playNotificationSound();
-            alert('🔊 Alerta de som ativado com sucesso!');
+            alert('🔊 Teste de som executado com sucesso!');
+        }
+
+        async function saveAudioSettings() {
+            const enabled = document.getElementById('setting-sound-toggle').checked;
+            deliverySettings.soundEnabled = enabled;
+            await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), { soundEnabled: enabled });
+        }
+
+        function updateSettingsUI() {
+            document.getElementById('setting-sound-toggle').checked = deliverySettings.soundEnabled !== false;
+            document.getElementById('delivery-mode-select').value = deliverySettings.mode || 'sector';
+            document.getElementById('fixed-rate-input').value = deliverySettings.fixedRate || 5.00;
+            handleDeliveryModeChange();
+        }
+
+        function handleDeliveryModeChange() {
+            const mode = document.getElementById('delivery-mode-select').value;
+            const fixedContainer = document.getElementById('mode-config-fixed');
+            const sectorContainer = document.getElementById('mode-config-sector');
+            const checkoutSectorGroup = document.getElementById('checkout-sector-group');
+
+            fixedContainer.classList.add('hidden');
+            sectorContainer.classList.add('hidden');
+            checkoutSectorGroup.classList.remove('hidden');
+
+            if(mode === 'fixed') {
+                fixedContainer.classList.remove('hidden');
+            } else if(mode === 'sector') {
+                sectorContainer.classList.remove('hidden');
+            } else if(mode === 'free') {
+                checkoutSectorGroup.classList.add('hidden');
+            }
+        }
+
+        async function saveDeliveryModeAndSettings(newMode) {
+            deliverySettings.mode = newMode;
+            await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), { mode: newMode });
+            renderCartItems();
+        }
+
+        document.getElementById('delivery-mode-select')?.addEventListener('change', (e) => {
+            saveDeliveryModeAndSettings(e.target.value);
+            handleDeliveryModeChange();
+        });
+
+        async function saveFixedRate() {
+            const val = parseFloat(document.getElementById('fixed-rate-input').value);
+            if(isNaN(val) || val < 0) return alert('Informe um valor válido.');
+            deliverySettings.fixedRate = val;
+            await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), { fixedRate: val });
+            alert('Taxa fixa salva com sucesso!');
+            renderCartItems();
+        }
+
+        async function saveSectorRate() {
+            const editId = document.getElementById('sector-edit-id').value;
+            const name = document.getElementById('sector-name-input').value.trim();
+            const price = parseFloat(document.getElementById('sector-price-input').value);
+
+            if(!name || isNaN(price)) return alert('Preencha o nome do setor e o valor corretamente.');
+
+            if(editId) {
+                await window.dbUpdate(window.dbRef(window.db, `maxburger/sectors/${editId}`), { name, price });
+            } else {
+                const newRef = window.dbPush(window.dbRef(window.db, 'maxburger/sectors'));
+                await window.dbSet(newRef, { name, price });
+            }
+
+            document.getElementById('sector-edit-id').value = '';
+            document.getElementById('sector-name-input').value = '';
+            document.getElementById('sector-price-input').value = '';
+            alert('Setor salvo com sucesso!');
+        }
+
+        function renderSectorsList() {
+            const container = document.getElementById('sectors-list-container');
+            if(!sectors || sectors.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 col-span-full">Nenhum setor cadastrado.</p>`;
+                return;
+            }
+
+            container.innerHTML = sectors.map(s => `
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
+                    <div>
+                        <h5 class="font-bold text-sm text-white">${s.name}</h5>
+                        <p class="text-xs text-brand-500 font-bold">R$ ${s.price.toFixed(2)}</p>
+                    </div>
+                    <div class="flex space-x-1">
+                        <button onclick="editSector('${s.firebaseKey}', '${s.name}', ${s.price})" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 p-2 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteSector('${s.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editSector(key, name, price) {
+            document.getElementById('sector-edit-id').value = key;
+            document.getElementById('sector-name-input').value = name;
+            document.getElementById('sector-price-input').value = price;
+        }
+
+        async function deleteSector(key) {
+            if(confirm('Deseja excluir este setor?')) {
+                await window.dbRemove(window.dbRef(window.db, `maxburger/sectors/${key}`));
+            }
+        }
+
+        function populateCheckoutSectors() {
+            const select = document.getElementById('client-sector');
+            if(!select) return;
+            select.innerHTML = sectors.map(s => `<option value="${s.firebaseKey}" data-price="${s.price}">${s.name} (Taxa: R$ ${s.price.toFixed(2)})</option>`).join('');
+        }
+
+        function getCurrentDeliveryFee() {
+            const mode = deliverySettings.mode || 'sector';
+            if(mode === 'free') return 0;
+            if(mode === 'fixed') return deliverySettings.fixedRate || 5.00;
+            
+            // Mode sector
+            const select = document.getElementById('client-sector');
+            if(!select || select.options.length === 0) {
+                const first = sectors[0];
+                return first ? first.price : 5.00;
+            }
+            const selectedOpt = select.options[select.selectedIndex];
+            return selectedOpt ? parseFloat(selectedOpt.getAttribute('data-price') || 5.00) : 5.00;
         }
 
         function switchView(view) {
@@ -654,9 +864,11 @@
         }
 
         function switchAdminTab(tab) {
-            ['new', 'production', 'delivery', 'motoboys', 'motoboy-deliveries', 'completed', 'menu-mgr', 'finance'].forEach(t => {
-                document.getElementById(`admin-sec-${t}`).classList.add('hidden');
-                document.getElementById(`btn-tab-${t}`).className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap';
+            ['new', 'production', 'delivery', 'settings', 'motoboys', 'motoboy-deliveries', 'completed', 'menu-mgr', 'finance'].forEach(t => {
+                const el = document.getElementById(`admin-sec-${t}`);
+                if(el) el.classList.add('hidden');
+                const btn = document.getElementById(`btn-tab-${t}`);
+                if(btn) btn.className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap';
             });
 
             document.getElementById(`admin-sec-${tab}`).classList.remove('hidden');
@@ -666,6 +878,7 @@
             if(tab === 'menu-mgr') renderAdminMenu();
             if(tab === 'motoboys') renderMotoboysList();
             if(tab === 'motoboy-deliveries') renderMotoboyDeliveries();
+            if(tab === 'settings') updateSettingsUI();
         }
 
         async function handleSaveMotoboy(e) {
@@ -737,7 +950,7 @@
 
             if(!order || !motoboy) return;
 
-            const taxaEntrega = 5.00;
+            const taxaEntrega = order.deliveryFee || 5.00;
 
             await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { 
                 status: 'delivery',
@@ -757,8 +970,8 @@
                              `👤 *Nome do Cliente:* ${order.client.name}\n` +
                              `📱 *WhatsApp do Cliente:* ${order.client.phone}\n` +
                              `💳 *Forma de Pagamento:* ${order.client.payment || 'Não informada'}\n` +
-                             `💵 *Valor Total:* R$ ${order.total.toFixed(2)}\n` +
-                             `📍 *Endereço:* ${order.client.address}\n\n` +
+                             `💵 *Taxa de Entrega:* R$ ${taxaEntrega.toFixed(2)}\n` +
+                             `📍 *Endereço:* ${order.client.address} (${order.client.sectorName || ''})\n\n` +
                              `Bom trabalho, ${motoboy.name}! Dirija com segurança.`;
 
             enqueueWhatsAppMessage(motoboy.whatsapp, cupomMsg);
@@ -913,7 +1126,6 @@
             `).join('');
         }
 
-        // Funções da Subpágina / Modal de Detalhes do Hambúrguer
         function openProductDetail(id) {
             const product = menuData.find(i => i.id === id);
             if(!product) return;
@@ -926,7 +1138,6 @@
             document.getElementById('detail-desc').innerText = product.desc;
             document.getElementById('detail-qty').innerText = currentDetailQty;
 
-            // Renderiza adicionais
             const addonsContainer = document.getElementById('detail-addons-list');
             addonsContainer.innerHTML = availableAddons.map(addon => `
                 <label class="flex items-center justify-between bg-zinc-900 p-3 rounded-xl border border-zinc-800 cursor-pointer hover:border-brand-500/40 transition">
@@ -942,13 +1153,8 @@
             document.getElementById('product-detail-modal').classList.remove('hidden');
         }
 
-        function closeProductDetail() {
-            document.getElementById('product-detail-modal').classList.add('hidden');
-        }
-
-        function minimizeProductDetail() {
-            closeProductDetail();
-        }
+        function closeProductDetail() { document.getElementById('product-detail-modal').classList.add('hidden'); }
+        function minimizeProductDetail() { closeProductDetail(); }
 
         function adjustDetailQty(delta) {
             currentDetailQty += delta;
@@ -987,8 +1193,6 @@
             });
 
             const finalUnitPrice = selectedProductForDetail.price + addonExtraPrice;
-
-            // Cria um identificador único baseado no produto e adicionais para agrupar ou diferenciar
             const cartItemKey = `${selectedProductForDetail.id}_${selectedAddons.map(a => a.id).sort().join('_')}`;
 
             const existing = cart.find(i => i.cartKey === cartItemKey);
@@ -1030,6 +1234,7 @@
             if(cart.length === 0) {
                 container.innerHTML = `<div class="text-center py-12 text-gray-500 text-sm"><i class="fa-solid fa-basket-shopping text-3xl mb-2"></i><p>Sua sacola está vazia</p></div>`;
                 document.getElementById('cart-subtotal').innerText = 'R$ 0,00';
+                document.getElementById('cart-delivery-display').innerText = 'R$ 0,00';
                 document.getElementById('cart-total').innerText = 'R$ 0,00';
                 return;
             }
@@ -1054,8 +1259,11 @@
             `).join('');
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const deliveryFee = getCurrentDeliveryFee();
+            
             document.getElementById('cart-subtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
-            document.getElementById('cart-total').innerText = `R$ ${(subtotal + 5.00).toFixed(2)}`;
+            document.getElementById('cart-delivery-display').innerText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `R$ ${(subtotal + deliveryFee).toFixed(2)}`;
         }
 
         function changeQty(cartKey, delta) {
@@ -1071,21 +1279,19 @@
         function openCheckout() {
             if(cart.length === 0) return alert('Adicione itens ao carrinho primeiro!');
             closeCart();
+            populateCheckoutSectors();
             renderCheckoutSummary();
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
         function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
-
-        function backToCartFromCheckout() {
-            closeCheckout();
-            openCart();
-        }
+        function backToCartFromCheckout() { closeCheckout(); openCart(); }
 
         function renderCheckoutSummary() {
             const container = document.getElementById('checkout-order-summary');
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            const total = subtotal + 5.00;
+            const deliveryFee = getCurrentDeliveryFee();
+            const total = subtotal + deliveryFee;
 
             container.innerHTML = `
                 <div class="text-xs font-bold text-brand-500 mb-1 flex items-center justify-between">
@@ -1099,7 +1305,7 @@
                     </div>
                 `).join('')}
                 <div class="flex justify-between text-[11px] text-gray-400 pt-1">
-                    <span>Taxa de Entrega: R$ 5,00</span>
+                    <span>Taxa de Entrega: ${deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`}</span>
                     <span id="cupom-troco-display" class="text-brand-500 font-semibold"></span>
                 </div>
             `;
@@ -1124,16 +1330,28 @@
             const payment = document.getElementById('client-payment').value;
             const troco = payment === 'Dinheiro' ? document.getElementById('client-troco').value.trim() : '';
 
-            // Validação de DDD e telefone obrigatório
             if(phone.length < 10) {
-                alert('Atenção: É obrigatório informar o número do WhatsApp com o DDD (ex: 63999999999) para garantir o envio correto das mensagens!');
+                alert('Atenção: É obrigatório informar o número do WhatsApp com o DDD (ex: 63999999999)!');
                 document.getElementById('client-phone').focus();
                 return;
             }
 
+            let sectorName = 'Não se aplica';
+            const mode = deliverySettings.mode || 'sector';
+            if(mode === 'sector') {
+                const sectorSelect = document.getElementById('client-sector');
+                if(sectorSelect && sectorSelect.options.length > 0) {
+                    sectorName = sectorSelect.options[sectorSelect.selectedIndex].text.split(' (Taxa')[0];
+                }
+            } else if(mode === 'fixed') {
+                sectorName = 'Taxa Fixa';
+            } else if(mode === 'free') {
+                sectorName = 'Entrega Grátis';
+            }
+
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const deliveryFee = getCurrentDeliveryFee();
             
-            // Lógica do Número do Pedido: Reinicia em 1 todo dia para cada novo dia
             const todayStr = new Date().toDateString();
             const todayOrders = orders.filter(o => new Date(o.date).toDateString() === todayStr);
             const dailyIdNum = todayOrders.length + 1;
@@ -1141,9 +1359,10 @@
             const newOrder = {
                 id: Date.now(),
                 dailyId: dailyIdNum,
-                client: { name, phone, address, payment, troco },
+                client: { name, phone, address, payment, troco, sectorName },
                 items: [...cart],
-                total: subtotal + 5.00,
+                deliveryFee: deliveryFee,
+                total: subtotal + deliveryFee,
                 status: 'new',
                 date: new Date().toISOString()
             };
@@ -1158,7 +1377,8 @@
             alert(`🎉 Pedido #${dailyIdNum} realizado com sucesso! Acompanhe as novidades.`);
 
             let trocoText = troco ? `💵 *Troco para:* ${troco}\n` : '';
-            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address}\n\nVá até o painel do comércio e confira!`;
+            let taxaText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
+            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address} (${sectorName})\n🛵 *Taxa:* ${taxaText}\n\nVá até o painel do comércio e confira!`;
             enqueueWhatsAppMessage(COMERCE_WHATSAPP, comecoMsg);
 
             const clienteMsg = `Olá ${name}! Seu pedido #${dailyIdNum} foi recebido com sucesso na Max Burger & Grill! 🍔`;
@@ -1192,7 +1412,8 @@
                             <h4 class="font-bold text-sm">${order.client.name}</h4>
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1 text-brand-500"></i> ${order.client.phone}</p>
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-credit-card mr-1 text-brand-500"></i> ${order.client.payment || 'Não informada'} ${order.client.troco ? `(Troco: ${order.client.troco})` : ''}</p>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address}</p>
+                            <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address} (${order.client.sectorName || ''})</p>
+                            <p class="text-xs text-brand-500 font-semibold"><i class="fa-solid fa-motorcycle mr-1"></i> Taxa: R$ ${(order.deliveryFee || 5.00).toFixed(2)}</p>
                             ${order.motoboy ? `<p class="text-xs text-blue-400 font-semibold mt-1"><i class="fa-solid fa-motorcycle mr-1"></i> Entregador: ${order.motoboy.name}</p>` : ''}
                         </div>
                         <div class="border-t border-zinc-800 pt-3 space-y-1 text-xs text-gray-300">
@@ -1253,9 +1474,7 @@
             document.getElementById('cancel-modal').classList.remove('hidden');
         }
 
-        function closeCancelModal() {
-            document.getElementById('cancel-modal').classList.add('hidden');
-        }
+        function closeCancelModal() { document.getElementById('cancel-modal').classList.add('hidden'); }
 
         async function confirmOrderCancellation() {
             const firebaseKey = document.getElementById('cancel-order-id').value;
@@ -1278,7 +1497,7 @@
         }
 
         async function deleteWrongOrder(firebaseKey) {
-            if(confirm('Tem certeza que deseja excluir esta venda do histórico e do caixa? Esta ação não pode ser desfeita.')) {
+            if(confirm('Tem certeza que deseja excluir esta venda do histórico e do caixa?')) {
                 await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`));
             }
         }
