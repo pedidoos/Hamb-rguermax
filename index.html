@@ -972,7 +972,7 @@
             const clienteMsg = `Oba! 🛵 O seu pedido #${order.id} acabou de sair para entrega com o entregador ${motoboy.name}! Fique atento no endereço: ${order.client.address}.`;
             await triggerWhatsApp(order.client.phone, clienteMsg);
 
-            // 2. Cupom detalhado para o WhatsApp do Motoboy (Correção aplicada aqui para garantir o número correto)
+            // 2. Cupom detalhado para o WhatsApp do Motoboy
             const motoboyPhoneClean = motoboy.phone.replace(/\D/g, '');
             const motoboyCupom = `🛵 *NOVA ENTREGA ATRIBUÍDA!* (Cupom #${order.id})\n\n` +
                 `👤 *Cliente:* ${order.client.name}\n` +
@@ -1072,11 +1072,9 @@
                 return;
             }
 
-            // Filtrar apenas pedidos concluídos para somar as taxas de entrega
             const completedOrders = orders.filter(o => o.status === 'completed' && o.assignedMotoboy);
 
             listContainer.innerHTML = motoboys.map(mb => {
-                // Somar taxas do motoboy
                 const mbDeliveries = completedOrders.filter(o => o.assignedMotoboy.phone === mb.phone);
                 const totalFees = mbDeliveries.reduce((sum, o) => sum + (o.deliveryFee || 5.00), 0);
 
@@ -1092,7 +1090,6 @@
                 `;
             }).join('');
 
-            // Histórico organizado por dia, semana, mês e ano no painel do motoboy
             const now = new Date();
             historyContainer.innerHTML = motoboys.map(mb => {
                 const mbDeliveries = completedOrders.filter(o => o.assignedMotoboy.phone === mb.phone);
