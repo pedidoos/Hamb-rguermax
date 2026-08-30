@@ -116,7 +116,6 @@
                 <div id="list-delivery-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- Seção de Configurações, Som e Taxas de Entrega -->
             <div id="admin-sec-settings" class="hidden space-y-6">
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-volume-high"></i><span>Configuração de Som de Notificação</span></h3>
@@ -144,7 +143,6 @@
                         </select>
                     </div>
 
-                    <!-- Configuração para Taxa Fixa -->
                     <div id="mode-config-fixed" class="hidden bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-3">
                         <h4 class="font-bold text-sm text-white">Valor da Taxa Fixa</h4>
                         <div class="flex gap-2">
@@ -153,7 +151,6 @@
                         </div>
                     </div>
 
-                    <!-- Configuração para Taxa por Setor -->
                     <div id="mode-config-sector" class="space-y-4">
                         <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-4">
                             <h4 class="font-bold text-sm text-white">Cadastrar / Editar Setor e Valor</h4>
@@ -285,7 +282,6 @@
         </div>
     </main>
 
-    <!-- Modal de Detalhes do Produto -->
     <div id="product-detail-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden my-auto">
             <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/50 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center z-10 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -330,7 +326,6 @@
         </div>
     </div>
 
-    <!-- Modal de Atribuição de Motoboy -->
     <div id="assign-motoboy-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -343,13 +338,12 @@
                     <label class="block text-xs font-medium text-gray-400 mb-1">Escolha o Entregador Cadastrado</label>
                     <select id="select-motoboy-target" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></select>
                 </div>
-                <p class="text-xs text-gray-400">Ao confirmar, o cupom detalhado de entrega será enviado automaticamente via WhatsApp para o motoboy selecionado!</p>
+                <p class="text-xs text-gray-400">Ao confirmar, o cupom detalhado de entrega será enfileirado e enviado via WhatsApp para o motoboy selecionado!</p>
                 <button onclick="confirmAssignMotoboy()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar e Enviar Cupom ao Motoboy</button>
             </div>
         </div>
     </div>
 
-    <!-- Carrinho / Sacola de Compras -->
     <div id="cart-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex justify-end backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md h-full flex flex-col p-6 border-l border-zinc-800 shadow-2xl">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800">
@@ -366,7 +360,6 @@
         </div>
     </div>
 
-    <!-- Modal de Checkout / Resumo & Dados do Cliente -->
     <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative my-auto">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -388,11 +381,9 @@
                     </div>
                 </div>
 
-                <!-- Seletor de Setor dinâmico para taxa de entrega -->
                 <div id="checkout-sector-group">
                     <label class="block text-xs font-medium text-gray-400 mb-1">Setor / Bairro de Entrega</label>
                     <select id="client-sector" onchange="updateCartBadge(); renderCartItems(); renderCheckoutSummary();" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
-                        <!-- Preenchido via JS -->
                     </select>
                 </div>
 
@@ -429,7 +420,6 @@
         </div>
     </div>
 
-    <!-- Modal de Cancelamento -->
     <div id="cancel-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -447,7 +437,6 @@
         </div>
     </div>
 
-    <!-- Modal de Gerenciamento de Item do Cardápio -->
     <div id="item-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -487,7 +476,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Modular -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update, remove, push, child } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
@@ -544,13 +532,10 @@
         let selectedProductForDetail = null;
         let currentDetailQty = 1;
 
+        // --- SISTEMA DE FILA ASSÍNCRONA PARA O WHATSAPP ---
         let messageQueue = [];
         let isProcessingQueue = false;
-        const MESSAGE_DELAY_MS = 15000;
-
-        window.addEventListener('firebase-ready', () => {
-            initFirebaseListeners();
-        });
+        const MESSAGE_DELAY_MS = 12000; // 12 segundos entre mensagens para evitar throttling/travamento
 
         function enqueueWhatsAppMessage(phone, text) {
             messageQueue.push({ phone, text });
@@ -564,14 +549,10 @@
             const { phone, text } = messageQueue.shift();
             await triggerWhatsAppDirect(phone, text);
 
-            if (messageQueue.length > 0) {
-                setTimeout(() => {
-                    isProcessingQueue = false;
-                    processWhatsAppQueue();
-                }, MESSAGE_DELAY_MS);
-            } else {
+            setTimeout(() => {
                 isProcessingQueue = false;
-            }
+                processWhatsAppQueue();
+            }, MESSAGE_DELAY_MS);
         }
 
         async function triggerWhatsAppDirect(phone, text) {
@@ -591,9 +572,13 @@
                 console.error('Erro ao conectar com a Evolution API:', error);
             }
         }
+        // --------------------------------------------------
+
+        window.addEventListener('firebase-ready', () => {
+            initFirebaseListeners();
+        });
 
         async function initFirebaseListeners() {
-            // Configurações e Taxas
             window.dbOnValue(window.dbRef(window.db, 'maxburger/settings'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -604,7 +589,6 @@
                 updateSettingsUI();
             });
 
-            // Setores
             window.dbOnValue(window.dbRef(window.db, 'maxburger/sectors'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -702,7 +686,7 @@
                 playTone(1320, 0.35, 0.3);
                 playTone(1760, 0.7, 0.5);
             } catch (e) {
-                console.log('Áudio aguardando interação do usuário.', e);
+                console.log('Áudio aguardando interação.', e);
             }
         }
 
@@ -827,7 +811,6 @@
             if(mode === 'free') return 0;
             if(mode === 'fixed') return deliverySettings.fixedRate || 5.00;
             
-            // Mode sector
             const select = document.getElementById('client-sector');
             if(!select || select.options.length === 0) {
                 const first = sectors[0];
@@ -979,7 +962,7 @@
             const clienteMsg = `Olá ${order.client.name}! O seu pedido #${order.dailyId} saiu para entrega com o motoboy ${motoboy.name}! 🛵`;
             enqueueWhatsAppMessage(order.client.phone, clienteMsg);
 
-            alert(`Pedido #${order.dailyId} enviado para o motoboy ${motoboy.name} e cupom enfileirado para envio seguro no WhatsApp!`);
+            alert(`Pedido #${order.dailyId} atribuído! Os cupons e avisos foram colocados na fila segura de envio.`);
         }
 
         function renderMotoboyDeliveries() {
