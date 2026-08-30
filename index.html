@@ -20,6 +20,8 @@
 </head>
 <body class="bg-brand-dark text-gray-100 font-sans min-h-screen flex flex-col">
 
+    <audio id="alert-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
     <header class="bg-brand-card border-b border-gray-800 sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('menu')">
@@ -102,7 +104,7 @@
             </div>
 
             <div class="flex space-x-2 overflow-x-auto pb-2 border-b border-zinc-800">
-                <button onclick="switchAdminTab('status')" id="btn-tab-status" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-store"></i><span>Status da Loja</span></button>
+                <button onclick="switchAdminTab('status')" id="btn-tab-status" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-store"></i><span>Status & Horários</span></button>
                 <button onclick="switchAdminTab('new')" id="btn-tab-new" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-bell"></i><span>Novos Pedidos</span></button>
                 <button onclick="switchAdminTab('production')" id="btn-tab-production" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-fire-burner"></i><span>Em Produção</span></button>
                 <button onclick="switchAdminTab('delivery')" id="btn-tab-delivery" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-motorcycle"></i><span>Em Rota</span></button>
@@ -111,21 +113,40 @@
                 <button onclick="switchAdminTab('motoboy-deliveries')" id="btn-tab-motoboy-deliveries" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-route text-blue-400"></i><span>Acerto Motoboys</span></button>
                 <button onclick="switchAdminTab('completed')" id="btn-tab-completed" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-circle-check"></i><span>Concluídos</span></button>
                 <button onclick="switchAdminTab('menu-mgr')" id="btn-tab-menu-mgr" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-utensils"></i><span>Cardápio</span></button>
-                <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-chart-line"></i><span>Financeiro</span></button>
+                <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-chart-line"></i><span>Caixa / Financeiro</span></button>
             </div>
 
             <div id="admin-sec-status" class="space-y-6">
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-6">
-                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-store"></i><span>Controle de Abertura e Fechamento</span></h3>
+                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-store"></i><span>Controle de Abertura, Fechamento e Agendamento</span></h3>
+                    
                     <div class="bg-zinc-900 p-5 rounded-xl border border-zinc-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h4 class="font-bold text-sm text-white">Modo de Operação Manual</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Altera instantaneamente o status da loja para aberto ou fechado no cardápio.</p>
+                            <p class="text-xs text-gray-400 mt-0.5">Força instantaneamente a loja aberta ou fechada independentemente do horário.</p>
                         </div>
                         <div class="flex items-center space-x-3">
                             <span id="manual-status-label" class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg">Verificando...</span>
                             <button onclick="toggleStoreManualStatus()" id="manual-toggle-btn" class="px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg">Alternar Status</button>
                         </div>
+                    </div>
+
+                    <div class="bg-zinc-900 p-5 rounded-xl border border-zinc-800 space-y-4">
+                        <h4 class="font-bold text-sm text-white"><i class="fa-solid fa-clock text-brand-500 mr-2"></i> Agendamento Automático de Funcionamento</h4>
+                        <p class="text-xs text-gray-400">Defina o horário em que a loja abre e fecha automaticamente todos os dias.</p>
+                        <form onsubmit="handleSaveStoreSchedule(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Horário de Abertura</label>
+                                <input type="time" id="store-open-time" required class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Horário de Fechamento</label>
+                                <input type="time" id="store-close-time" required class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-2.5 rounded-xl transition text-sm shadow-lg">Salvar Horários</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -133,7 +154,7 @@
             <div id="admin-sec-new" class="hidden space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-bell"></i><span>Pedidos Aguardando Aceite</span></h3>
-                    <button onclick="enableAudioAlerts()" class="bg-brand-500/20 text-brand-500 hover:bg-brand-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition border border-brand-500/30"><i class="fa-solid fa-volume-high mr-1"></i> Testar Alarme Sonoro</button>
+                    <button onclick="testarSomAlerta()" class="bg-brand-500/20 text-brand-500 hover:bg-brand-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition border border-brand-500/30"><i class="fa-solid fa-volume-high mr-1"></i> Testar Alarme Sonoro</button>
                 </div>
                 <div id="list-new-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
@@ -153,13 +174,63 @@
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-volume-high"></i><span>Configuração de Som de Notificação</span></h3>
                     <div class="flex items-center justify-between bg-zinc-900 p-4 rounded-xl border border-zinc-800">
                         <div>
-                            <h4 class="font-bold text-sm text-white">Alarme Sonoro de Novos Pedidos</h4>
-                            <p class="text-xs text-gray-400">Ativar ou desativar o toque sonoro automático quando chegar um novo pedido.</p>
+                            <h4 class="font-bold text-sm text-white">Alarme Sonoro Automático</h4>
+                            <p class="text-xs text-gray-400">Toca alarme quando chegar novo pedido.</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="setting-sound-toggle" onchange="saveAudioSettings()" class="sr-only peer" checked>
                             <div class="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
                         </label>
+                    </div>
+                </div>
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-map-location-dot"></i><span>Taxas de Entrega e Setores</span></h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <label class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 cursor-pointer flex items-center space-x-3">
+                            <input type="radio" name="delivery-mode" value="sector" onchange="updateDeliveryMode('sector')" class="accent-brand-500" checked>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">Por Setores / Bairros</h4>
+                                <p class="text-[10px] text-gray-400">Taxa individualizada por setor</p>
+                            </div>
+                        </label>
+                        <label class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 cursor-pointer flex items-center space-x-3">
+                            <input type="radio" name="delivery-mode" value="fixed" onchange="updateDeliveryMode('fixed')" class="accent-brand-500">
+                            <div>
+                                <h4 class="font-bold text-xs text-white">Taxa Fixa Única</h4>
+                                <p class="text-[10px] text-gray-400">Mesmo valor para todos</p>
+                            </div>
+                        </label>
+                        <label class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 cursor-pointer flex items-center space-x-3">
+                            <input type="radio" name="delivery-mode" value="free" onchange="updateDeliveryMode('free')" class="accent-brand-500">
+                            <div>
+                                <h4 class="font-bold text-xs text-white">Entrega Grátis</h4>
+                                <p class="text-[10px] text-gray-400">R$ 0,00 para qualquer setor</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="fixed-rate-box" class="hidden bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-3">
+                        <h4 class="font-bold text-xs text-white">Valor da Taxa Fixa</h4>
+                        <div class="flex space-x-2">
+                            <input type="number" step="0.01" id="input-fixed-rate" placeholder="5.00" class="bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2 text-sm text-white">
+                            <button onclick="saveFixedRate()" class="bg-brand-500 text-brand-dark px-4 py-2 rounded-xl text-xs font-bold">Salvar Taxa</button>
+                        </div>
+                    </div>
+
+                    <div id="sectors-mgmt-box" class="space-y-4 pt-2">
+                        <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+                            <h4 class="font-bold text-sm text-white mb-3">Cadastrar Novo Setor / Bairro</h4>
+                            <form onsubmit="handleSaveSector(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <input type="text" id="sector-name" required placeholder="Nome do Setor / Bairro" class="bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                                <input type="number" step="0.01" id="sector-price" required placeholder="Taxa (R$)" class="bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-2.5 rounded-xl transition text-sm">Adicionar Setor</button>
+                            </form>
+                        </div>
+                        <div id="sectors-list-container" class="bg-zinc-900 rounded-xl border border-zinc-800 divide-y divide-zinc-800 overflow-hidden"></div>
                     </div>
                 </div>
             </div>
@@ -181,10 +252,15 @@
                         </div>
                     </form>
                 </div>
+                <div id="motoboys-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
             <div id="admin-sec-motoboy-deliveries" class="hidden space-y-6">
-                <div id="motoboy-summary-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800">
+                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500 mb-2"><i class="fa-solid fa-route mr-2"></i> Acerto de Taxas dos Motoboys (Acumulado do Dia)</h3>
+                    <p class="text-xs text-gray-400 mb-6">Acompanhe quantas entregas cada motoboy realizou e o valor total em taxas recebidas hoje.</p>
+                    <div id="motoboy-summary-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
             </div>
 
             <div id="admin-sec-completed" class="hidden space-y-4">
@@ -201,13 +277,26 @@
             </div>
 
             <div id="admin-sec-finance" class="hidden space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
                         <span class="text-xs text-gray-400">Faturamento do Dia</span>
                         <h4 id="rep-day" class="text-2xl font-black text-brand-500 mt-1">R$ 0,00</h4>
                     </div>
+                    <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
+                        <span class="text-xs text-gray-400">Total de Pedidos Concluídos</span>
+                        <h4 id="rep-total-orders" class="text-2xl font-black text-white mt-1">0</h4>
+                    </div>
+                    <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 flex flex-col justify-between">
+                        <span class="text-xs text-gray-400">Ações do Caixa</span>
+                        <div class="flex space-x-2 mt-2">
+                            <button onclick="clearHistory('day')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 px-3 py-2 rounded-xl text-xs font-bold transition">Limpar Dia</button>
+                            <button onclick="clearHistory('all')" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-gray-300 border border-zinc-700 px-3 py-2 rounded-xl text-xs font-bold transition">Limpar Geral</button>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
+                    <h4 class="font-bold text-sm text-white">Detalhamento dos Pedidos Concluídos</h4>
                     <div id="finance-orders-list" class="space-y-2 divide-y divide-zinc-800/60 overflow-y-auto max-h-96"></div>
                 </div>
             </div>
@@ -241,7 +330,7 @@
                 <button onclick="closeItemModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleSaveItem(event)" class="space-y-4">
-                <input type="hidden" id="item-edit-id">
+                <input type="hidden" id="item-edit-firebase-key">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Nome do Item</label>
                     <input type="text" id="item-name" required placeholder="Ex: Double Max Burger" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
@@ -444,8 +533,8 @@
         let storeStatus = { manualOpen: true, openTime: '18:00', closeTime: '23:59', isCurrentlyOpen: true };
         let cart = [];
         let currentCategory = 'Todos';
-        let alarmInterval = null;
         let currentUser = null;
+        let lastKnownNewOrdersCount = 0;
 
         const availableAddons = [
             { id: 'bacon', name: 'Bacon Extra Crocante', price: 5.00 },
@@ -503,13 +592,8 @@
             });
         }
 
-        function openFirstAccessModal() {
-            document.getElementById('first-access-modal').classList.remove('hidden');
-        }
-
-        function closeFirstAccessModal() {
-            document.getElementById('first-access-modal').classList.add('hidden');
-        }
+        function openFirstAccessModal() { document.getElementById('first-access-modal').classList.remove('hidden'); }
+        function closeFirstAccessModal() { document.getElementById('first-access-modal').classList.add('hidden'); }
 
         async function handleFirstAccess(e) {
             e.preventDefault();
@@ -542,7 +626,7 @@
             switchView('menu');
         }
 
-        async function initFirebaseListeners() {
+        function initFirebaseListeners() {
             window.dbOnValue(window.dbRef(window.db, 'maxburger/storeStatus'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -559,18 +643,26 @@
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/settings'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) deliverySettings = { ...deliverySettings, ...data };
+                if (data) {
+                    deliverySettings = { ...deliverySettings, ...data };
+                    const toggle = document.getElementById('setting-sound-toggle');
+                    if(toggle) toggle.checked = deliverySettings.soundEnabled !== false;
+                    syncDeliverySettingsUI();
+                }
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/sectors'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) sectors = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                else sectors = [];
                 populateCheckoutSectors();
+                renderSectorsMgr();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/menu'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) menuData = Array.isArray(data) ? data : Object.values(data);
+                else menuData = [];
                 renderCategories();
                 renderMenu();
                 renderAdminMenuMgr();
@@ -579,7 +671,9 @@
             window.dbOnValue(window.dbRef(window.db, 'maxburger/motoboys'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) motoboys = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                else motoboys = [];
                 renderMotoboyDeliveriesSummary();
+                renderMotoboysMgr();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/orders'), (snapshot) => {
@@ -590,7 +684,16 @@
                     newOrdersList.sort((a, b) => new Date(b.date) - new Date(a.date));
                 }
                 orders = newOrdersList;
-                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) renderAdminDashboard();
+                
+                const currentNewCount = orders.filter(o => o.status === 'new').length;
+                if (currentNewCount > lastKnownNewOrdersCount && deliverySettings.soundEnabled !== false) {
+                    tocarAlertaSonoro();
+                }
+                lastKnownNewOrdersCount = currentNewCount;
+
+                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
+                    renderAdminDashboard();
+                }
             });
         }
 
@@ -635,6 +738,12 @@
         function renderAdminStatusUI() {
             const label = document.getElementById('manual-status-label');
             const btn = document.getElementById('manual-toggle-btn');
+            const openInput = document.getElementById('store-open-time');
+            const closeInput = document.getElementById('store-close-time');
+
+            if(openInput && storeStatus.openTime) openInput.value = storeStatus.openTime;
+            if(closeInput && storeStatus.closeTime) closeInput.value = storeStatus.closeTime;
+
             if(!label || !btn) return;
             if(storeStatus.manualOpen) {
                 label.innerText = 'Aberto Manualmente';
@@ -652,6 +761,14 @@
         async function toggleStoreManualStatus() {
             storeStatus.manualOpen = !storeStatus.manualOpen;
             await window.dbSet(window.dbRef(window.db, 'maxburger/storeStatus'), storeStatus);
+        }
+
+        async function handleSaveStoreSchedule(e) {
+            e.preventDefault();
+            storeStatus.openTime = document.getElementById('store-open-time').value;
+            storeStatus.closeTime = document.getElementById('store-close-time').value;
+            await window.dbSet(window.dbRef(window.db, 'maxburger/storeStatus'), storeStatus);
+            alert('Horários de funcionamento atualizados com sucesso!');
         }
 
         function switchView(view) {
@@ -790,7 +907,19 @@
 
         function populateCheckoutSectors() {
             const select = document.getElementById('client-sector');
-            if(select) select.innerHTML = sectors.map(s => `<option value="${s.firebaseKey}" data-price="${s.price}">${s.name} (Taxa: R$ ${s.price.toFixed(2)})</option>`).join('');
+            const sectorGroup = document.getElementById('checkout-sector-group');
+            const mode = deliverySettings.mode || 'sector';
+
+            if(mode === 'free') {
+                if(sectorGroup) sectorGroup.style.display = 'none';
+            } else if(mode === 'fixed') {
+                if(sectorGroup) sectorGroup.style.display = 'none';
+            } else {
+                if(sectorGroup) sectorGroup.style.display = 'block';
+                if(select) {
+                    select.innerHTML = sectors.map(s => `<option value="${s.firebaseKey}" data-price="${s.price}">${s.name} (Taxa: R$ ${s.price.toFixed(2)})</option>`).join('');
+                }
+            }
         }
 
         function getCurrentDeliveryFee() {
@@ -840,6 +969,8 @@
             renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído.');
             renderAdminMenuMgr();
             renderFinanceReport();
+            renderMotoboyDeliveriesSummary();
+            renderSectorsMgr();
         }
 
         function renderOrderList(status, elementId, emptyText) {
@@ -848,15 +979,16 @@
             if(!container) return;
             if(filtered.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-6">${emptyText}</p>`; return; }
             container.innerHTML = filtered.map(o => `
-                <div class="bg-brand-card p-4 rounded-2xl border border-zinc-800 space-y-3">
-                    <div class="flex justify-between"><span class="text-xs font-bold text-brand-500">#${o.dailyId}</span><span class="text-xs text-gray-400">${o.client.name}</span></div>
-                    <div class="text-xs text-gray-300">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</div>
+                <div class="bg-brand-card p-4 rounded-2xl border border-zinc-800 space-y-3 shadow-md">
+                    <div class="flex justify-between items-center"><span class="text-xs font-bold text-brand-500">#${o.dailyId}</span><span class="text-xs text-gray-400">${new Date(o.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
+                    <div><h4 class="font-bold text-sm text-white">${o.client.name}</h4><p class="text-xs text-gray-400">${o.client.address}</p></div>
+                    <div class="text-xs text-gray-300 bg-zinc-900 p-2.5 rounded-xl border border-zinc-800">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</div>
                     <div class="flex justify-between items-center pt-2 border-t border-zinc-800">
-                        <span class="font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
+                        <span class="font-black text-brand-500 text-sm">R$ ${o.total.toFixed(2)}</span>
                         <div class="flex space-x-2">
-                            ${status === 'new' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'production')" class="bg-amber-500 text-brand-dark px-3 py-1 rounded-lg text-xs font-bold">Produzir</button>` : ''}
-                            ${status === 'production' ? `<button onclick="openAssignMotoboyModal('${o.firebaseKey}')" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Entregar</button>` : ''}
-                            ${status === 'delivery' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'completed')" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Concluir</button>` : ''}
+                            ${status === 'new' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'production')" class="bg-amber-500 hover:bg-amber-600 text-brand-dark px-3 py-1.5 rounded-lg text-xs font-bold transition">Produzir</button>` : ''}
+                            ${status === 'production' ? `<button onclick="openAssignMotoboyModal('${o.firebaseKey}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition">Entregar</button>` : ''}
+                            ${status === 'delivery' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'completed')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition">Concluir</button>` : ''}
                         </div>
                     </div>
                 </div>
@@ -867,9 +999,180 @@
             await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${key}`), { status: newStatus });
         }
 
+        // --- GESTÃO DE SETORES & TAXAS ---
+        async function updateDeliveryMode(mode) {
+            deliverySettings.mode = mode;
+            document.getElementById('fixed-rate-box').classList.toggle('hidden', mode !== 'fixed');
+            await window.dbSet(window.dbRef(window.db, 'maxburger/settings'), deliverySettings);
+        }
+
+        async function saveFixedRate() {
+            const rate = parseFloat(document.getElementById('input-fixed-rate').value) || 0;
+            deliverySettings.fixedRate = rate;
+            await window.dbSet(window.dbRef(window.db, 'maxburger/settings'), deliverySettings);
+            alert('Taxa fixa atualizada!');
+        }
+
+        function syncDeliverySettingsUI() {
+            const radios = document.querySelectorAll('input[name="delivery-mode"]');
+            radios.forEach(r => { if(r.value === deliverySettings.mode) r.checked = true; });
+            document.getElementById('fixed-rate-box').classList.toggle('hidden', deliverySettings.mode !== 'fixed');
+            const inputRate = document.getElementById('input-fixed-rate');
+            if(inputRate) inputRate.value = deliverySettings.fixedRate || 5.00;
+        }
+
+        async function handleSaveSector(e) {
+            e.preventDefault();
+            const name = document.getElementById('sector-name').value;
+            const price = parseFloat(document.getElementById('sector-price').value);
+            await window.dbSet(window.dbPush(window.dbRef(window.db, 'maxburger/sectors')), { name, price });
+            document.getElementById('sector-name').value = '';
+            document.getElementById('sector-price').value = '';
+            alert('Setor cadastrado com sucesso!');
+        }
+
+        function renderSectorsMgr() {
+            const container = document.getElementById('sectors-list-container');
+            if(!container) return;
+            if(sectors.length === 0) { container.innerHTML = `<p class="p-4 text-center text-xs text-gray-500">Nenhum setor cadastrado.</p>`; return; }
+            container.innerHTML = sectors.map(s => `
+                <div class="p-3.5 flex justify-between items-center text-xs">
+                    <span class="font-bold text-white">${s.name}</span>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-brand-500 font-bold">R$ ${s.price.toFixed(2)}</span>
+                        <button onclick="deleteSector('${s.firebaseKey}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteSector(key) {
+            if(confirm('Deseja excluir este setor?')) {
+                await window.dbRemove(window.dbRef(window.db, `maxburger/sectors/${key}`));
+            }
+        }
+
+        // --- GESTÃO DE MOTOBOYS & ACERTO ---
+        async function handleSaveMotoboy(e) {
+            e.preventDefault();
+            const name = document.getElementById('motoboy-name').value;
+            const whatsapp = document.getElementById('motoboy-whatsapp').value.replace(/\D/g, '');
+            await window.dbSet(window.dbPush(window.dbRef(window.db, 'maxburger/motoboys')), { name, whatsapp });
+            document.getElementById('motoboy-name').value = '';
+            document.getElementById('motoboy-whatsapp').value = '';
+            alert('Motoboy cadastrado com sucesso!');
+        }
+
+        function renderMotoboysMgr() {
+            const container = document.getElementById('motoboys-list-container');
+            if(!container) return;
+            if(motoboys.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-xs text-gray-500">Nenhum motoboy cadastrado.</p>`; return; }
+            container.innerHTML = motoboys.map(m => `
+                <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 flex justify-between items-center">
+                    <div><h4 class="font-bold text-sm text-white">${m.name}</h4><p class="text-xs text-gray-400">WhatsApp: ${m.whatsapp}</p></div>
+                    <button onclick="deleteMotoboy('${m.firebaseKey}')" class="text-red-400 hover:text-red-300 p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        async function deleteMotoboy(key) {
+            if(confirm('Deseja excluir este motoboy?')) {
+                await window.dbRemove(window.dbRef(window.db, `maxburger/motoboys/${key}`));
+            }
+        }
+
+        function openAssignMotoboyModal(orderKey) {
+            document.getElementById('assign-order-key').value = orderKey;
+            const select = document.getElementById('select-motoboy-target');
+            select.innerHTML = motoboys.map(m => `<option value="${m.name}">${m.name} (${m.whatsapp})</option>`).join('');
+            document.getElementById('assign-motoboy-modal').classList.remove('hidden');
+        }
+
+        function closeAssignMotoboyModal() { document.getElementById('assign-motoboy-modal').classList.add('hidden'); }
+
+        async function confirmAssignMotoboy() {
+            const orderKey = document.getElementById('assign-order-key').value;
+            const motoboyName = document.getElementById('select-motoboy-target').value;
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${orderKey}`), {
+                status: 'delivery',
+                motoboy: motoboyName
+            });
+            closeAssignMotoboyModal();
+        }
+
+        function renderMotoboyDeliveriesSummary() {
+            const container = document.getElementById('motoboy-summary-container');
+            if(!container) return;
+            if(motoboys.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-6">Nenhum motoboy cadastrado.</p>`; return; }
+            
+            const todayStr = new Date().toDateString();
+
+            container.innerHTML = motoboys.map(m => {
+                const motoboyOrders = orders.filter(o => o.motoboy === m.name && (o.status === 'delivery' || o.status === 'completed'));
+                const todayOrders = motoboyOrders.filter(o => new Date(o.date).toDateString() === todayStr);
+                const totalFeesToday = todayOrders.reduce((sum, o) => sum + (o.deliveryFee || 0), 0);
+                
+                return `
+                    <div class="bg-zinc-900 p-5 rounded-2xl border border-zinc-800 space-y-3 shadow-md">
+                        <div class="flex justify-between items-center"><h4 class="font-bold text-sm text-brand-500">${m.name}</h4><span class="text-[10px] bg-brand-500/10 text-brand-500 px-2 py-0.5 rounded-full font-bold">Ativo</span></div>
+                        <p class="text-xs text-gray-400">WhatsApp: ${m.whatsapp}</p>
+                        <div class="pt-3 border-t border-zinc-800 space-y-1.5">
+                            <div class="flex justify-between text-xs"><span class="text-gray-400">Entregas hoje:</span><span class="font-bold text-white">${todayOrders.length}</span></div>
+                            <div class="flex justify-between text-xs"><span class="text-gray-400">Taxas ganhas hoje:</span><span class="font-black text-green-400">R$ ${totalFeesToday.toFixed(2)}</span></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- CAIXA / FINANCEIRO & LIMPEZA DE HISTÓRICO ---
+        function renderFinanceReport() {
+            const completed = orders.filter(o => o.status === 'completed');
+            const totalDay = completed.reduce((sum, o) => sum + o.total, 0);
+            
+            const repDay = document.getElementById('rep-day');
+            const repTotalOrders = document.getElementById('rep-total-orders');
+            if(repDay) repDay.innerText = `R$ ${totalDay.toFixed(2)}`;
+            if(repTotalOrders) repTotalOrders.innerText = completed.length;
+
+            const listContainer = document.getElementById('finance-orders-list');
+            if(listContainer) {
+                if(completed.length === 0) {
+                    listContainer.innerHTML = `<p class="text-center text-xs text-gray-500 py-4">Nenhum pedido concluído registrado.</p>`;
+                } else {
+                    listContainer.innerHTML = completed.map(o => `
+                        <div class="py-2.5 flex justify-between items-center text-xs">
+                            <div><span class="font-bold text-white">#${o.dailyId} - ${o.client.name}</span><span class="block text-gray-400">${new Date(o.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • ${o.client.payment}</span></div>
+                            <span class="font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        async function clearHistory(scope) {
+            if(scope === 'day') {
+                if(!confirm('Deseja limpar todos os pedidos concluídos do dia atual?')) return;
+                const todayStr = new Date().toDateString();
+                for(let o of orders) {
+                    if(o.status === 'completed' && new Date(o.date).toDateString() === todayStr) {
+                        await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${o.firebaseKey}`));
+                    }
+                }
+                alert('Histórico do dia limpo com sucesso!');
+            } else if(scope === 'all') {
+                if(!confirm('ATENÇÃO: Deseja apagar todo o histórico geral de pedidos do sistema?')) return;
+                for(let o of orders) {
+                    await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${o.firebaseKey}`));
+                }
+                alert('Histórico geral limpo com sucesso!');
+            }
+        }
+
+        // --- CARDÁPIO GESTÃO ---
         function openItemModal(isEdit = false, item = null) {
             document.getElementById('item-modal-title').innerText = isEdit ? 'Editar Item do Cardápio' : 'Novo Item do Cardápio';
-            document.getElementById('item-edit-id').value = isEdit ? item.firebaseKey : '';
+            document.getElementById('item-edit-firebase-key').value = isEdit ? item.firebaseKey : '';
             document.getElementById('item-name').value = isEdit ? item.name : '';
             document.getElementById('item-category').value = isEdit ? item.category : '';
             document.getElementById('item-price').value = isEdit ? item.price : '';
@@ -879,13 +1182,11 @@
             document.getElementById('item-modal').classList.remove('hidden');
         }
 
-        function closeItemModal() {
-            document.getElementById('item-modal').classList.add('hidden');
-        }
+        function closeItemModal() { document.getElementById('item-modal').classList.add('hidden'); }
 
         async function handleSaveItem(e) {
             e.preventDefault();
-            const editKey = document.getElementById('item-edit-id').value;
+            const editKey = document.getElementById('item-edit-firebase-key').value;
             const itemObj = {
                 id: parseInt(document.getElementById('item-numeric-id').value),
                 name: document.getElementById('item-name').value,
@@ -907,7 +1208,7 @@
             const container = document.getElementById('admin-menu-list');
             if(!container) return;
             if(menuData.length === 0) { container.innerHTML = `<p class="p-6 text-center text-gray-500">Nenhum item cadastrado.</p>`; return; }
-            container.innerHTML = menuData.map((item, idx) => `
+            container.innerHTML = menuData.map((item) => `
                 <div class="p-4 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
@@ -923,80 +1224,24 @@
             `).join('');
         }
 
-        async function handleSaveMotoboy(e) {
-            e.preventDefault();
-            const name = document.getElementById('motoboy-name').value;
-            const whatsapp = document.getElementById('motoboy-whatsapp').value.replace(/\D/g, '');
-            await window.dbSet(window.dbPush(window.dbRef(window.db, 'maxburger/motoboys')), { name, whatsapp });
-            document.getElementById('motoboy-name').value = '';
-            document.getElementById('motoboy-whatsapp').value = '';
-            alert('Motoboy cadastrado com sucesso!');
-        }
-
-        function openAssignMotoboyModal(orderKey) {
-            document.getElementById('assign-order-key').value = orderKey;
-            const select = document.getElementById('select-motoboy-target');
-            select.innerHTML = motoboys.map(m => `<option value="${m.name}">${m.name} (${m.whatsapp})</option>`).join('');
-            document.getElementById('assign-motoboy-modal').classList.remove('hidden');
-        }
-
-        function closeAssignMotoboyModal() {
-            document.getElementById('assign-motoboy-modal').classList.add('hidden');
-        }
-
-        async function confirmAssignMotoboy() {
-            const orderKey = document.getElementById('assign-order-key').value;
-            const motoboyName = document.getElementById('select-motoboy-target').value;
-            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${orderKey}`), {
-                status: 'delivery',
-                motoboy: motoboyName
-            });
-            closeAssignMotoboyModal();
-        }
-
-        function renderMotoboyDeliveriesSummary() {
-            const container = document.getElementById('motoboy-summary-container');
-            if(!container) return;
-            if(motoboys.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-6">Nenhum motoboy cadastrado.</p>`; return; }
-            container.innerHTML = motoboys.map(m => {
-                const assignedOrders = orders.filter(o => o.motoboy === m.name && o.status === 'delivery');
-                const totalFees = assignedOrders.reduce((sum, o) => sum + (o.deliveryFee || 0), 0);
-                return `
-                    <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 space-y-3">
-                        <h4 class="font-bold text-sm text-brand-500">${m.name}</h4>
-                        <p class="text-xs text-gray-400">WhatsApp: ${m.whatsapp}</p>
-                        <div class="pt-2 border-t border-zinc-800 flex justify-between text-xs">
-                            <span class="text-gray-300">Entregas ativas: ${assignedOrders.length}</span>
-                            <span class="font-bold text-green-400">Taxas: R$ ${totalFees.toFixed(2)}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderFinanceReport() {
-            const completed = orders.filter(o => o.status === 'completed');
-            const totalDay = completed.reduce((sum, o) => sum + o.total, 0);
-            const repDay = document.getElementById('rep-day');
-            if(repDay) repDay.innerText = `R$ ${totalDay.toFixed(2)}`;
-
-            const listContainer = document.getElementById('finance-orders-list');
-            if(listContainer) {
-                if(completed.length === 0) {
-                    listContainer.innerHTML = `<p class="text-center text-gray-500 py-4">Nenhum pedido concluído registrado hoje.</p>`;
-                } else {
-                    listContainer.innerHTML = completed.map(o => `
-                        <div class="py-2.5 flex justify-between items-center text-xs">
-                            <div><span class="font-bold text-white">#${o.dailyId} - ${o.client.name}</span><span class="block text-gray-400">${new Date(o.date).toLocaleTimeString()} • ${o.client.payment}</span></div>
-                            <span class="font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
-                        </div>
-                    `).join('');
-                }
+        // --- ALARME SONORO ---
+        function tocarAlertaSonoro() {
+            const sound = document.getElementById('alert-sound');
+            if(sound) {
+                sound.play().catch(err => console.log('Áudio bloqueado pelo navegador até interação:', err));
             }
         }
 
-        function enableAudioAlerts() { alert('Alarme sonoro ativado.'); }
-        function saveAudioSettings() {}
+        function testarSomAlerta() {
+            tocarAlertaSonoro();
+            alert('Alarme sonoro testado!');
+        }
+
+        function saveAudioSettings() {
+            const enabled = document.getElementById('setting-sound-toggle').checked;
+            deliverySettings.soundEnabled = enabled;
+            window.dbSet(window.dbRef(window.db, 'maxburger/settings'), deliverySettings);
+        }
     </script>
 </body>
 </html>
