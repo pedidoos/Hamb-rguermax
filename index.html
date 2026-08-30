@@ -972,7 +972,8 @@
             const clienteMsg = `Oba! 🛵 O seu pedido #${order.id} acabou de sair para entrega com o entregador ${motoboy.name}! Fique atento no endereço: ${order.client.address}.`;
             await triggerWhatsApp(order.client.phone, clienteMsg);
 
-            // 2. Cupom detalhado para o WhatsApp do Motoboy
+            // 2. Cupom detalhado para o WhatsApp do Motoboy (Correção aplicada aqui para garantir o número correto)
+            const motoboyPhoneClean = motoboy.phone.replace(/\D/g, '');
             const motoboyCupom = `🛵 *NOVA ENTREGA ATRIBUÍDA!* (Cupom #${order.id})\n\n` +
                 `👤 *Cliente:* ${order.client.name}\n` +
                 `📱 *WhatsApp do Cliente:* ${order.client.phone}\n` +
@@ -981,7 +982,7 @@
                 `💰 *Valor Total do Pedido:* R$ ${order.total.toFixed(2)}\n\n` +
                 `Bom trabalho! Dirija com segurança! 🍔`;
             
-            await triggerWhatsApp(motoboy.phone, motoboyCupom);
+            await triggerWhatsApp(motoboyPhoneClean, motoboyCupom);
         }
 
         async function updateOrderStatus(firebaseKey, newStatus) {
