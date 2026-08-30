@@ -61,7 +61,7 @@
             <div class="text-center mb-6">
                 <div class="bg-brand-500/10 text-brand-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3 class="text-xl font-bold">Painel Administrativo</h3>
-                <p class="text-xs text-gray-400 mt-1">Gerenciamento conectado via Evolution API</p>
+                <p class="text-xs text-gray-400 mt-1">Gerenciamento conectado via Firebase & Evolution API</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
@@ -81,7 +81,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-zinc-800">
                 <div>
                     <h2 class="text-2xl font-black">Painel de Controle Operacional</h2>
-                    <p class="text-xs text-gray-400">Gerencie o fluxo de pedidos e automações via WhatsApp</p>
+                    <p class="text-xs text-gray-400">Sincronizado em Nuvem em Tempo Real (Firebase RTDB)</p>
                 </div>
                 <button onclick="switchView('menu')" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-xs text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair do Painel</span></button>
             </div>
@@ -246,55 +246,122 @@
         </div>
     </div>
 
+    <!-- Firebase SDK Modular -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, update, remove, push, child } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCczhst9EVg27JpvBMq9C-Z0n9efQpI5rQ",
+            authDomain: "studio-bella-rosa.firebaseapp.com",
+            databaseURL: "https://studio-bella-rosa-default-rtdb.firebaseio.com",
+            projectId: "studio-bella-rosa",
+            storageBucket: "studio-bella-rosa.firebasestorage.app",
+            messagingSenderId: "235281594938",
+            appId: "1:235281594938:web:bb215b9aaa694e219d5303",
+            measurementId: "G-TCNBC5S04S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Expondo as funções e objetos do Firebase globalmente para o script tradicional
+        window.db = database;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbGet = get;
+        window.dbOnValue = onValue;
+        window.dbUpdate = update;
+        window.dbRemove = remove;
+        window.dbPush = push;
+        window.dbChild = child;
+
+        // Dispara evento informando que o Firebase carregou
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
     <script>
         const API_URL = 'https://maxburger-api.onrender.com';
         const INSTANCE_NAME = 'maxburger';
         const API_KEY = 'max123456';
-        
-        const COMERCE_WHATSAPP = '5563984140501'; // Insira o número do comércio com DDD
+        const COMERCE_WHATSAPP = '5563984140501';
 
-        let menuData = [
-            { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
-            { id: 2, name: 'Max Cheddar Brasa', category: 'Burgers', price: 32.00, desc: 'Blend bovino 180g, queijo cheddar derretido, cebola caramelizada e molho especial da casa.', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' },
-            { id: 3, name: 'Batata Rústica com Cheddar', category: 'Acompanhamentos', price: 18.50, desc: 'Batatas rústicas temperadas com alecrim, cobertas com cheddar cremoso e bacon em cubos.', image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80' },
-            { id: 4, name: 'Coca-Cola 350ml', category: 'Bebidas', price: 6.00, desc: 'Lata gelada 350ml.', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' }
-        ];
-
+        let menuData = [];
+        let orders = [];
         let cart = [];
-        let orders = [
-            { id: 101, client: { name: 'Carlos Eduardo', phone: '63984123456', address: 'Av. NS 2, 404 Norte' }, items: [{name: 'Max Bacon Melt', qty: 2, price: 34.90}], total: 74.80, status: 'new', date: new Date().toISOString() },
-            { id: 102, client: { name: 'Mariana Souza', phone: '63992335511', address: 'Quadra 104 Sul, Al 12' }, items: [{name: 'Max Cheddar Brasa', qty: 1, price: 32.00}], total: 37.00, status: 'production', date: new Date().toISOString() }
-        ];
-
         let currentCategory = 'Todos';
+        let isInitialLoadOrders = true;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderMenu();
-            renderCategories();
-            updateCartBadge();
-            renderAdminDashboard();
+        // Aguarda o Firebase carregar para sincronizar os dados em tempo real
+        window.addEventListener('firebase-ready', () => {
+            initFirebaseListeners();
         });
+
+        async function initFirebaseListeners() {
+            // Sincronizar Cardápio em Tempo Real
+            window.dbOnValue(window.dbRef(window.db, 'maxburger/menu'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    menuData = Array.isArray(data) ? data : Object.values(data);
+                } else {
+                    // Cardápio padrão caso o banco esteja vazio
+                    menuData = [
+                        { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
+                        { id: 2, name: 'Max Cheddar Brasa', category: 'Burgers', price: 32.00, desc: 'Blend bovino 180g, queijo cheddar derretido, cebola caramelizada e molho especial da casa.', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' },
+                        { id: 3, name: 'Batata Rústica com Cheddar', category: 'Acompanhamentos', price: 18.50, desc: 'Batatas rústicas temperadas com alecrim, cobertas com cheddar cremoso e bacon em cubos.', image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80' },
+                        { id: 4, name: 'Coca-Cola 350ml', category: 'Bebidas', price: 6.00, desc: 'Lata gelada 350ml.', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' }
+                    ];
+                    window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
+                }
+                renderCategories();
+                renderMenu();
+                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
+                    renderAdminMenu();
+                }
+            });
+
+            // Sincronizar Pedidos em Tempo Real
+            window.dbOnValue(window.dbRef(window.db, 'maxburger/orders'), (snapshot) => {
+                const data = snapshot.val();
+                let newOrdersList = [];
+                if (data) {
+                    newOrdersList = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                    // Ordenar por data decrescente
+                    newOrdersList.sort((a, b) => new Date(b.date) - new Date(a.date));
+                }
+
+                // Tocar som de alarme se houver novos pedidos e não for a carga inicial
+                if (!isInitialLoadOrders && newOrdersList.length > orders.length) {
+                    playNotificationSound();
+                }
+                isInitialLoadOrders = false;
+
+                orders = newOrdersList;
+                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
+                    renderAdminDashboard();
+                }
+            });
+        }
 
         function playNotificationSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.3);
-
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.5);
+                function playTone(frequency, startTime, duration) {
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime + startTime);
+                    gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime + startTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    oscillator.start(audioCtx.currentTime + startTime);
+                    oscillator.stop(audioCtx.currentTime + startTime + duration);
+                }
+                playTone(587.33, 0.0, 0.15);
+                playTone(880.00, 0.18, 0.25);
             } catch (e) {
-                console.log('Áudio bloqueado pelo navegador até haver interação.', e);
+                console.log('Áudio bloqueado pelo navegador.', e);
             }
         }
 
@@ -459,8 +526,9 @@
             }
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const orderIdNum = Math.floor(100 + Math.random() * 900);
             const newOrder = {
-                id: Math.floor(100 + Math.random() * 900),
+                id: orderIdNum,
                 client: { name, phone, address },
                 items: [...cart],
                 total: subtotal + 5.00,
@@ -468,21 +536,27 @@
                 date: new Date().toISOString()
             };
 
-            orders.unshift(newOrder);
+            // Salvar pedido no Firebase Realtime Database
+            const newOrderRef = window.dbPush(window.dbRef(window.db, 'maxburger/orders'));
+            await window.dbSet(newOrderRef, newOrder);
+
             cart = [];
             updateCartBadge();
             closeCheckout();
 
             alert('🎉 Pedido feito com sucesso! Acompanhe as novidades.');
-            playNotificationSound();
 
+            // Mensagem para o Comércio
             const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${newOrder.id})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n📍 *Endereço:* ${address}\n\nVá até o painel do comércio e confira!`;
             await triggerWhatsApp(COMERCE_WHATSAPP, comecoMsg);
 
-            const clienteMsg = `Olá! Quero acompanhar meu pedido 🍔 (#${newOrder.id})`;
-            await triggerWhatsApp(phone, clienteMsg);
+            // Delay anti-ban (3 a 6 segundos)
+            const delaySegundos = Math.floor(Math.random() * 4) + 3;
+            await new Promise(resolve => setTimeout(resolve, delaySegundos * 1000));
 
-            renderAdminDashboard();
+            // Mensagem para o Cliente
+            const clienteMsg = `Olá ${name}! Seu pedido #${newOrder.id} foi recebido com sucesso na Max Burger & Grill! 🍔`;
+            await triggerWhatsApp(phone, clienteMsg);
         }
 
         function renderAdminDashboard() {
@@ -532,28 +606,28 @@
             if(order.status === 'new') {
                 return `
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="updateOrderStatus(${order.id}, 'production')" class="bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold text-xs py-2.5 rounded-xl transition shadow">Aceitar / Produzir</button>
-                        <button onclick="openCancelModal(${order.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold text-xs py-2.5 rounded-xl transition">Recusar</button>
+                        <button onclick="updateOrderStatus('${order.firebaseKey}', 'production')" class="bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold text-xs py-2.5 rounded-xl transition shadow">Aceitar / Produzir</button>
+                        <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold text-xs py-2.5 rounded-xl transition">Recusar</button>
                     </div>
                 `;
             } else if(order.status === 'production') {
                 return `
-                    <button onclick="updateOrderStatus(${order.id}, 'delivery')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Mover para Rota de Entrega 🛵</button>
+                    <button onclick="updateOrderStatus('${order.firebaseKey}', 'delivery')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Mover para Rota de Entrega 🛵</button>
                 `;
             } else if(order.status === 'delivery') {
                 return `
-                    <button onclick="updateOrderStatus(${order.id}, 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Finalizar com Sucesso ✅</button>
+                    <button onclick="updateOrderStatus('${order.firebaseKey}', 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Finalizar com Sucesso ✅</button>
                 `;
             }
             return `<span class="text-xs text-green-500 font-bold block text-center"><i class="fa-solid fa-check-circle mr-1"></i> Concluído com Sucesso</span>`;
         }
 
-        async function updateOrderStatus(orderId, newStatus) {
-            const order = orders.find(o => o.id === orderId);
+        async function updateOrderStatus(firebaseKey, newStatus) {
+            const order = orders.find(o => o.firebaseKey === firebaseKey);
             if(!order) return;
 
-            order.status = newStatus;
-            renderAdminDashboard();
+            // Atualizar status no Firebase
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
 
             if(newStatus === 'production') {
                 const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.id} está em preparo na brasa!`;
@@ -564,8 +638,8 @@
             }
         }
 
-        function openCancelModal(orderId) {
-            document.getElementById('cancel-order-id').value = orderId;
+        function openCancelModal(firebaseKey) {
+            document.getElementById('cancel-order-id').value = firebaseKey;
             document.getElementById('cancel-reason').value = '';
             document.getElementById('cancel-modal').classList.remove('hidden');
         }
@@ -575,7 +649,7 @@
         }
 
         async function confirmOrderCancellation() {
-            const orderId = document.getElementById('cancel-order-id').value;
+            const firebaseKey = document.getElementById('cancel-order-id').value;
             const reason = document.getElementById('cancel-reason').value;
             
             if(!reason.trim()) {
@@ -583,15 +657,14 @@
                 return;
             }
 
-            const order = orders.find(o => o.id == orderId);
+            const order = orders.find(o => o.firebaseKey === firebaseKey);
             if(order) {
-                order.status = 'cancelled';
+                await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: 'cancelled' });
                 const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi cancelado.\n\n*Motivo:* ${reason}\n\nQualquer dúvida estamos à disposição!`;
                 await triggerWhatsApp(order.client.phone, cancelMsg);
             }
 
             closeCancelModal();
-            renderAdminDashboard();
             alert('Pedido recusado e cliente avisado via WhatsApp.');
         }
 
@@ -613,7 +686,6 @@
                         text: text
                     })
                 });
-                
                 const result = await response.json();
                 console.log('Evolution API Response:', result);
             } catch (error) {
@@ -632,9 +704,11 @@
 
             const productCounts = {};
             validOrders.forEach(o => {
-                o.items.forEach(i => {
-                    productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
-                });
+                if(o.items) {
+                    o.items.forEach(i => {
+                        productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
+                    });
+                }
             });
 
             const sortedProducts = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
@@ -697,7 +771,7 @@
 
         function closeItemModal() { document.getElementById('item-modal').classList.add('hidden'); }
 
-        function saveMenuItem(e) {
+        async function saveMenuItem(e) {
             e.preventDefault();
             const id = document.getElementById('item-id').value;
             const name = document.getElementById('item-name').value;
@@ -707,24 +781,25 @@
             const desc = document.getElementById('item-desc').value;
 
             if(id) {
-                const item = menuData.find(i => i.id == id);
-                item.name = name; item.category = category; item.price = price; item.image = image; item.desc = desc;
+                const index = menuData.findIndex(i => i.id == id);
+                if(index !== -1) {
+                    menuData[index] = { id: Number(id), name, category, price, image, desc };
+                }
             } else {
                 menuData.push({ id: Date.now(), name, category, price, image, desc });
             }
 
+            // Salvar cardápio atualizado no Firebase
+            await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
+
             closeItemModal();
-            renderMenu();
-            renderCategories();
-            renderAdminMenu();
         }
 
-        function deleteMenuItem(id) {
+        async function deleteMenuItem(id) {
             if(confirm('Tem certeza que deseja excluir este item?')) {
                 menuData = menuData.filter(i => i.id !== id);
-                renderMenu();
-                renderCategories();
-                renderAdminMenu();
+                // Atualizar cardápio no Firebase
+                await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
             }
         }
     </script>
