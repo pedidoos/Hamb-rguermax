@@ -219,6 +219,54 @@
         </div>
     </main>
 
+    <!-- Subpágina / Modal de Detalhes do Produto (Com Adicionais e Minimizar) -->
+    <div id="product-detail-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden my-auto">
+            <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/50 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center z-10 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="h-64 overflow-hidden relative">
+                <img id="detail-img" src="" alt="" class="w-full h-full object-cover">
+                <span id="detail-category" class="absolute bottom-3 left-3 bg-brand-dark/85 backdrop-blur-md text-brand-500 text-xs font-bold px-3 py-1 rounded-full"></span>
+            </div>
+            <div class="p-6 space-y-5">
+                <div>
+                    <h3 id="detail-name" class="text-2xl font-black text-white mb-1"></h3>
+                    <p id="detail-desc" class="text-sm text-gray-300 leading-relaxed"></p>
+                </div>
+
+                <div class="border-t border-zinc-800 pt-4 space-y-3">
+                    <h4 class="text-xs font-bold text-brand-500 uppercase tracking-wider"><i class="fa-solid fa-plus-circle mr-1"></i> Escolha os Adicionais (Opcional)</h4>
+                    <div id="detail-addons-list" class="space-y-2.5 max-h-40 overflow-y-auto pr-1">
+                        <!-- Inserido via JS -->
+                    </div>
+                </div>
+
+                <div class="border-t border-zinc-800 pt-4 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Preço Total do Item</span>
+                        <span id="detail-total-price" class="text-2xl font-black text-brand-500">R$ 0,00</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-2 bg-zinc-900 border border-zinc-700 rounded-xl p-1">
+                            <button onclick="adjustDetailQty(-1)" class="w-8 h-8 bg-zinc-800 hover:bg-zinc-700 rounded-lg font-bold text-white flex items-center justify-center">-</button>
+                            <span id="detail-qty" class="w-6 text-center font-bold text-sm">1</span>
+                            <button onclick="adjustDetailQty(1)" class="w-8 h-8 bg-zinc-800 hover:bg-zinc-700 rounded-lg font-bold text-white flex items-center justify-center">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button onclick="minimizeProductDetail()" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold py-3.5 rounded-xl transition text-xs flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-window-minimize"></i><span>Minimizar (Comprar Mais)</span>
+                    </button>
+                    <button onclick="addDetailedProductToCart()" class="bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition text-xs shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-cart-plus"></i><span>Avançar p/ Resumo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Atribuição de Motoboy -->
     <div id="assign-motoboy-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -238,6 +286,7 @@
         </div>
     </div>
 
+    <!-- Carrinho / Sacola de Compras -->
     <div id="cart-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex justify-end backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md h-full flex flex-col p-6 border-l border-zinc-800 shadow-2xl">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800">
@@ -249,44 +298,70 @@
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-bold">R$ 0,00</span></div>
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Taxa de Entrega</span><span class="font-bold text-brand-500">R$ 5,00</span></div>
                 <div class="flex justify-between text-base font-black pt-2 border-t border-zinc-800"><span>Total</span><span id="cart-total" class="text-brand-500">R$ 0,00</span></div>
-                <button onclick="openCheckout()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Finalizar Pedido</button>
+                <button onclick="openCheckout()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
             </div>
         </div>
     </div>
 
-    <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
+    <!-- Modal de Checkout / Resumo & Dados do Cliente -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative my-auto">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold">Informações de Entrega</h3>
+                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-receipt mr-2"></i> Resumo do Pedido & Entrega</h3>
                 <button onclick="closeCheckout()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            
             <form onsubmit="submitOrder(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Nome Completo</label>
-                    <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                <!-- Cupom Resumo Superior -->
+                <div id="checkout-order-summary" class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-2 max-h-40 overflow-y-auto">
+                    <!-- Inserido via JS -->
                 </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp (Para avisos e acompanhamento)</label>
-                    <input type="tel" id="client-phone" required placeholder="Ex: 63999999999 (com DDD)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Nome Completo</label>
+                        <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp com DDD (Obrigatório)</label>
+                        <input type="tel" id="client-phone" required placeholder="Ex: 63999999999" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    </div>
                 </div>
+
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Endereço de Entrega (Rua, Número, Bairro)</label>
-                    <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000 - Centro" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Endereço Completo (Rua, Número, Bairro, Ponto de Referência)</label>
+                    <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000 - Centro" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
                 </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Forma de Pagamento</label>
-                    <select id="client-payment" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
-                        <option value="Cartão de Crédito">Cartão de Crédito</option>
-                        <option value="Cartão de Débito">Cartão de Débito</option>
-                        <option value="Pix">Pix</option>
-                        <option value="Dinheiro">Dinheiro</option>
-                    </select>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Forma de Pagamento</label>
+                        <select id="client-payment" onchange="toggleTrocoField()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                    <div id="troco-container" class="hidden">
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Troco para quanto? (Dinheiro)</label>
+                        <input type="text" id="client-troco" placeholder="Ex: R$ 50,00 ou Não preciso" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-4">Enviar Pedido Agora</button>
+
+                <div class="flex items-center space-x-3 pt-2">
+                    <button type="button" onclick="backToCartFromCheckout()" class="w-1/3 bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold py-3.5 rounded-xl transition text-xs shadow">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Voltar / Sacola
+                    </button>
+                    <button type="submit" class="w-2/3 bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition text-sm shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-check"></i><span>Finalizar Pedido</span>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal de Cancelamento -->
     <div id="cancel-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -304,6 +379,7 @@
         </div>
     </div>
 
+    <!-- Modal de Gerenciamento de Item do Cardápio -->
     <div id="item-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -389,16 +465,26 @@
         let isInitialLoadOrders = true;
         let alarmInterval = null;
 
-        // Fila global de envio com espaçamento de segurança (Anti-Ban WhatsApp) - Reduzido para 15 segundos
+        // Adicionais padrão disponíveis
+        const availableAddons = [
+            { id: 'bacon', name: 'Bacon Extra Crocante', price: 5.00 },
+            { id: 'cheddar', name: 'Cheddar Cremoso Extra', price: 4.50 },
+            { id: 'burger', name: 'Blend 180g Extra na Brasa', price: 9.00 },
+            { id: 'ovo', name: 'Ovo Frito na Chapa', price: 3.00 }
+        ];
+
+        let selectedProductForDetail = null;
+        let currentDetailQty = 1;
+
+        // Fila global de envio com espaçamento de segurança (Anti-Ban WhatsApp)
         let messageQueue = [];
         let isProcessingQueue = false;
-        const MESSAGE_DELAY_MS = 15000; // 15 segundos de intervalo entre cada mensagem
+        const MESSAGE_DELAY_MS = 15000;
 
         window.addEventListener('firebase-ready', () => {
             initFirebaseListeners();
         });
 
-        // Adiciona mensagem na fila segura
         function enqueueWhatsAppMessage(phone, text) {
             messageQueue.push({ phone, text });
             processWhatsAppQueue();
@@ -667,7 +753,7 @@
             closeAssignMotoboyModal();
 
             const cupomMsg = `🛵 *CUPOM DE ENTREGA - MAX BURGER & GRILL*\n\n` +
-                             `🆔 *Nº do Pedido:* #${order.id}\n` +
+                             `🆔 *Nº do Pedido:* #${order.dailyId}\n` +
                              `👤 *Nome do Cliente:* ${order.client.name}\n` +
                              `📱 *WhatsApp do Cliente:* ${order.client.phone}\n` +
                              `💳 *Forma de Pagamento:* ${order.client.payment || 'Não informada'}\n` +
@@ -677,10 +763,10 @@
 
             enqueueWhatsAppMessage(motoboy.whatsapp, cupomMsg);
 
-            const clienteMsg = `Olá ${order.client.name}! O seu pedido #${order.id} saiu para entrega com o motoboy ${motoboy.name}! 🛵`;
+            const clienteMsg = `Olá ${order.client.name}! O seu pedido #${order.dailyId} saiu para entrega com o motoboy ${motoboy.name}! 🛵`;
             enqueueWhatsAppMessage(order.client.phone, clienteMsg);
 
-            alert(`Pedido #${order.id} enviado para o motoboy ${motoboy.name} e cupom enfileirado para envio seguro no WhatsApp!`);
+            alert(`Pedido #${order.dailyId} enviado para o motoboy ${motoboy.name} e cupom enfileirado para envio seguro no WhatsApp!`);
         }
 
         function renderMotoboyDeliveries() {
@@ -741,7 +827,7 @@
                                 ${assignedOrders.length === 0 ? '<p class="text-xs text-gray-500">Nenhuma entrega neste período.</p>' : 
                                     assignedOrders.map(o => `
                                         <div class="flex justify-between text-xs bg-zinc-900/50 p-2 rounded-lg items-center">
-                                            <span>#${o.id} - ${o.client.name}</span>
+                                            <span>#${o.dailyId || o.id} - ${o.client.name}</span>
                                             <span class="font-bold text-gray-300">R$ ${(o.motoboy.tax || 5.00).toFixed(2)}</span>
                                         </div>
                                     `).join('')}
@@ -806,7 +892,7 @@
             const filtered = currentCategory === 'Todos' ? menuData : menuData.filter(i => i.category === currentCategory);
             
             grid.innerHTML = filtered.map(item => `
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 flex flex-col justify-between shadow-lg hover:border-brand-500/50 transition">
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 flex flex-col justify-between shadow-lg hover:border-brand-500/50 transition cursor-pointer" onclick="openProductDetail(${item.id})">
                     <div>
                         <div class="h-48 overflow-hidden relative">
                             <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
@@ -819,20 +905,109 @@
                     </div>
                     <div class="p-5 pt-0 flex items-center justify-between mt-4">
                         <span class="text-lg font-black text-brand-500">R$ ${item.price.toFixed(2)}</span>
-                        <button onclick="addToCart(${item.id})" class="bg-brand-500 hover:bg-brand-600 text-brand-dark px-4 py-2.5 rounded-xl text-xs font-bold transition shadow flex items-center space-x-2">
-                            <i class="fa-solid fa-plus"></i><span>Adicionar</span>
-                        </button>
+                        <span class="bg-brand-500 hover:bg-brand-600 text-brand-dark px-4 py-2.5 rounded-xl text-xs font-bold transition shadow flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i><span>Pedir</span>
+                        </span>
                     </div>
                 </div>
             `).join('');
         }
 
-        function addToCart(id) {
+        // Funções da Subpágina / Modal de Detalhes do Hambúrguer
+        function openProductDetail(id) {
             const product = menuData.find(i => i.id === id);
-            const existing = cart.find(i => i.id === id);
-            if(existing) { existing.qty++; } 
-            else { cart.push({ ...product, qty: 1 }); }
+            if(!product) return;
+            selectedProductForDetail = product;
+            currentDetailQty = 1;
+
+            document.getElementById('detail-img').src = product.image;
+            document.getElementById('detail-category').innerText = product.category;
+            document.getElementById('detail-name').innerText = product.name;
+            document.getElementById('detail-desc').innerText = product.desc;
+            document.getElementById('detail-qty').innerText = currentDetailQty;
+
+            // Renderiza adicionais
+            const addonsContainer = document.getElementById('detail-addons-list');
+            addonsContainer.innerHTML = availableAddons.map(addon => `
+                <label class="flex items-center justify-between bg-zinc-900 p-3 rounded-xl border border-zinc-800 cursor-pointer hover:border-brand-500/40 transition">
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" value="${addon.id}" data-price="${addon.price}" data-name="${addon.name}" onchange="updateDetailTotalPrice()" class="product-addon-checkbox w-4 h-4 accent-brand-500 rounded bg-zinc-800 border-zinc-700">
+                        <span class="text-xs font-medium text-white">${addon.name}</span>
+                    </div>
+                    <span class="text-xs font-bold text-brand-500">+ R$ ${addon.price.toFixed(2)}</span>
+                </label>
+            `).join('');
+
+            updateDetailTotalPrice();
+            document.getElementById('product-detail-modal').classList.remove('hidden');
+        }
+
+        function closeProductDetail() {
+            document.getElementById('product-detail-modal').classList.add('hidden');
+        }
+
+        function minimizeProductDetail() {
+            closeProductDetail();
+        }
+
+        function adjustDetailQty(delta) {
+            currentDetailQty += delta;
+            if(currentDetailQty < 1) currentDetailQty = 1;
+            document.getElementById('detail-qty').innerText = currentDetailQty;
+            updateDetailTotalPrice();
+        }
+
+        function updateDetailTotalPrice() {
+            if(!selectedProductForDetail) return;
+            let unitPrice = selectedProductForDetail.price;
+            
+            const checkboxes = document.querySelectorAll('.product-addon-checkbox:checked');
+            checkboxes.forEach(cb => {
+                unitPrice += parseFloat(cb.getAttribute('data-price'));
+            });
+
+            const total = unitPrice * currentDetailQty;
+            document.getElementById('detail-total-price').innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        function addDetailedProductToCart() {
+            if(!selectedProductForDetail) return;
+
+            const checkboxes = document.querySelectorAll('.product-addon-checkbox:checked');
+            let selectedAddons = [];
+            let addonExtraPrice = 0;
+
+            checkboxes.forEach(cb => {
+                selectedAddons.push({
+                    id: cb.value,
+                    name: cb.getAttribute('data-name'),
+                    price: parseFloat(cb.getAttribute('data-price'))
+                });
+                addonExtraPrice += parseFloat(cb.getAttribute('data-price'));
+            });
+
+            const finalUnitPrice = selectedProductForDetail.price + addonExtraPrice;
+
+            // Cria um identificador único baseado no produto e adicionais para agrupar ou diferenciar
+            const cartItemKey = `${selectedProductForDetail.id}_${selectedAddons.map(a => a.id).sort().join('_')}`;
+
+            const existing = cart.find(i => i.cartKey === cartItemKey);
+            if(existing) {
+                existing.qty += currentDetailQty;
+            } else {
+                cart.push({
+                    cartKey: cartItemKey,
+                    id: selectedProductForDetail.id,
+                    name: selectedProductForDetail.name,
+                    price: finalUnitPrice,
+                    basePrice: selectedProductForDetail.price,
+                    qty: currentDetailQty,
+                    addons: selectedAddons
+                });
+            }
+
             updateCartBadge();
+            closeProductDetail();
             openCart();
         }
 
@@ -860,16 +1035,21 @@
             }
 
             container.innerHTML = cart.map(item => `
-                <div class="py-3 flex justify-between items-center">
-                    <div>
-                        <h4 class="text-sm font-bold">${item.name}</h4>
-                        <span class="text-xs text-brand-500 font-bold">R$ ${item.price.toFixed(2)}</span>
+                <div class="py-3 space-y-1">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="text-sm font-bold">${item.name}</h4>
+                            <span class="text-xs text-brand-500 font-bold">R$ ${item.price.toFixed(2)} cada</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="changeQty('${item.cartKey}', -1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-zinc-700">-</button>
+                            <span class="text-sm font-bold">${item.qty}</span>
+                            <button onclick="changeQty('${item.cartKey}', 1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-zinc-700">+</button>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-3">
-                        <button onclick="changeQty(${item.id}, -1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-zinc-700">-</button>
-                        <span class="text-sm font-bold">${item.qty}</span>
-                        <button onclick="changeQty(${item.id}, 1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-zinc-700">+</button>
-                    </div>
+                    ${item.addons && item.addons.length > 0 ? `
+                        <p class="text-[11px] text-gray-400">Adicionais: ${item.addons.map(a => a.name).join(', ')}</p>
+                    ` : ''}
                 </div>
             `).join('');
 
@@ -878,11 +1058,11 @@
             document.getElementById('cart-total').innerText = `R$ ${(subtotal + 5.00).toFixed(2)}`;
         }
 
-        function changeQty(id, delta) {
-            const item = cart.find(i => i.id === id);
+        function changeQty(cartKey, delta) {
+            const item = cart.find(i => i.cartKey === cartKey);
             if(item) {
                 item.qty += delta;
-                if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+                if(item.qty <= 0) cart = cart.filter(i => i.cartKey !== cartKey);
             }
             updateCartBadge();
             renderCartItems();
@@ -891,28 +1071,77 @@
         function openCheckout() {
             if(cart.length === 0) return alert('Adicione itens ao carrinho primeiro!');
             closeCart();
+            renderCheckoutSummary();
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
         function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
 
+        function backToCartFromCheckout() {
+            closeCheckout();
+            openCart();
+        }
+
+        function renderCheckoutSummary() {
+            const container = document.getElementById('checkout-order-summary');
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const total = subtotal + 5.00;
+
+            container.innerHTML = `
+                <div class="text-xs font-bold text-brand-500 mb-1 flex items-center justify-between">
+                    <span>CUPOM / RESUMO DOS ITENS</span>
+                    <span>Total: R$ ${total.toFixed(2)}</span>
+                </div>
+                ${cart.map(i => `
+                    <div class="flex justify-between text-xs text-gray-300 py-1 border-b border-zinc-800/50">
+                        <span>${i.qty}x ${i.name} ${i.addons && i.addons.length > 0 ? `(${i.addons.map(a => a.name).join(', ')})` : ''}</span>
+                        <span class="font-bold">R$ ${(i.price * i.qty).toFixed(2)}</span>
+                    </div>
+                `).join('')}
+                <div class="flex justify-between text-[11px] text-gray-400 pt-1">
+                    <span>Taxa de Entrega: R$ 5,00</span>
+                    <span id="cupom-troco-display" class="text-brand-500 font-semibold"></span>
+                </div>
+            `;
+        }
+
+        function toggleTrocoField() {
+            const payment = document.getElementById('client-payment').value;
+            const trocoContainer = document.getElementById('troco-container');
+            if(payment === 'Dinheiro') {
+                trocoContainer.classList.remove('hidden');
+            } else {
+                trocoContainer.classList.add('hidden');
+                document.getElementById('client-troco').value = '';
+            }
+        }
+
         async function submitOrder(e) {
             e.preventDefault();
-            const name = document.getElementById('client-name').value;
+            const name = document.getElementById('client-name').value.trim();
             const phone = document.getElementById('client-phone').value.replace(/\D/g, '');
-            const address = document.getElementById('client-address').value;
+            const address = document.getElementById('client-address').value.trim();
             const payment = document.getElementById('client-payment').value;
+            const troco = payment === 'Dinheiro' ? document.getElementById('client-troco').value.trim() : '';
 
+            // Validação de DDD e telefone obrigatório
             if(phone.length < 10) {
-                alert('Por favor, informe um número de WhatsApp válido com DDD!');
+                alert('Atenção: É obrigatório informar o número do WhatsApp com o DDD (ex: 63999999999) para garantir o envio correto das mensagens!');
+                document.getElementById('client-phone').focus();
                 return;
             }
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            const orderIdNum = Math.floor(100 + Math.random() * 900);
+            
+            // Lógica do Número do Pedido: Reinicia em 1 todo dia para cada novo dia
+            const todayStr = new Date().toDateString();
+            const todayOrders = orders.filter(o => new Date(o.date).toDateString() === todayStr);
+            const dailyIdNum = todayOrders.length + 1;
+
             const newOrder = {
-                id: orderIdNum,
-                client: { name, phone, address, payment },
+                id: Date.now(),
+                dailyId: dailyIdNum,
+                client: { name, phone, address, payment, troco },
                 items: [...cart],
                 total: subtotal + 5.00,
                 status: 'new',
@@ -926,12 +1155,13 @@
             updateCartBadge();
             closeCheckout();
 
-            alert('🎉 Pedido feito com sucesso! Acompanhe as novidades.');
+            alert(`🎉 Pedido #${dailyIdNum} realizado com sucesso! Acompanhe as novidades.`);
 
-            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${newOrder.id})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n📍 *Endereço:* ${address}\n\nVá até o painel do comércio e confira!`;
+            let trocoText = troco ? `💵 *Troco para:* ${troco}\n` : '';
+            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address}\n\nVá até o painel do comércio e confira!`;
             enqueueWhatsAppMessage(COMERCE_WHATSAPP, comecoMsg);
 
-            const clienteMsg = `Olá ${name}! Seu pedido #${newOrder.id} foi recebido com sucesso na Max Burger & Grill! 🍔`;
+            const clienteMsg = `Olá ${name}! Seu pedido #${dailyIdNum} foi recebido com sucesso na Max Burger & Grill! 🍔`;
             enqueueWhatsAppMessage(phone, clienteMsg);
         }
 
@@ -955,18 +1185,23 @@
                 <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 flex flex-col justify-between shadow-md">
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-bold bg-zinc-800 text-brand-500 px-3 py-1 rounded-full">#${order.id}</span>
+                            <span class="text-xs font-bold bg-zinc-800 text-brand-500 px-3 py-1 rounded-full">Pedido #${order.dailyId || order.id}</span>
                             <span class="text-[10px] text-gray-400">${new Date(order.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                         </div>
                         <div class="space-y-1 mb-4">
                             <h4 class="font-bold text-sm">${order.client.name}</h4>
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1 text-brand-500"></i> ${order.client.phone}</p>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-credit-card mr-1 text-brand-500"></i> ${order.client.payment || 'Não informada'}</p>
+                            <p class="text-xs text-gray-400"><i class="fa-solid fa-credit-card mr-1 text-brand-500"></i> ${order.client.payment || 'Não informada'} ${order.client.troco ? `(Troco: ${order.client.troco})` : ''}</p>
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address}</p>
                             ${order.motoboy ? `<p class="text-xs text-blue-400 font-semibold mt-1"><i class="fa-solid fa-motorcycle mr-1"></i> Entregador: ${order.motoboy.name}</p>` : ''}
                         </div>
                         <div class="border-t border-zinc-800 pt-3 space-y-1 text-xs text-gray-300">
-                            ${order.items.map(i => `<div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty).toFixed(2)}</span></div>`).join('')}
+                            ${order.items.map(i => `
+                                <div>
+                                    <div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty).toFixed(2)}</span></div>
+                                    ${i.addons && i.addons.length > 0 ? `<p class="text-[10px] text-gray-500">Adicionais: ${i.addons.map(a => a.name).join(', ')}</p>` : ''}
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                     <div class="border-t border-zinc-800 pt-3 mt-4 space-y-3">
@@ -1007,7 +1242,7 @@
             await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
 
             if(newStatus === 'production') {
-                const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.id} foi aceito e já está em preparo na brasa!`;
+                const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
                 enqueueWhatsAppMessage(order.client.phone, msg);
             }
         }
@@ -1034,7 +1269,7 @@
             const order = orders.find(o => o.firebaseKey === firebaseKey);
             if(order) {
                 await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: 'cancelled' });
-                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.id} foi cancelado.\n\n*Motivo:* ${reason}\n\nQualquer dúvida estamos à disposição!`;
+                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.dailyId} foi cancelado.\n\n*Motivo:* ${reason}\n\nQualquer dúvida estamos à disposição!`;
                 enqueueWhatsAppMessage(order.client.phone, cancelMsg);
             }
 
@@ -1101,7 +1336,7 @@
                     <div class="py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 hover:bg-zinc-900/40 px-3 rounded-xl transition">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <span class="text-xs font-bold text-brand-500">#${o.id}</span>
+                                <span class="text-xs font-bold text-brand-500">Pedido #${o.dailyId || o.id}</span>
                                 <span class="text-xs font-semibold text-white">${o.client.name}</span>
                                 <span class="text-[10px] text-gray-400">(${new Date(o.date).toLocaleDateString()} ${new Date(o.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})})</span>
                             </div>
