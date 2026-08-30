@@ -61,16 +61,16 @@
             <div class="text-center mb-6">
                 <div class="bg-brand-500/10 text-brand-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3 class="text-xl font-bold">Painel Administrativo</h3>
-                <p class="text-xs text-gray-400 mt-1">Gerenciamento conectado via Firebase & Evolution API</p>
+                <p class="text-xs text-gray-400 mt-1">Autenticação Segura via Firebase Authentication</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4" autocomplete="off">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Usuário</label>
-                    <input type="text" id="admin-user" value="admin" autocomplete="off" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                    <label class="block text-xs font-medium text-gray-400 mb-1">E-mail de Acesso</label>
+                    <input type="email" id="admin-user" autocomplete="email" required placeholder="admin@maxburger.com" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Senha</label>
-                    <input type="password" id="admin-pass" value="123456" autocomplete="current-password" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                    <input type="password" id="admin-pass" autocomplete="current-password" required placeholder="••••••••" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                 </div>
                 <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg">Entrar no Painel</button>
                 <button type="button" onclick="switchView('menu')" class="w-full bg-transparent hover:bg-zinc-800 text-gray-400 text-xs py-2 rounded-xl transition">Voltar ao Cardápio</button>
@@ -83,7 +83,7 @@
                     <h2 class="text-2xl font-black">Painel de Controle Operacional</h2>
                     <p class="text-xs text-gray-400">Sincronizado em Nuvem em Tempo Real (Firebase RTDB)</p>
                 </div>
-                <button onclick="switchView('menu')" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-xs text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair do Painel</span></button>
+                <button onclick="handleAdminLogout()" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-xs text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair do Painel</span></button>
             </div>
 
             <div class="flex space-x-2 overflow-x-auto pb-2 border-b border-zinc-800">
@@ -136,7 +136,7 @@
                     
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-2">Modelo de Cobrança do Frete</label>
-                        <select id="delivery-mode-select" onchange="handleDeliveryModeChange()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
+                        <select id="delivery-mode-select" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
                             <option value="sector">Taxa por Setor / Bairro</option>
                             <option value="fixed">Taxa Fixa Única</option>
                             <option value="free">Entrega Grátis (R$ 0,00)</option>
@@ -430,7 +430,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Motivo (Enviado via WhatsApp ao cliente)</label>
-                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
+                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 text-white"></textarea>
                 </div>
                 <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Avisar Cliente</button>
             </div>
@@ -447,12 +447,12 @@
                 <input type="hidden" id="item-id">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Nome do Item</label>
-                    <input type="text" id="item-name" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                    <input type="text" id="item-name" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Categoria</label>
-                        <select id="item-category" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                        <select id="item-category" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                             <option value="Burgers">Burgers</option>
                             <option value="Acompanhamentos">Acompanhamentos</option>
                             <option value="Bebidas">Bebidas</option>
@@ -460,16 +460,16 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Preço (R$)</label>
-                        <input type="number" step="0.01" id="item-price" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                        <input type="number" step="0.01" id="item-price" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem</label>
-                    <input type="text" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                    <input type="text" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Descrição</label>
-                    <textarea id="item-desc" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
+                    <textarea id="item-desc" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
                 </div>
                 <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg mt-2">Salvar Item</button>
             </form>
@@ -479,6 +479,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update, remove, push, child } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCczhst9EVg27JpvBMq9C-Z0n9efQpI5rQ",
@@ -493,6 +494,7 @@
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const auth = getAuth(app);
 
         window.db = database;
         window.dbRef = ref;
@@ -503,6 +505,11 @@
         window.dbRemove = remove;
         window.dbPush = push;
         window.dbChild = child;
+
+        window.firebaseAuth = auth;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
 
         window.dispatchEvent(new Event('firebase-ready'));
     </script>
@@ -576,7 +583,28 @@
 
         window.addEventListener('firebase-ready', () => {
             initFirebaseListeners();
+            initAuthListener();
         });
+
+        function initAuthListener() {
+            window.onAuthStateChanged(window.firebaseAuth, (user) => {
+                const currentViewMenu = document.getElementById('view-menu').classList.contains('hidden');
+                const currentViewLogin = document.getElementById('view-admin-login').classList.contains('hidden');
+                
+                if (user) {
+                    // Usuário autenticado
+                    if (!currentViewLogin) {
+                        switchView('admin-dashboard');
+                    }
+                } else {
+                    // Usuário deslogado - protege rotas do painel administrativo
+                    const isDashboardVisible = !document.getElementById('view-admin-dashboard').classList.contains('hidden');
+                    if (isDashboardVisible) {
+                        switchView('admin-login');
+                    }
+                }
+            });
+        }
 
         async function initFirebaseListeners() {
             window.dbOnValue(window.dbRef(window.db, 'maxburger/settings'), (snapshot) => {
@@ -702,27 +730,32 @@
         }
 
         function updateSettingsUI() {
-            document.getElementById('setting-sound-toggle').checked = deliverySettings.soundEnabled !== false;
-            document.getElementById('delivery-mode-select').value = deliverySettings.mode || 'sector';
-            document.getElementById('fixed-rate-input').value = deliverySettings.fixedRate || 5.00;
+            const soundToggle = document.getElementById('setting-sound-toggle');
+            if (soundToggle) soundToggle.checked = deliverySettings.soundEnabled !== false;
+            const deliveryModeSelect = document.getElementById('delivery-mode-select');
+            if (deliveryModeSelect) deliveryModeSelect.value = deliverySettings.mode || 'sector';
+            const fixedRateInput = document.getElementById('fixed-rate-input');
+            if (fixedRateInput) fixedRateInput.value = deliverySettings.fixedRate || 5.00;
             handleDeliveryModeChange();
         }
 
         function handleDeliveryModeChange() {
-            const mode = document.getElementById('delivery-mode-select').value;
+            const modeSelect = document.getElementById('delivery-mode-select');
+            if(!modeSelect) return;
+            const mode = modeSelect.value;
             const fixedContainer = document.getElementById('mode-config-fixed');
             const sectorContainer = document.getElementById('mode-config-sector');
             const checkoutSectorGroup = document.getElementById('checkout-sector-group');
 
-            fixedContainer.classList.add('hidden');
-            sectorContainer.classList.add('hidden');
-            checkoutSectorGroup.classList.remove('hidden');
+            if(fixedContainer) fixedContainer.classList.add('hidden');
+            if(sectorContainer) sectorContainer.classList.add('hidden');
+            if(checkoutSectorGroup) checkoutSectorGroup.classList.remove('hidden');
 
-            if(mode === 'fixed') {
+            if(mode === 'fixed' && fixedContainer) {
                 fixedContainer.classList.remove('hidden');
-            } else if(mode === 'sector') {
+            } else if(mode === 'sector' && sectorContainer) {
                 sectorContainer.classList.remove('hidden');
-            } else if(mode === 'free') {
+            } else if(mode === 'free' && checkoutSectorGroup) {
                 checkoutSectorGroup.classList.add('hidden');
             }
         }
@@ -769,6 +802,7 @@
 
         function renderSectorsList() {
             const container = document.getElementById('sectors-list-container');
+            if(!container) return;
             if(!sectors || sectors.length === 0) {
                 container.innerHTML = `<p class="text-xs text-gray-500 col-span-full">Nenhum setor cadastrado.</p>`;
                 return;
@@ -833,16 +867,34 @@
             }
         }
 
-        function openAdminLogin() { switchView('admin-login'); }
+        function openAdminLogin() { 
+            // Se já estiver logado, vai direto para o painel
+            if (window.firebaseAuth.currentUser) {
+                switchView('admin-dashboard');
+            } else {
+                switchView('admin-login'); 
+            }
+        }
 
-        function handleAdminLogin(e) {
+        async function handleAdminLogin(e) {
             e.preventDefault();
             const u = document.getElementById('admin-user').value;
             const p = document.getElementById('admin-pass').value;
-            if(u === 'admin' && p === '123456') {
+            try {
+                await window.signInWithEmailAndPassword(window.firebaseAuth, u, p);
                 switchView('admin-dashboard');
-            } else {
-                alert('Usuário ou senha incorretos! (Use admin / 123456)');
+            } catch (error) {
+                console.error(error);
+                alert('E-mail ou senha incorretos ou não cadastrados no Firebase Authentication!');
+            }
+        }
+
+        async function handleAdminLogout() {
+            try {
+                await window.signOut(window.firebaseAuth);
+                switchView('menu');
+            } catch (error) {
+                console.error(error);
             }
         }
 
@@ -884,6 +936,7 @@
 
         function renderMotoboysList() {
             const container = document.getElementById('motoboys-list-container');
+            if(!container) return;
             if(!motoboys || motoboys.length === 0) {
                 container.innerHTML = `<p class="text-xs text-gray-500 col-span-full py-4 text-center">Nenhum motoboy cadastrado ainda.</p>`;
                 return;
@@ -966,8 +1019,11 @@
         }
 
         function renderMotoboyDeliveries() {
-            const period = document.getElementById('motoboy-period-filter').value;
+            const periodFilter = document.getElementById('motoboy-period-filter');
+            if(!periodFilter) return;
+            const period = periodFilter.value;
             const container = document.getElementById('motoboy-summary-container');
+            if(!container) return;
 
             if(motoboys.length === 0) {
                 container.innerHTML = `<p class="text-xs text-gray-500 col-span-full text-center py-8">Nenhum motoboy cadastrado.</p>`;
@@ -1069,8 +1125,10 @@
         }
 
         function renderCategories() {
+            const tabs = document.getElementById('category-tabs');
+            if(!tabs) return;
             const cats = ['Todos', ...new Set(menuData.map(i => i.category))];
-            document.getElementById('category-tabs').innerHTML = cats.map(cat => `
+            tabs.innerHTML = cats.map(cat => `
                 <button onclick="filterCategory('${cat}')" class="px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border ${currentCategory === cat ? 'bg-brand-500 text-brand-dark border-brand-500 shadow-md' : 'bg-brand-card text-gray-300 border-zinc-800 hover:bg-zinc-800'}">
                     ${cat}
                 </button>
@@ -1085,6 +1143,7 @@
 
         function renderMenu() {
             const grid = document.getElementById('products-grid');
+            if(!grid) return;
             const filtered = currentCategory === 'Todos' ? menuData : menuData.filter(i => i.category === currentCategory);
             
             grid.innerHTML = filtered.map(item => `
@@ -1200,6 +1259,7 @@
 
         function updateCartBadge() {
             const badge = document.getElementById('cart-badge');
+            if(!badge) return;
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
             if(totalItems > 0) {
                 badge.innerText = totalItems;
@@ -1214,6 +1274,7 @@
 
         function renderCartItems() {
             const container = document.getElementById('cart-items');
+            if(!container) return;
             if(cart.length === 0) {
                 container.innerHTML = `<div class="text-center py-12 text-gray-500 text-sm"><i class="fa-solid fa-basket-shopping text-3xl mb-2"></i><p>Sua sacola está vazia</p></div>`;
                 document.getElementById('cart-subtotal').innerText = 'R$ 0,00';
@@ -1272,6 +1333,7 @@
 
         function renderCheckoutSummary() {
             const container = document.getElementById('checkout-order-summary');
+            if(!container) return;
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
             const deliveryFee = getCurrentDeliveryFee();
             const total = subtotal + deliveryFee;
@@ -1295,7 +1357,9 @@
         }
 
         function toggleTrocoField() {
-            const payment = document.getElementById('client-payment').value;
+            const paymentSelect = document.getElementById('client-payment');
+            if(!paymentSelect) return;
+            const payment = paymentSelect.value;
             const trocoContainer = document.getElementById('troco-container');
             if(payment === 'Dinheiro') {
                 trocoContainer.classList.remove('hidden');
@@ -1377,6 +1441,7 @@
 
         function renderOrderList(statusFilter, elementId, emptyText) {
             const container = document.getElementById(elementId);
+            if(!container) return;
             const filtered = orders.filter(o => o.status === statusFilter);
 
             if(filtered.length === 0) {
@@ -1531,6 +1596,7 @@
             document.getElementById('rep-count').innerText = validOrders.length;
 
             const financeListContainer = document.getElementById('finance-orders-list');
+            if(!financeListContainer) return;
             if(validOrders.length === 0) {
                 financeListContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Nenhuma venda registrada no caixa.</p>`;
             } else {
@@ -1563,6 +1629,7 @@
 
             const sortedProducts = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
             const topList = document.getElementById('top-products-list');
+            if(!topList) return;
             
             if(sortedProducts.length === 0) {
                 topList.innerHTML = `<p class="text-xs text-gray-500">Nenhum produto vendido ainda.</p>`;
@@ -1581,7 +1648,9 @@
         }
 
         function renderAdminMenu() {
-            document.getElementById('admin-menu-list').innerHTML = menuData.map(item => `
+            const adminMenuList = document.getElementById('admin-menu-list');
+            if(!adminMenuList) return;
+            adminMenuList.innerHTML = menuData.map(item => `
                 <div class="p-4 flex items-center justify-between hover:bg-zinc-900/50 transition">
                     <div class="flex items-center space-x-4">
                         <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
