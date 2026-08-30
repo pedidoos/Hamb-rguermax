@@ -30,10 +30,6 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <div id="store-status-badge" class="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-bold">
-                    <span id="store-status-dot" class="w-2.5 h-2.5 rounded-full"></span>
-                    <span id="store-status-text">Verificando...</span>
-                </div>
                 <button onclick="openCart()" class="relative bg-zinc-800 hover:bg-zinc-700 px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center space-x-2 border border-zinc-700">
                     <i class="fa-solid fa-cart-shopping text-brand-500"></i>
                     <span class="hidden sm:inline">Carrinho</span>
@@ -51,17 +47,9 @@
         <div id="view-menu" class="space-y-6">
             <div class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center">
                 <div class="relative z-10 max-w-lg">
-                    <span id="banner-store-badge" class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via WhatsApp</span>
+                    <span class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via WhatsApp</span>
                     <h2 class="text-2xl sm:text-4xl font-black text-white mb-2">O Verdadeiro Sabor Artesanal</h2>
                     <p class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
-                </div>
-            </div>
-
-            <div id="closed-warning-banner" class="hidden bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex items-center space-x-3 text-red-400">
-                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
-                <div>
-                    <h4 class="font-bold text-sm">Loja Fechada no Momento</h4>
-                    <p class="text-xs text-gray-300">Você ainda pode navegar pelo cardápio e montar sua sacola, mas os pedidos estarão disponíveis assim que abrirmos!</p>
                 </div>
             </div>
 
@@ -73,16 +61,16 @@
             <div class="text-center mb-6">
                 <div class="bg-brand-500/10 text-brand-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3 class="text-xl font-bold">Painel Administrativo</h3>
-                <p class="text-xs text-gray-400 mt-1">Acesso Restrito via Firebase Authentication</p>
+                <p class="text-xs text-gray-400 mt-1">Gerenciamento conectado via Firebase & Evolution API</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4" autocomplete="off">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">E-mail Cadastrado</label>
-                    <input type="email" id="admin-email" required placeholder="admin@maxburger.com" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Usuário</label>
+                    <input type="text" id="admin-user" value="admin" autocomplete="off" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Senha</label>
-                    <input type="password" id="admin-pass" required autocomplete="current-password" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    <input type="password" id="admin-pass" value="123456" autocomplete="current-password" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg">Entrar no Painel</button>
                 <button type="button" onclick="switchView('menu')" class="w-full bg-transparent hover:bg-zinc-800 text-gray-400 text-xs py-2 rounded-xl transition">Voltar ao Cardápio</button>
@@ -93,64 +81,24 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-zinc-800">
                 <div>
                     <h2 class="text-2xl font-black">Painel de Controle Operacional</h2>
-                    <p class="text-xs text-gray-400">Sincronizado em Nuvem em Tempo Real (Firebase Auth & RTDB)</p>
+                    <p class="text-xs text-gray-400">Sincronizado em Nuvem em Tempo Real (Firebase RTDB)</p>
                 </div>
-                <button onclick="handleAdminLogout()" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-xs text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair do Painel</span></button>
+                <button onclick="switchView('menu')" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-xs text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair do Painel</span></button>
             </div>
 
             <div class="flex space-x-2 overflow-x-auto pb-2 border-b border-zinc-800">
-                <button onclick="switchAdminTab('status')" id="btn-tab-status" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-store"></i><span>Status da Loja</span></button>
-                <button onclick="switchAdminTab('new')" id="btn-tab-new" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-bell"></i><span>Novos Pedidos</span></button>
+                <button onclick="switchAdminTab('new')" id="btn-tab-new" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-bell"></i><span>Novos Pedidos</span></button>
                 <button onclick="switchAdminTab('production')" id="btn-tab-production" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-fire-burner"></i><span>Em Produção</span></button>
-                <button onclick="switchAdminTab('delivery')" id="btn-tab-delivery" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-motorcycle"></i><span>Em Rota</span></button>
+                <button onclick="switchAdminTab('delivery')" id="btn-tab-delivery" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-motorcycle"></i><span>Em Rota de Entrega</span></button>
                 <button onclick="switchAdminTab('settings')" id="btn-tab-settings" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-gears text-brand-500"></i><span>Config. & Taxas</span></button>
-                <button onclick="switchAdminTab('motoboys')" id="btn-tab-motoboys" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-id-card-clip text-brand-500"></i><span>Motoboys</span></button>
-                <button onclick="switchAdminTab('motoboy-deliveries')" id="btn-tab-motoboy-deliveries" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-route text-blue-400"></i><span>Acerto Motoboys</span></button>
+                <button onclick="switchAdminTab('motoboys')" id="btn-tab-motoboys" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-id-card-clip text-brand-500"></i><span>Cadastrar Motoboys</span></button>
+                <button onclick="switchAdminTab('motoboy-deliveries')" id="btn-tab-motoboy-deliveries" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-route text-blue-400"></i><span>Entregas por Motoboy</span></button>
                 <button onclick="switchAdminTab('completed')" id="btn-tab-completed" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-circle-check"></i><span>Concluídos</span></button>
-                <button onclick="switchAdminTab('menu-mgr')" id="btn-tab-menu-mgr" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-utensils"></i><span>Cardápio</span></button>
-                <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-chart-line"></i><span>Financeiro</span></button>
+                <button onclick="switchAdminTab('menu-mgr')" id="btn-tab-menu-mgr" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-utensils"></i><span>Gerenciar Cardápio</span></button>
+                <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-chart-line"></i><span>Financeiro & Caixa</span></button>
             </div>
 
-            <!-- ABA DE STATUS DA LOJA -->
-            <div id="admin-sec-status" class="space-y-6">
-                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-6">
-                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-store"></i><span>Controle de Abertura e Fechamento</span></h3>
-                    
-                    <div class="bg-zinc-900 p-5 rounded-xl border border-zinc-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div>
-                            <h4 class="font-bold text-sm text-white">Modo de Operação Manual</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Altera instantaneamente o status da loja para aberto ou fechado no cardápio.</p>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <span id="manual-status-label" class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg">Verificando...</span>
-                            <button onclick="toggleStoreManualStatus()" id="manual-toggle-btn" class="px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg">Alternar Status</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-zinc-900 p-5 rounded-xl border border-zinc-800 space-y-4">
-                        <div>
-                            <h4 class="font-bold text-sm text-white">Agendamento Automático por Horário</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Defina o horário em que o sistema abre e fecha a loja automaticamente todos os dias.</p>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1">Horário de Abertura</label>
-                                <input type="time" id="schedule-open-time" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1">Horário de Fechamento</label>
-                                <input type="time" id="schedule-close-time" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
-                            </div>
-                            <div class="flex items-end">
-                                <button onclick="saveStoreSchedule()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-2.5 rounded-xl transition text-xs shadow">Salvar Agendamento</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="admin-sec-new" class="hidden space-y-4">
+            <div id="admin-sec-new" class="space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-bell"></i><span>Pedidos Aguardando Aceite</span></h3>
                     <button onclick="enableAudioAlerts()" class="bg-brand-500/20 text-brand-500 hover:bg-brand-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition border border-brand-500/30"><i class="fa-solid fa-volume-high mr-1"></i> Testar Alarme Sonoro</button>
@@ -169,7 +117,6 @@
             </div>
 
             <div id="admin-sec-settings" class="hidden space-y-6">
-                <!-- Configurações de som e taxas -->
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-volume-high"></i><span>Configuração de Som de Notificação</span></h3>
                     <div class="flex items-center justify-between bg-zinc-900 p-4 rounded-xl border border-zinc-800">
@@ -186,6 +133,7 @@
 
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-6">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-motorcycle"></i><span>Gestão de Taxas de Entrega em Tempo Real</span></h3>
+                    
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-2">Modelo de Cobrança do Frete</label>
                         <select id="delivery-mode-select" onchange="handleDeliveryModeChange()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
@@ -325,11 +273,15 @@
                     <h4 class="text-base font-bold flex items-center space-x-2"><i class="fa-solid fa-receipt text-brand-500"></i><span>Extrato de Vendas & Fechamento de Caixa</span></h4>
                     <div id="finance-orders-list" class="space-y-2 divide-y divide-zinc-800/60 overflow-y-auto max-h-96"></div>
                 </div>
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800">
+                    <h4 class="text-base font-bold mb-4 flex items-center space-x-2"><i class="fa-solid fa-fire text-brand-500"></i><span>Hambúrguer Mais Vendido</span></h4>
+                    <div id="top-products-list" class="space-y-3"></div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Modais de Produtos, Carrinho, Checkout e Atribuição -->
     <div id="product-detail-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden my-auto">
             <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/50 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center z-10 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -364,10 +316,10 @@
 
                 <div class="grid grid-cols-2 gap-3 pt-2">
                     <button onclick="minimizeProductDetail()" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold py-3.5 rounded-xl transition text-xs flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-window-minimize"></i><span>Minimizar</span>
+                        <i class="fa-solid fa-window-minimize"></i><span>Minimizar (Comprar Mais)</span>
                     </button>
                     <button onclick="addDetailedProductToCart()" class="bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition text-xs shadow-lg flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-cart-plus"></i><span>Adicionar</span>
+                        <i class="fa-solid fa-cart-plus"></i><span>Avançar p/ Resumo</span>
                     </button>
                 </div>
             </div>
@@ -377,16 +329,17 @@
     <div id="assign-motoboy-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-motorcycle mr-2"></i> Selecionar Motoboy</h3>
+                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-motorcycle mr-2"></i> Selecionar Motoboy para Entrega</h3>
                 <button onclick="closeAssignMotoboyModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <input type="hidden" id="assign-order-key">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Entregador</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Escolha o Entregador Cadastrado</label>
                     <select id="select-motoboy-target" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></select>
                 </div>
-                <button onclick="confirmAssignMotoboy()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar e Enviar</button>
+                <p class="text-xs text-gray-400">Ao confirmar, o cupom detalhado de entrega será enfileirado e enviado via WhatsApp para o motoboy selecionado!</p>
+                <button onclick="confirmAssignMotoboy()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar e Enviar Cupom ao Motoboy</button>
             </div>
         </div>
     </div>
@@ -402,7 +355,7 @@
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-bold">R$ 0,00</span></div>
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Taxa de Entrega</span><span id="cart-delivery-display" class="font-bold text-brand-500">R$ 0,00</span></div>
                 <div class="flex justify-between text-base font-black pt-2 border-t border-zinc-800"><span>Total</span><span id="cart-total" class="text-brand-500">R$ 0,00</span></div>
-                <button onclick="openCheckout()" id="btn-checkout-proceed" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
+                <button onclick="openCheckout()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
             </div>
         </div>
     </div>
@@ -410,32 +363,38 @@
     <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative my-auto">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-receipt mr-2"></i> Finalizar Pedido</h3>
+                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-receipt mr-2"></i> Resumo do Pedido & Entrega</h3>
                 <button onclick="closeCheckout()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            
             <form onsubmit="submitOrder(event)" class="space-y-4">
                 <div id="checkout-order-summary" class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-2 max-h-40 overflow-y-auto"></div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Nome Completo</label>
-                        <input type="text" id="client-name" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp</label>
-                        <input type="tel" id="client-phone" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp com DDD (Obrigatório)</label>
+                        <input type="tel" id="client-phone" required placeholder="Ex: 63999999999" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                     </div>
                 </div>
+
                 <div id="checkout-sector-group">
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Setor / Bairro</label>
-                    <select id="client-sector" onchange="renderCartItems(); renderCheckoutSummary();" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></select>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Setor / Bairro de Entrega</label>
+                    <select id="client-sector" onchange="updateCartBadge(); renderCartItems(); renderCheckoutSummary();" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    </select>
                 </div>
+
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Endereço</label>
-                    <textarea id="client-address" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Endereço Completo (Rua, Número, Ponto de Referência)</label>
+                    <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
                 </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1">Pagamento</label>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Forma de Pagamento</label>
                         <select id="client-payment" onchange="toggleTrocoField()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
@@ -444,11 +403,19 @@
                         </select>
                     </div>
                     <div id="troco-container" class="hidden">
-                        <label class="block text-xs font-medium text-gray-400 mb-1">Troco</label>
-                        <input type="text" id="client-troco" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Troco para quanto? (Dinheiro)</label>
+                        <input type="text" id="client-troco" placeholder="Ex: R$ 50,00 ou Não preciso" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition text-sm shadow-lg">Enviar Pedido</button>
+
+                <div class="flex items-center space-x-3 pt-2">
+                    <button type="button" onclick="backToCartFromCheckout()" class="w-1/3 bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold py-3.5 rounded-xl transition text-xs shadow">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Voltar / Sacola
+                    </button>
+                    <button type="submit" class="w-2/3 bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition text-sm shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-check"></i><span>Finalizar Pedido</span>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -456,13 +423,16 @@
     <div id="cancel-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold text-red-500">Recusar Pedido</h3>
+                <h3 class="text-lg font-bold text-red-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Recusar / Cancelar Pedido</h3>
                 <button onclick="closeCancelModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <input type="hidden" id="cancel-order-id">
             <div class="space-y-4">
-                <textarea id="cancel-reason" rows="3" required placeholder="Motivo..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
-                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar</button>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo (Enviado via WhatsApp ao cliente)</label>
+                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
+                </div>
+                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Avisar Cliente</button>
             </div>
         </div>
     </div>
@@ -470,32 +440,45 @@
     <div id="item-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 id="item-modal-title" class="text-lg font-bold">Item do Cardápio</h3>
+                <h3 id="item-modal-title" class="text-lg font-bold">Novo Item do Cardápio</h3>
                 <button onclick="closeItemModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="saveMenuItem(event)" class="space-y-4">
                 <input type="hidden" id="item-id">
-                <input type="text" id="item-name" required placeholder="Nome" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
-                <div class="grid grid-cols-2 gap-4">
-                    <select id="item-category" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
-                        <option value="Burgers">Burgers</option>
-                        <option value="Acompanhamentos">Acompanhamentos</option>
-                        <option value="Bebidas">Bebidas</option>
-                    </select>
-                    <input type="number" step="0.01" id="item-price" required placeholder="Preço" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Nome do Item</label>
+                    <input type="text" id="item-name" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
-                <input type="text" id="item-image" required placeholder="URL Imagem" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
-                <textarea id="item-desc" required rows="2" placeholder="Descrição" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
-                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg">Salvar</button>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Categoria</label>
+                        <select id="item-category" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                            <option value="Burgers">Burgers</option>
+                            <option value="Acompanhamentos">Acompanhamentos</option>
+                            <option value="Bebidas">Bebidas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Preço (R$)</label>
+                        <input type="number" step="0.01" id="item-price" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem</label>
+                    <input type="text" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Descrição</label>
+                    <textarea id="item-desc" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg mt-2">Salvar Item</button>
             </form>
         </div>
     </div>
 
-    <!-- Firebase SDK Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue, update, remove, push } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+        import { getDatabase, ref, set, get, onValue, update, remove, push, child } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCczhst9EVg27JpvBMq9C-Z0n9efQpI5rQ",
@@ -510,10 +493,8 @@
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
-        const auth = getAuth(app);
 
         window.db = database;
-        window.auth = auth;
         window.dbRef = ref;
         window.dbSet = set;
         window.dbGet = get;
@@ -521,9 +502,7 @@
         window.dbUpdate = update;
         window.dbRemove = remove;
         window.dbPush = push;
-        window.signInFirebase = signInWithEmailAndPassword;
-        window.signOutFirebase = signOut;
-        window.onAuthStateChanged = onAuthStateChanged;
+        window.dbChild = child;
 
         window.dispatchEvent(new Event('firebase-ready'));
     </script>
@@ -539,11 +518,9 @@
         let motoboys = [];
         let sectors = [];
         let deliverySettings = { mode: 'sector', fixedRate: 5.00, soundEnabled: true };
-        let storeStatus = { manualOpen: true, openTime: '18:00', closeTime: '23:59', isCurrentlyOpen: true };
         let cart = [];
         let currentCategory = 'Todos';
         let alarmInterval = null;
-        let currentUser = null;
 
         const availableAddons = [
             { id: 'bacon', name: 'Bacon Extra Crocante', price: 5.00 },
@@ -555,9 +532,10 @@
         let selectedProductForDetail = null;
         let currentDetailQty = 1;
 
+        // --- SISTEMA DE FILA ASSÍNCRONA PARA O WHATSAPP ---
         let messageQueue = [];
         let isProcessingQueue = false;
-        const MESSAGE_DELAY_MS = 12000;
+        const MESSAGE_DELAY_MS = 12000; // 12 segundos entre mensagens para evitar throttling/travamento
 
         function enqueueWhatsAppMessage(phone, text) {
             messageQueue.push({ phone, text });
@@ -567,8 +545,10 @@
         async function processWhatsAppQueue() {
             if (isProcessingQueue || messageQueue.length === 0) return;
             isProcessingQueue = true;
+
             const { phone, text } = messageQueue.shift();
             await triggerWhatsAppDirect(phone, text);
+
             setTimeout(() => {
                 isProcessingQueue = false;
                 processWhatsAppQueue();
@@ -577,86 +557,81 @@
 
         async function triggerWhatsAppDirect(phone, text) {
             let cleanNumber = phone.replace(/\D/g, '');
-            if (!cleanNumber.startsWith('55')) cleanNumber = '55' + cleanNumber;
+            if (!cleanNumber.startsWith('55')) {
+                cleanNumber = '55' + cleanNumber;
+            }
+
             try {
-                await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
+                const response = await fetch(`${API_URL}/message/sendText/${INSTANCE_NAME}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'apikey': API_KEY },
                     body: JSON.stringify({ number: cleanNumber, text: text })
                 });
-            } catch (error) { console.error(error); }
+                await response.json();
+            } catch (error) {
+                console.error('Erro ao conectar com a Evolution API:', error);
+            }
         }
+        // --------------------------------------------------
 
         window.addEventListener('firebase-ready', () => {
             initFirebaseListeners();
-            initAuthListener();
         });
 
-        function initAuthListener() {
-            window.onAuthStateChanged(window.auth, (user) => {
-                currentUser = user;
-                if (!user && !document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
-                    switchView('menu');
-                }
-            });
-        }
-
-        async function handleAdminLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('admin-email').value;
-            const pass = document.getElementById('admin-pass').value;
-            try {
-                await window.signInFirebase(window.auth, email, pass);
-                switchView('admin-dashboard');
-            } catch (error) {
-                alert('Erro de autenticação: Verifique e-mail e senha cadastrados no Firebase.');
-            }
-        }
-
-        async function handleAdminLogout() {
-            await window.signOutFirebase(window.auth);
-            switchView('menu');
-        }
-
         async function initFirebaseListeners() {
-            // Sincronização de Status da Loja
-            window.dbOnValue(window.dbRef(window.db, 'maxburger/storeStatus'), (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    storeStatus = { ...storeStatus, ...data };
-                } else {
-                    window.dbSet(window.dbRef(window.db, 'maxburger/storeStatus'), storeStatus);
-                }
-                evaluateStoreStatus();
-                updateStoreStatusUI();
-            });
-
-            setInterval(evaluateStoreStatus, 30000); // Reavalia horários a cada 30s
-
             window.dbOnValue(window.dbRef(window.db, 'maxburger/settings'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) deliverySettings = { ...deliverySettings, ...data };
+                if (data) {
+                    deliverySettings = { ...deliverySettings, ...data };
+                } else {
+                    window.dbSet(window.dbRef(window.db, 'maxburger/settings'), deliverySettings);
+                }
                 updateSettingsUI();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/sectors'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) sectors = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                if (data) {
+                    sectors = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                } else {
+                    sectors = [
+                        { firebaseKey: '1', name: 'Centro', price: 5.00 },
+                        { firebaseKey: '2', name: 'Plano Diretor Sul', price: 7.00 },
+                        { firebaseKey: '3', name: 'Plano Diretor Norte', price: 6.00 }
+                    ];
+                    window.dbSet(window.dbRef(window.db, 'maxburger/sectors'), sectors);
+                }
                 renderSectorsList();
                 populateCheckoutSectors();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/menu'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) menuData = Array.isArray(data) ? data : Object.values(data);
+                if (data) {
+                    menuData = Array.isArray(data) ? data : Object.values(data);
+                } else {
+                    menuData = [
+                        { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
+                        { id: 2, name: 'Max Cheddar Brasa', category: 'Burgers', price: 32.00, desc: 'Blend bovino 180g, queijo cheddar derretido, cebola caramelizada e molho especial da casa.', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' },
+                        { id: 3, name: 'Batata Rústica com Cheddar', category: 'Acompanhamentos', price: 18.50, desc: 'Batatas rústicas temperadas com alecrim, cobertas com cheddar cremoso e bacon em cubos.', image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80' },
+                        { id: 4, name: 'Coca-Cola 350ml', category: 'Bebidas', price: 6.00, desc: 'Lata gelada 350ml.', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' }
+                    ];
+                    window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
+                }
                 renderCategories();
                 renderMenu();
-                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) renderAdminMenu();
+                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
+                    renderAdminMenu();
+                }
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/motoboys'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) motoboys = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                if (data) {
+                    motoboys = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
+                } else {
+                    motoboys = [];
+                }
                 renderMotoboysList();
             });
 
@@ -667,118 +642,59 @@
                     newOrdersList = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
                     newOrdersList.sort((a, b) => new Date(b.date) - new Date(a.date));
                 }
+
                 orders = newOrdersList;
-                if (orders.some(o => o.status === 'new') && deliverySettings.soundEnabled) {
+
+                const hasPendingOrders = orders.some(o => o.status === 'new');
+                if (hasPendingOrders && deliverySettings.soundEnabled) {
                     if (!alarmInterval) {
                         playNotificationSound();
-                        alarmInterval = setInterval(() => { if(deliverySettings.soundEnabled) playNotificationSound(); }, 4000);
+                        alarmInterval = setInterval(() => {
+                            if(deliverySettings.soundEnabled) playNotificationSound();
+                        }, 4000);
                     }
-                } else if (alarmInterval) {
-                    clearInterval(alarmInterval);
-                    alarmInterval = null;
-                }
-                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) renderAdminDashboard();
-            });
-        }
-
-        function evaluateStoreStatus() {
-            const now = new Date();
-            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            
-            let scheduleOpen = true;
-            if (storeStatus.openTime && storeStatus.closeTime) {
-                if (storeStatus.openTime <= storeStatus.closeTime) {
-                    scheduleOpen = currentTime >= storeStatus.openTime && currentTime <= storeStatus.closeTime;
                 } else {
-                    // Turno noturno que passa da meia-noite
-                    scheduleOpen = currentTime >= storeStatus.openTime || currentTime <= storeStatus.closeTime;
+                    if (alarmInterval) {
+                        clearInterval(alarmInterval);
+                        alarmInterval = null;
+                    }
                 }
-            }
 
-            const isOpen = storeStatus.manualOpen && scheduleOpen;
-            storeStatus.isCurrentlyOpen = isOpen;
-            updateStoreStatusUI();
-        }
-
-        function updateStoreStatusUI() {
-            const headerBadge = document.getElementById('store-status-badge');
-            const headerDot = document.getElementById('store-status-dot');
-            const headerText = document.getElementById('store-status-text');
-            const bannerBadge = document.getElementById('banner-store-badge');
-            const closedBanner = document.getElementById('closed-warning-banner');
-            const manualLabel = document.getElementById('manual-status-label');
-            const manualBtn = document.getElementById('manual-toggle-btn');
-
-            if (storeStatus.isCurrentlyOpen) {
-                if(headerBadge) headerBadge.className = 'hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20';
-                if(headerDot) headerDot.className = 'w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse';
-                if(headerText) headerText.innerText = 'Aberto Agora';
-                if(bannerBadge) bannerBadge.innerText = 'Aberto agora • Pedidos via WhatsApp';
-                if(closedBanner) closedBanner.classList.add('hidden');
-                if(manualLabel) {
-                    manualLabel.innerText = 'Aberto';
-                    manualLabel.className = 'text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-green-500/10 text-green-400 border border-green-500/30';
+                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
+                    renderAdminDashboard();
                 }
-                if(manualBtn) {
-                    manualBtn.innerText = 'Fechar Loja Manualmente';
-                    manualBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg bg-red-600 hover:bg-red-700 text-white';
-                }
-            } else {
-                if(headerBadge) headerBadge.className = 'hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20';
-                if(headerDot) headerDot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
-                if(headerText) headerText.innerText = 'Fechado';
-                if(bannerBadge) bannerBadge.innerText = 'Fechado no momento';
-                if(closedBanner) closedBanner.classList.remove('hidden');
-                if(manualLabel) {
-                    manualLabel.innerText = 'Fechado';
-                    manualLabel.className = 'text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/30';
-                }
-                if(manualBtn) {
-                    manualBtn.innerText = 'Abrir Loja Manualmente';
-                    manualBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg bg-green-600 hover:bg-green-700 text-white';
-                }
-            }
-
-            const openTimeInput = document.getElementById('schedule-open-time');
-            const closeTimeInput = document.getElementById('schedule-close-time');
-            if (openTimeInput && storeStatus.openTime) openTimeInput.value = storeStatus.openTime;
-            if (closeTimeInput && storeStatus.closeTime) closeTimeInput.value = storeStatus.closeTime;
-        }
-
-        async function toggleStoreManualStatus() {
-            const newState = !storeStatus.manualOpen;
-            await window.dbUpdate(window.dbRef(window.db, 'maxburger/storeStatus'), { manualOpen: newState });
-        }
-
-        async function saveStoreSchedule() {
-            const openTime = document.getElementById('schedule-open-time').value;
-            const closeTime = document.getElementById('schedule-close-time').value;
-            if (!openTime || !closeTime) return alert('Defina os horários corretamente.');
-            await window.dbUpdate(window.dbRef(window.db, 'maxburger/storeStatus'), { openTime, closeTime });
-            alert('Horários de agendamento salvos com sucesso!');
+            });
         }
 
         function playNotificationSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-                function playTone(freq, start, dur) {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
-                    gain.gain.setValueAtTime(1.0, audioCtx.currentTime + start);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + dur);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime + start);
-                    osc.stop(audioCtx.currentTime + start + dur);
+                function playTone(frequency, startTime, duration) {
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime + startTime);
+                    gainNode.gain.setValueAtTime(1.0, audioCtx.currentTime + startTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    oscillator.start(audioCtx.currentTime + startTime);
+                    oscillator.stop(audioCtx.currentTime + startTime + duration);
                 }
                 playTone(880, 0.0, 0.3);
                 playTone(1320, 0.35, 0.3);
-            } catch(e) {}
+                playTone(1760, 0.7, 0.5);
+            } catch (e) {
+                console.log('Áudio aguardando interação.', e);
+            }
         }
 
-        function enableAudioAlerts() { playNotificationSound(); alert('🔊 Alarme testado!'); }
+        function enableAudioAlerts() {
+            playNotificationSound();
+            alert('🔊 Teste de som executado com sucesso!');
+        }
+
         async function saveAudioSettings() {
             const enabled = document.getElementById('setting-sound-toggle').checked;
             deliverySettings.soundEnabled = enabled;
@@ -794,42 +710,79 @@
 
         function handleDeliveryModeChange() {
             const mode = document.getElementById('delivery-mode-select').value;
-            document.getElementById('mode-config-fixed').classList.toggle('hidden', mode !== 'fixed');
-            document.getElementById('mode-config-sector').classList.toggle('hidden', mode !== 'sector');
-            document.getElementById('checkout-sector-group').classList.toggle('hidden', mode === 'free');
+            const fixedContainer = document.getElementById('mode-config-fixed');
+            const sectorContainer = document.getElementById('mode-config-sector');
+            const checkoutSectorGroup = document.getElementById('checkout-sector-group');
+
+            fixedContainer.classList.add('hidden');
+            sectorContainer.classList.add('hidden');
+            checkoutSectorGroup.classList.remove('hidden');
+
+            if(mode === 'fixed') {
+                fixedContainer.classList.remove('hidden');
+            } else if(mode === 'sector') {
+                sectorContainer.classList.remove('hidden');
+            } else if(mode === 'free') {
+                checkoutSectorGroup.classList.add('hidden');
+            }
         }
+
+        async function saveDeliveryModeAndSettings(newMode) {
+            deliverySettings.mode = newMode;
+            await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), { mode: newMode });
+            renderCartItems();
+        }
+
+        document.getElementById('delivery-mode-select')?.addEventListener('change', (e) => {
+            saveDeliveryModeAndSettings(e.target.value);
+            handleDeliveryModeChange();
+        });
 
         async function saveFixedRate() {
             const val = parseFloat(document.getElementById('fixed-rate-input').value);
-            if(isNaN(val) || val < 0) return alert('Valor inválido.');
+            if(isNaN(val) || val < 0) return alert('Informe um valor válido.');
+            deliverySettings.fixedRate = val;
             await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), { fixedRate: val });
-            alert('Salvo!');
+            alert('Taxa fixa salva com sucesso!');
+            renderCartItems();
         }
 
         async function saveSectorRate() {
             const editId = document.getElementById('sector-edit-id').value;
             const name = document.getElementById('sector-name-input').value.trim();
             const price = parseFloat(document.getElementById('sector-price-input').value);
-            if(!name || isNaN(price)) return alert('Preencha corretamente.');
+
+            if(!name || isNaN(price)) return alert('Preencha o nome do setor e o valor corretamente.');
+
             if(editId) {
                 await window.dbUpdate(window.dbRef(window.db, `maxburger/sectors/${editId}`), { name, price });
             } else {
                 const newRef = window.dbPush(window.dbRef(window.db, 'maxburger/sectors'));
                 await window.dbSet(newRef, { name, price });
             }
+
             document.getElementById('sector-edit-id').value = '';
             document.getElementById('sector-name-input').value = '';
             document.getElementById('sector-price-input').value = '';
+            alert('Setor salvo com sucesso!');
         }
 
         function renderSectorsList() {
             const container = document.getElementById('sectors-list-container');
+            if(!sectors || sectors.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 col-span-full">Nenhum setor cadastrado.</p>`;
+                return;
+            }
+
             container.innerHTML = sectors.map(s => `
                 <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
-                    <div><h5 class="font-bold text-sm text-white">${s.name}</h5><p class="text-xs text-brand-500 font-bold">R$ ${s.price.toFixed(2)}</p></div>
+                    <div>
+                        <h5 class="font-bold text-sm text-white">${s.name}</h5>
+                        <p class="text-xs text-brand-500 font-bold">R$ ${s.price.toFixed(2)}</p>
+                    </div>
                     <div class="flex space-x-1">
                         <button onclick="editSector('${s.firebaseKey}', '${s.name}', ${s.price})" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 p-2 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteSector('${s.firebaseKey}')" class="bg-red-500/10 text-red-500 p-2 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deleteSector('${s.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -841,29 +794,40 @@
             document.getElementById('sector-price-input').value = price;
         }
 
-        async function deleteSector(key) { await window.dbRemove(window.dbRef(window.db, `maxburger/sectors/${key}`)); }
+        async function deleteSector(key) {
+            if(confirm('Deseja excluir este setor?')) {
+                await window.dbRemove(window.dbRef(window.db, `maxburger/sectors/${key}`));
+            }
+        }
+
         function populateCheckoutSectors() {
             const select = document.getElementById('client-sector');
-            if(select) select.innerHTML = sectors.map(s => `<option value="${s.firebaseKey}" data-price="${s.price}">${s.name} (Taxa: R$ ${s.price.toFixed(2)})</option>`).join('');
+            if(!select) return;
+            select.innerHTML = sectors.map(s => `<option value="${s.firebaseKey}" data-price="${s.price}">${s.name} (Taxa: R$ ${s.price.toFixed(2)})</option>`).join('');
         }
 
         function getCurrentDeliveryFee() {
             const mode = deliverySettings.mode || 'sector';
             if(mode === 'free') return 0;
             if(mode === 'fixed') return deliverySettings.fixedRate || 5.00;
+            
             const select = document.getElementById('client-sector');
-            if(!select || select.options.length === 0) return sectors[0]?.price || 5.00;
-            return parseFloat(select.options[select.selectedIndex]?.getAttribute('data-price') || 5.00);
+            if(!select || select.options.length === 0) {
+                const first = sectors[0];
+                return first ? first.price : 5.00;
+            }
+            const selectedOpt = select.options[select.selectedIndex];
+            return selectedOpt ? parseFloat(selectedOpt.getAttribute('data-price') || 5.00) : 5.00;
         }
 
         function switchView(view) {
             document.getElementById('view-menu').classList.add('hidden');
             document.getElementById('view-admin-login').classList.add('hidden');
             document.getElementById('view-admin-dashboard').classList.add('hidden');
+
             if (view === 'menu') document.getElementById('view-menu').classList.remove('hidden');
             if (view === 'admin-login') document.getElementById('view-admin-login').classList.remove('hidden');
             if (view === 'admin-dashboard') {
-                if (!currentUser) { switchView('admin-login'); return; }
                 document.getElementById('view-admin-dashboard').classList.remove('hidden');
                 renderAdminDashboard();
             }
@@ -871,145 +835,378 @@
 
         function openAdminLogin() { switchView('admin-login'); }
 
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+            if(u === 'admin' && p === '123456') {
+                switchView('admin-dashboard');
+            } else {
+                alert('Usuário ou senha incorretos! (Use admin / 123456)');
+            }
+        }
+
         function switchAdminTab(tab) {
-            ['status', 'new', 'production', 'delivery', 'settings', 'motoboys', 'motoboy-deliveries', 'completed', 'menu-mgr', 'finance'].forEach(t => {
-                document.getElementById(`admin-sec-${t}`)?.classList.add('hidden');
+            ['new', 'production', 'delivery', 'settings', 'motoboys', 'motoboy-deliveries', 'completed', 'menu-mgr', 'finance'].forEach(t => {
+                const el = document.getElementById(`admin-sec-${t}`);
+                if(el) el.classList.add('hidden');
                 const btn = document.getElementById(`btn-tab-${t}`);
                 if(btn) btn.className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap';
             });
+
             document.getElementById(`admin-sec-${tab}`).classList.remove('hidden');
             document.getElementById(`btn-tab-${tab}`).className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2 whitespace-nowrap';
+
             if(tab === 'finance') renderFinanceReports();
             if(tab === 'menu-mgr') renderAdminMenu();
             if(tab === 'motoboys') renderMotoboysList();
             if(tab === 'motoboy-deliveries') renderMotoboyDeliveries();
+            if(tab === 'settings') updateSettingsUI();
         }
 
         async function handleSaveMotoboy(e) {
             e.preventDefault();
             const name = document.getElementById('motoboy-name').value.trim();
             const whatsapp = document.getElementById('motoboy-whatsapp').value.replace(/\D/g, '');
-            const newRef = window.dbPush(window.dbRef(window.db, 'maxburger/motoboys'));
-            await window.dbSet(newRef, { name, whatsapp });
+
+            if(whatsapp.length < 10) {
+                alert('Informe um número de WhatsApp com DDD válido (ex: 63999887766).');
+                return;
+            }
+
+            const newMotoboyRef = window.dbPush(window.dbRef(window.db, 'maxburger/motoboys'));
+            await window.dbSet(newMotoboyRef, { name, whatsapp });
+
             document.getElementById('motoboy-name').value = '';
             document.getElementById('motoboy-whatsapp').value = '';
-            alert('Motoboy cadastrado!');
+            alert('Entregador cadastrado com sucesso!');
         }
 
         function renderMotoboysList() {
-            document.getElementById('motoboys-list-container').innerHTML = motoboys.map(m => `
+            const container = document.getElementById('motoboys-list-container');
+            if(!motoboys || motoboys.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 col-span-full py-4 text-center">Nenhum motoboy cadastrado ainda.</p>`;
+                return;
+            }
+
+            container.innerHTML = motoboys.map(m => `
                 <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 flex justify-between items-center">
-                    <div><h5 class="font-bold text-sm text-white">${m.name}</h5><p class="text-xs text-brand-500">${m.whatsapp}</p></div>
-                    <button onclick="deleteMotoboy('${m.firebaseKey}')" class="text-red-500 p-2"><i class="fa-solid fa-trash"></i></button>
+                    <div>
+                        <h5 class="font-bold text-sm text-white">${m.name}</h5>
+                        <p class="text-xs text-brand-500"><i class="fa-brands fa-whatsapp mr-1"></i> ${m.whatsapp}</p>
+                    </div>
+                    <button onclick="deleteMotoboy('${m.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-lg text-xs transition"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
         }
 
-        async function deleteMotoboy(key) { await window.dbRemove(window.dbRef(window.db, `maxburger/motoboys/${key}`)); }
+        async function deleteMotoboy(key) {
+            if(confirm('Tem certeza que deseja excluir este motoboy?')) {
+                await window.dbRemove(window.dbRef(window.db, `maxburger/motoboys/${key}`));
+            }
+        }
 
         function promptAssignMotoboy(firebaseKey) {
-            if(motoboys.length === 0) { switchAdminTab('motoboys'); return alert('Cadastre um motoboy primeiro.'); }
+            if(motoboys.length === 0) {
+                alert('Você precisa cadastrar ao menos um motoboy antes de enviar o pedido para a rota de entrega!');
+                switchAdminTab('motoboys');
+                return;
+            }
+
             document.getElementById('assign-order-key').value = firebaseKey;
-            document.getElementById('select-motoboy-target').innerHTML = motoboys.map(m => `<option value="${m.firebaseKey}">${m.name} (${m.whatsapp})</option>`).join('');
+            const select = document.getElementById('select-motoboy-target');
+            select.innerHTML = motoboys.map(m => `<option value="${m.firebaseKey}">${m.name} (${m.whatsapp})</option>`).join('');
+            
             document.getElementById('assign-motoboy-modal').classList.remove('hidden');
         }
 
-        function closeAssignMotoboyModal() { document.getElementById('assign-motoboy-modal').classList.add('hidden'); }
+        function closeAssignMotoboyModal() {
+            document.getElementById('assign-motoboy-modal').classList.add('hidden');
+        }
 
         async function confirmAssignMotoboy() {
             const firebaseKey = document.getElementById('assign-order-key').value;
             const motoboyKey = document.getElementById('select-motoboy-target').value;
+            
             const order = orders.find(o => o.firebaseKey === firebaseKey);
             const motoboy = motoboys.find(m => m.firebaseKey === motoboyKey);
-            const taxa = order.deliveryFee || 5.00;
 
-            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), {
+            if(!order || !motoboy) return;
+
+            const taxaEntrega = order.deliveryFee || 5.00;
+
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { 
                 status: 'delivery',
-                motoboy: { key: motoboy.firebaseKey, name: motoboy.name, whatsapp: motoboy.whatsapp, tax: taxa, settled: false }
+                motoboy: {
+                    key: motoboy.firebaseKey,
+                    name: motoboy.name,
+                    whatsapp: motoboy.whatsapp,
+                    tax: taxaEntrega,
+                    settled: false
+                }
             });
+
             closeAssignMotoboyModal();
-            enqueueWhatsAppMessage(motoboy.whatsapp, `🛵 Novo pedido #${order.dailyId} para entrega! Cliente: ${order.client.name}, Endereço: ${order.client.address}`);
-            enqueueWhatsAppMessage(order.client.phone, `Olá ${order.client.name}! Seu pedido #${order.dailyId} saiu para entrega com ${motoboy.name}.`);
+
+            const cupomMsg = `🛵 *CUPOM DE ENTREGA - MAX BURGER & GRILL*\n\n` +
+                             `🆔 *Nº do Pedido:* #${order.dailyId}\n` +
+                             `👤 *Nome do Cliente:* ${order.client.name}\n` +
+                             `📱 *WhatsApp do Cliente:* ${order.client.phone}\n` +
+                             `💳 *Forma de Pagamento:* ${order.client.payment || 'Não informada'}\n` +
+                             `💵 *Taxa de Entrega:* R$ ${taxaEntrega.toFixed(2)}\n` +
+                             `📍 *Endereço:* ${order.client.address} (${order.client.sectorName || ''})\n\n` +
+                             `Bom trabalho, ${motoboy.name}! Dirija com segurança.`;
+
+            enqueueWhatsAppMessage(motoboy.whatsapp, cupomMsg);
+
+            const clienteMsg = `Olá ${order.client.name}! O seu pedido #${order.dailyId} saiu para entrega com o motoboy ${motoboy.name}! 🛵`;
+            enqueueWhatsAppMessage(order.client.phone, clienteMsg);
+
+            alert(`Pedido #${order.dailyId} atribuído! Os cupons e avisos foram colocados na fila segura de envio.`);
         }
 
         function renderMotoboyDeliveries() {
+            const period = document.getElementById('motoboy-period-filter').value;
             const container = document.getElementById('motoboy-summary-container');
-            container.innerHTML = motoboys.map(m => `
-                <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800">
-                    <h4 class="font-bold text-base text-white">${m.name}</h4>
-                    <p class="text-xs text-brand-500">${m.whatsapp}</p>
-                </div>
-            `).join('');
+
+            if(motoboys.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 col-span-full text-center py-8">Nenhum motoboy cadastrado.</p>`;
+                return;
+            }
+
+            const now = new Date();
+            const validOrders = orders.filter(o => o.motoboy && o.status !== 'cancelled');
+
+            const filteredOrders = validOrders.filter(o => {
+                const orderDate = new Date(o.date);
+                if(period === 'day') {
+                    return orderDate.toDateString() === now.toDateString();
+                } else if(period === 'week') {
+                    const diffTime = Math.abs(now - orderDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays <= 7;
+                } else if(period === 'month') {
+                    return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+                }
+                return true;
+            });
+
+            container.innerHTML = motoboys.map(motoboy => {
+                const assignedOrders = filteredOrders.filter(o => o.motoboy.key === motoboy.firebaseKey);
+                const totalTax = assignedOrders.reduce((sum, o) => sum + (o.motoboy.tax || 5.00), 0);
+                const unsettledCount = assignedOrders.filter(o => !o.motoboy.settled).length;
+
+                return `
+                    <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 flex flex-col justify-between shadow-lg">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="font-bold text-base text-white">${motoboy.name}</h4>
+                                    <p class="text-xs text-gray-400"><i class="fa-brands fa-whatsapp text-brand-500 mr-1"></i> ${motoboy.whatsapp}</p>
+                                </div>
+                                <span class="bg-blue-500/10 text-blue-400 text-xs font-bold px-2.5 py-1 rounded-full">${assignedOrders.length} entregas</span>
+                            </div>
+
+                            <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 my-3 space-y-2">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-400">Taxas Acumuladas:</span>
+                                    <span class="font-black text-brand-500 text-sm">R$ ${totalTax.toFixed(2)}</span>
+                                </div>
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-400">Pendentes de Acerto:</span>
+                                    <span class="font-bold text-white">${unsettledCount} pedidos</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5 max-h-40 overflow-y-auto">
+                                <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Histórico no Período:</p>
+                                ${assignedOrders.length === 0 ? '<p class="text-xs text-gray-500">Nenhuma entrega neste período.</p>' : 
+                                    assignedOrders.map(o => `
+                                        <div class="flex justify-between text-xs bg-zinc-900/50 p-2 rounded-lg items-center">
+                                            <span>#${o.dailyId || o.id} - ${o.client.name}</span>
+                                            <span class="font-bold text-gray-300">R$ ${(o.motoboy.tax || 5.00).toFixed(2)}</span>
+                                        </div>
+                                    `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-zinc-800 mt-4">
+                            <button onclick="settleMotoboyAccount('${motoboy.firebaseKey}', '${period}')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-handshake"></i><span>Fechar Acerto de Taxas</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function settleMotoboyAccount(motoboyKey, period) {
+            if(confirm('Deseja realmente marcar todas as entregas pendentes deste motoboy como acertadas/pagas?')) {
+                const now = new Date();
+                let updatedCount = 0;
+
+                for(let order of orders) {
+                    if(order.motoboy && order.motoboy.key === motoboyKey && !order.motoboy.settled) {
+                        const orderDate = new Date(order.date);
+                        let matchesPeriod = true;
+                        if(period === 'day' && orderDate.toDateString() !== now.toDateString()) matchesPeriod = false;
+                        if(period === 'week') {
+                            const diffDays = Math.ceil(Math.abs(now - orderDate) / (1000 * 60 * 60 * 24));
+                            if(diffDays > 7) matchesPeriod = false;
+                        }
+                        if(period === 'month' && (orderDate.getMonth() !== now.getMonth() || orderDate.getFullYear() !== now.getFullYear())) matchesPeriod = false;
+
+                        if(matchesPeriod) {
+                            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${order.firebaseKey}/motoboy`), { settled: true });
+                            updatedCount++;
+                        }
+                    }
+                }
+
+                alert(`Acerto concluído com sucesso! ${updatedCount} pedido(s) atualizado(s).`);
+                renderMotoboyDeliveries();
+            }
         }
 
         function renderCategories() {
             const cats = ['Todos', ...new Set(menuData.map(i => i.category))];
             document.getElementById('category-tabs').innerHTML = cats.map(cat => `
-                <button onclick="filterCategory('${cat}')" class="px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border ${currentCategory === cat ? 'bg-brand-500 text-brand-dark border-brand-500' : 'bg-brand-card text-gray-300 border-zinc-800'}">${cat}</button>
+                <button onclick="filterCategory('${cat}')" class="px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border ${currentCategory === cat ? 'bg-brand-500 text-brand-dark border-brand-500 shadow-md' : 'bg-brand-card text-gray-300 border-zinc-800 hover:bg-zinc-800'}">
+                    ${cat}
+                </button>
             `).join('');
         }
 
-        function filterCategory(cat) { currentCategory = cat; renderCategories(); renderMenu(); }
+        function filterCategory(cat) {
+            currentCategory = cat;
+            renderCategories();
+            renderMenu();
+        }
 
         function renderMenu() {
+            const grid = document.getElementById('products-grid');
             const filtered = currentCategory === 'Todos' ? menuData : menuData.filter(i => i.category === currentCategory);
-            document.getElementById('products-grid').innerHTML = filtered.map(item => `
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 flex flex-col justify-between shadow-lg cursor-pointer" onclick="openProductDetail(${item.id})">
-                    <div class="h-48 overflow-hidden relative"><img src="${item.image}" class="w-full h-full object-cover"></div>
-                    <div class="p-5"><h3 class="font-bold text-lg mb-1">${item.name}</h3><p class="text-xs text-gray-400 line-clamp-2">${item.desc}</p></div>
-                    <div class="p-5 pt-0 flex items-center justify-between"><span class="text-lg font-black text-brand-500">R$ ${item.price.toFixed(2)}</span><span class="bg-brand-500 text-brand-dark px-4 py-2.5 rounded-xl text-xs font-bold">Pedir</span></div>
+            
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 flex flex-col justify-between shadow-lg hover:border-brand-500/50 transition cursor-pointer" onclick="openProductDetail(${item.id})">
+                    <div>
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                            <span class="absolute top-3 left-3 bg-brand-dark/85 backdrop-blur-md text-brand-500 text-xs font-bold px-3 py-1 rounded-full">${item.category}</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-1">${item.name}</h3>
+                            <p class="text-xs text-gray-400 line-clamp-2">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 flex items-center justify-between mt-4">
+                        <span class="text-lg font-black text-brand-500">R$ ${item.price.toFixed(2)}</span>
+                        <span class="bg-brand-500 hover:bg-brand-600 text-brand-dark px-4 py-2.5 rounded-xl text-xs font-bold transition shadow flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i><span>Pedir</span>
+                        </span>
+                    </div>
                 </div>
             `).join('');
         }
 
         function openProductDetail(id) {
-            selectedProductForDetail = menuData.find(i => i.id === id);
+            const product = menuData.find(i => i.id === id);
+            if(!product) return;
+            selectedProductForDetail = product;
             currentDetailQty = 1;
-            document.getElementById('detail-img').src = selectedProductForDetail.image;
-            document.getElementById('detail-name').innerText = selectedProductForDetail.name;
-            document.getElementById('detail-desc').innerText = selectedProductForDetail.desc;
-            document.getElementById('detail-qty').innerText = 1;
-            document.getElementById('detail-addons-list').innerHTML = availableAddons.map(a => `
-                <label class="flex items-center justify-between bg-zinc-900 p-3 rounded-xl border border-zinc-800 cursor-pointer">
-                    <div class="flex items-center space-x-3"><input type="checkbox" value="${a.id}" data-price="${a.price}" data-name="${a.name}" onchange="updateDetailTotalPrice()" class="product-addon-checkbox accent-brand-500"><span class="text-xs text-white">${a.name}</span></div>
-                    <span class="text-xs font-bold text-brand-500">+ R$ ${a.price.toFixed(2)}</span>
+
+            document.getElementById('detail-img').src = product.image;
+            document.getElementById('detail-category').innerText = product.category;
+            document.getElementById('detail-name').innerText = product.name;
+            document.getElementById('detail-desc').innerText = product.desc;
+            document.getElementById('detail-qty').innerText = currentDetailQty;
+
+            const addonsContainer = document.getElementById('detail-addons-list');
+            addonsContainer.innerHTML = availableAddons.map(addon => `
+                <label class="flex items-center justify-between bg-zinc-900 p-3 rounded-xl border border-zinc-800 cursor-pointer hover:border-brand-500/40 transition">
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" value="${addon.id}" data-price="${addon.price}" data-name="${addon.name}" onchange="updateDetailTotalPrice()" class="product-addon-checkbox w-4 h-4 accent-brand-500 rounded bg-zinc-800 border-zinc-700">
+                        <span class="text-xs font-medium text-white">${addon.name}</span>
+                    </div>
+                    <span class="text-xs font-bold text-brand-500">+ R$ ${addon.price.toFixed(2)}</span>
                 </label>
             `).join('');
+
             updateDetailTotalPrice();
             document.getElementById('product-detail-modal').classList.remove('hidden');
         }
 
         function closeProductDetail() { document.getElementById('product-detail-modal').classList.add('hidden'); }
         function minimizeProductDetail() { closeProductDetail(); }
-        function adjustDetailQty(delta) { currentDetailQty = Math.max(1, currentDetailQty + delta); document.getElementById('detail-qty').innerText = currentDetailQty; updateDetailTotalPrice(); }
+
+        function adjustDetailQty(delta) {
+            currentDetailQty += delta;
+            if(currentDetailQty < 1) currentDetailQty = 1;
+            document.getElementById('detail-qty').innerText = currentDetailQty;
+            updateDetailTotalPrice();
+        }
 
         function updateDetailTotalPrice() {
-            let total = selectedProductForDetail.price;
-            document.querySelectorAll('.product-addon-checkbox:checked').forEach(cb => total += parseFloat(cb.getAttribute('data-price')));
-            document.getElementById('detail-total-price').innerText = `R$ ${(total * currentDetailQty).toFixed(2)}`;
+            if(!selectedProductForDetail) return;
+            let unitPrice = selectedProductForDetail.price;
+            
+            const checkboxes = document.querySelectorAll('.product-addon-checkbox:checked');
+            checkboxes.forEach(cb => {
+                unitPrice += parseFloat(cb.getAttribute('data-price'));
+            });
+
+            const total = unitPrice * currentDetailQty;
+            document.getElementById('detail-total-price').innerText = `R$ ${total.toFixed(2)}`;
         }
 
         function addDetailedProductToCart() {
-            let addons = [];
-            let extra = 0;
-            document.querySelectorAll('.product-addon-checkbox:checked').forEach(cb => {
-                addons.push({ id: cb.value, name: cb.getAttribute('data-name'), price: parseFloat(cb.getAttribute('data-price')) });
-                extra += parseFloat(cb.getAttribute('data-price'));
+            if(!selectedProductForDetail) return;
+
+            const checkboxes = document.querySelectorAll('.product-addon-checkbox:checked');
+            let selectedAddons = [];
+            let addonExtraPrice = 0;
+
+            checkboxes.forEach(cb => {
+                selectedAddons.push({
+                    id: cb.value,
+                    name: cb.getAttribute('data-name'),
+                    price: parseFloat(cb.getAttribute('data-price'))
+                });
+                addonExtraPrice += parseFloat(cb.getAttribute('data-price'));
             });
-            const key = `${selectedProductForDetail.id}_${addons.map(a => a.id).sort().join('_')}`;
-            const existing = cart.find(i => i.cartKey === key);
-            if(existing) existing.qty += currentDetailQty;
-            else cart.push({ cartKey: key, id: selectedProductForDetail.id, name: selectedProductForDetail.name, price: selectedProductForDetail.price + extra, qty: currentDetailQty, addons });
+
+            const finalUnitPrice = selectedProductForDetail.price + addonExtraPrice;
+            const cartItemKey = `${selectedProductForDetail.id}_${selectedAddons.map(a => a.id).sort().join('_')}`;
+
+            const existing = cart.find(i => i.cartKey === cartItemKey);
+            if(existing) {
+                existing.qty += currentDetailQty;
+            } else {
+                cart.push({
+                    cartKey: cartItemKey,
+                    id: selectedProductForDetail.id,
+                    name: selectedProductForDetail.name,
+                    price: finalUnitPrice,
+                    basePrice: selectedProductForDetail.price,
+                    qty: currentDetailQty,
+                    addons: selectedAddons
+                });
+            }
+
             updateCartBadge();
             closeProductDetail();
             openCart();
         }
 
         function updateCartBadge() {
-            const total = cart.reduce((s, i) => s + i.qty, 0);
             const badge = document.getElementById('cart-badge');
-            badge.innerText = total;
-            badge.classList.toggle('hidden', total === 0);
+            const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
+            if(totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         function openCart() { document.getElementById('cart-modal').classList.remove('hidden'); renderCartItems(); }
@@ -1017,111 +1214,440 @@
 
         function renderCartItems() {
             const container = document.getElementById('cart-items');
-            if(cart.length === 0) { container.innerHTML = `<p class="text-center py-12 text-gray-500">Sacola vazia</p>`; return; }
-            container.innerHTML = cart.map(i => `
-                <div class="py-2 flex justify-between items-center">
-                    <div><h4 class="text-sm font-bold">${i.name}</h4><span class="text-xs text-brand-500">R$ ${i.price.toFixed(2)}</span></div>
-                    <div class="flex items-center space-x-2"><button onclick="changeQty('${i.cartKey}', -1)" class="w-6 h-6 bg-zinc-800 rounded">-</button><span>${i.qty}</span><button onclick="changeQty('${i.cartKey}', 1)" class="w-6 h-6 bg-zinc-800 rounded">+</button></div>
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-gray-500 text-sm"><i class="fa-solid fa-basket-shopping text-3xl mb-2"></i><p>Sua sacola está vazia</p></div>`;
+                document.getElementById('cart-subtotal').innerText = 'R$ 0,00';
+                document.getElementById('cart-delivery-display').innerText = 'R$ 0,00';
+                document.getElementById('cart-total').innerText = 'R$ 0,00';
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="py-3 space-y-1">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="text-sm font-bold">${item.name}</h4>
+                            <span class="text-xs text-brand-500 font-bold">R$ ${item.price.toFixed(2)} cada</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="changeQty('${item.cartKey}', -1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-zinc-700">-</button>
+                            <span class="text-sm font-bold">${item.qty}</span>
+                            <button onclick="changeQty('${item.cartKey}', 1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-zinc-700">+</button>
+                        </div>
+                    </div>
+                    ${item.addons && item.addons.length > 0 ? `
+                        <p class="text-[11px] text-gray-400">Adicionais: ${item.addons.map(a => a.name).join(', ')}</p>
+                    ` : ''}
                 </div>
             `).join('');
-            const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-            const delivery = getCurrentDeliveryFee();
+
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const deliveryFee = getCurrentDeliveryFee();
+            
             document.getElementById('cart-subtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
-            document.getElementById('cart-delivery-display').innerText = `R$ ${delivery.toFixed(2)}`;
-            document.getElementById('cart-total').innerText = `R$ ${(subtotal + delivery).toFixed(2)}`;
+            document.getElementById('cart-delivery-display').innerText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `R$ ${(subtotal + deliveryFee).toFixed(2)}`;
         }
 
-        function changeQty(key, delta) {
-            const item = cart.find(i => i.cartKey === key);
-            if(item) { item.qty += delta; if(item.qty <= 0) cart = cart.filter(i => i.cartKey !== key); }
-            updateCartBadge(); renderCartItems();
+        function changeQty(cartKey, delta) {
+            const item = cart.find(i => i.cartKey === cartKey);
+            if(item) {
+                item.qty += delta;
+                if(item.qty <= 0) cart = cart.filter(i => i.cartKey !== cartKey);
+            }
+            updateCartBadge();
+            renderCartItems();
         }
 
         function openCheckout() {
-            if(!storeStatus.isCurrentlyOpen) return alert('A loja está fechada no momento. Não é possível finalizar pedidos agora.');
-            if(cart.length === 0) return;
-            closeCart(); populateCheckoutSectors(); renderCheckoutSummary();
+            if(cart.length === 0) return alert('Adicione itens ao carrinho primeiro!');
+            closeCart();
+            populateCheckoutSectors();
+            renderCheckoutSummary();
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
         function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
+        function backToCartFromCheckout() { closeCheckout(); openCart(); }
 
         function renderCheckoutSummary() {
-            const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-            document.getElementById('checkout-order-summary').innerHTML = cart.map(i => `<div class="flex justify-between text-xs"><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty).toFixed(2)}</span></div>`).join('');
+            const container = document.getElementById('checkout-order-summary');
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const deliveryFee = getCurrentDeliveryFee();
+            const total = subtotal + deliveryFee;
+
+            container.innerHTML = `
+                <div class="text-xs font-bold text-brand-500 mb-1 flex items-center justify-between">
+                    <span>CUPOM / RESUMO DOS ITENS</span>
+                    <span>Total: R$ ${total.toFixed(2)}</span>
+                </div>
+                ${cart.map(i => `
+                    <div class="flex justify-between text-xs text-gray-300 py-1 border-b border-zinc-800/50">
+                        <span>${i.qty}x ${i.name} ${i.addons && i.addons.length > 0 ? `(${i.addons.map(a => a.name).join(', ')})` : ''}</span>
+                        <span class="font-bold">R$ ${(i.price * i.qty).toFixed(2)}</span>
+                    </div>
+                `).join('')}
+                <div class="flex justify-between text-[11px] text-gray-400 pt-1">
+                    <span>Taxa de Entrega: ${deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`}</span>
+                    <span id="cupom-troco-display" class="text-brand-500 font-semibold"></span>
+                </div>
+            `;
         }
 
         function toggleTrocoField() {
-            document.getElementById('troco-container').classList.toggle('hidden', document.getElementById('client-payment').value !== 'Dinheiro');
+            const payment = document.getElementById('client-payment').value;
+            const trocoContainer = document.getElementById('troco-container');
+            if(payment === 'Dinheiro') {
+                trocoContainer.classList.remove('hidden');
+            } else {
+                trocoContainer.classList.add('hidden');
+                document.getElementById('client-troco').value = '';
+            }
         }
 
         async function submitOrder(e) {
             e.preventDefault();
-            if(!storeStatus.isCurrentlyOpen) return alert('A loja encontra-se fechada.');
-            const name = document.getElementById('client-name').value;
+            const name = document.getElementById('client-name').value.trim();
             const phone = document.getElementById('client-phone').value.replace(/\D/g, '');
-            const address = document.getElementById('client-address').value;
+            const address = document.getElementById('client-address').value.trim();
             const payment = document.getElementById('client-payment').value;
-            const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            const troco = payment === 'Dinheiro' ? document.getElementById('client-troco').value.trim() : '';
+
+            if(phone.length < 10) {
+                alert('Atenção: É obrigatório informar o número do WhatsApp com o DDD (ex: 63999999999)!');
+                document.getElementById('client-phone').focus();
+                return;
+            }
+
+            let sectorName = 'Não se aplica';
+            const mode = deliverySettings.mode || 'sector';
+            if(mode === 'sector') {
+                const sectorSelect = document.getElementById('client-sector');
+                if(sectorSelect && sectorSelect.options.length > 0) {
+                    sectorName = sectorSelect.options[sectorSelect.selectedIndex].text.split(' (Taxa')[0];
+                }
+            } else if(mode === 'fixed') {
+                sectorName = 'Taxa Fixa';
+            } else if(mode === 'free') {
+                sectorName = 'Entrega Grátis';
+            }
+
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
             const deliveryFee = getCurrentDeliveryFee();
             
+            const todayStr = new Date().toDateString();
+            const todayOrders = orders.filter(o => new Date(o.date).toDateString() === todayStr);
+            const dailyIdNum = todayOrders.length + 1;
+
             const newOrder = {
                 id: Date.now(),
-                dailyId: orders.length + 1,
-                client: { name, phone, address, payment },
+                dailyId: dailyIdNum,
+                client: { name, phone, address, payment, troco, sectorName },
                 items: [...cart],
-                deliveryFee,
+                deliveryFee: deliveryFee,
                 total: subtotal + deliveryFee,
                 status: 'new',
                 date: new Date().toISOString()
             };
 
-            await window.dbSet(window.dbPush(window.dbRef(window.db, 'maxburger/orders')), newOrder);
-            cart = []; updateCartBadge(); closeCheckout();
-            alert('Pedido enviado com sucesso!');
-            enqueueWhatsAppMessage(COMERCE_WHATSAPP, `🚨 Novo pedido #${newOrder.dailyId} de ${name}!`);
+            const newOrderRef = window.dbPush(window.dbRef(window.db, 'maxburger/orders'));
+            await window.dbSet(newOrderRef, newOrder);
+
+            cart = [];
+            updateCartBadge();
+            closeCheckout();
+
+            alert(`🎉 Pedido #${dailyIdNum} realizado com sucesso! Acompanhe as novidades.`);
+
+            let trocoText = troco ? `💵 *Troco para:* ${troco}\n` : '';
+            let taxaText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
+            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address} (${sectorName})\n🛵 *Taxa:* ${taxaText}\n\nVá até o painel do comércio e confira!`;
+            enqueueWhatsAppMessage(COMERCE_WHATSAPP, comecoMsg);
+
+            const clienteMsg = `Olá ${name}! Seu pedido #${dailyIdNum} foi recebido com sucesso na Max Burger & Grill! 🍔`;
+            enqueueWhatsAppMessage(phone, clienteMsg);
         }
 
         function renderAdminDashboard() {
-            renderOrderList('new', 'list-new-orders', 'Nenhum novo pedido.');
+            renderOrderList('new', 'list-new-orders', 'Nenhum pedido novo no momento.');
             renderOrderList('production', 'list-production-orders', 'Nenhum pedido em produção.');
-            renderOrderList('delivery', 'list-delivery-orders', 'Nenhum pedido em rota.');
-            renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído.');
+            renderOrderList('delivery', 'list-delivery-orders', 'Nenhum pedido em rota de entrega.');
+            renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído ainda.');
         }
 
-        function renderOrderList(status, elementId, emptyText) {
-            const filtered = orders.filter(o => o.status === status);
+        function renderOrderList(statusFilter, elementId, emptyText) {
             const container = document.getElementById(elementId);
-            if(filtered.length === 0) { container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-6">${emptyText}</p>`; return; }
-            container.innerHTML = filtered.map(o => `
-                <div class="bg-brand-card p-4 rounded-2xl border border-zinc-800 space-y-3">
-                    <div class="flex justify-between"><span class="text-xs font-bold text-brand-500">#${o.dailyId}</span><span class="text-xs text-gray-400">${o.client.name}</span></div>
-                    <div class="text-xs text-gray-300">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</div>
-                    <div class="flex justify-between items-center pt-2 border-t border-zinc-800">
-                        <span class="font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
-                        ${o.status === 'new' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'production')" class="bg-amber-500 text-brand-dark px-3 py-1.5 rounded-lg text-xs font-bold">Aceitar</button>` : ''}
-                        ${o.status === 'production' ? `<button onclick="promptAssignMotoboy('${o.firebaseKey}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Enviar</button>` : ''}
-                        ${o.status === 'delivery' ? `<button onclick="updateOrderStatus('${o.firebaseKey}', 'completed')" class="bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Concluir</button>` : ''}
+            const filtered = orders.filter(o => o.status === statusFilter);
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-sm">${emptyText}</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(order => `
+                <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 flex flex-col justify-between shadow-md">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs font-bold bg-zinc-800 text-brand-500 px-3 py-1 rounded-full">Pedido #${order.dailyId || order.id}</span>
+                            <span class="text-[10px] text-gray-400">${new Date(order.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        </div>
+                        <div class="space-y-1 mb-4">
+                            <h4 class="font-bold text-sm">${order.client.name}</h4>
+                            <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1 text-brand-500"></i> ${order.client.phone}</p>
+                            <p class="text-xs text-gray-400"><i class="fa-solid fa-credit-card mr-1 text-brand-500"></i> ${order.client.payment || 'Não informada'} ${order.client.troco ? `(Troco: ${order.client.troco})` : ''}</p>
+                            <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address} (${order.client.sectorName || ''})</p>
+                            <p class="text-xs text-brand-500 font-semibold"><i class="fa-solid fa-motorcycle mr-1"></i> Taxa: R$ ${(order.deliveryFee || 5.00).toFixed(2)}</p>
+                            ${order.motoboy ? `<p class="text-xs text-blue-400 font-semibold mt-1"><i class="fa-solid fa-motorcycle mr-1"></i> Entregador: ${order.motoboy.name}</p>` : ''}
+                        </div>
+                        <div class="border-t border-zinc-800 pt-3 space-y-1 text-xs text-gray-300">
+                            ${order.items.map(i => `
+                                <div>
+                                    <div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty).toFixed(2)}</span></div>
+                                    ${i.addons && i.addons.length > 0 ? `<p class="text-[10px] text-gray-500">Adicionais: ${i.addons.map(a => a.name).join(', ')}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-800 pt-3 mt-4 space-y-3">
+                        <div class="flex justify-between items-center text-sm font-black">
+                            <span>Total</span>
+                            <span class="text-brand-500">R$ ${order.total.toFixed(2)}</span>
+                        </div>
+                        ${getActionButtons(order)}
                     </div>
                 </div>
             `).join('');
         }
 
-        async function updateOrderStatus(key, status) {
-            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${key}`), { status });
+        function getActionButtons(order) {
+            if(order.status === 'new') {
+                return `
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="updateOrderStatus('${order.firebaseKey}', 'production')" class="bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold text-xs py-2.5 rounded-xl transition shadow">Aceitar / Produzir</button>
+                        <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold text-xs py-2.5 rounded-xl transition">Recusar</button>
+                    </div>
+                `;
+            } else if(order.status === 'production') {
+                return `
+                    <button onclick="promptAssignMotoboy('${order.firebaseKey}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Mover para Rota de Entrega 🛵</button>
+                `;
+            } else if(order.status === 'delivery') {
+                return `
+                    <button onclick="updateOrderStatus('${order.firebaseKey}', 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Finalizar com Sucesso ✅</button>
+                `;
+            }
+            return `<span class="text-xs text-green-500 font-bold block text-center"><i class="fa-solid fa-check-circle mr-1"></i> Concluído com Sucesso</span>`;
+        }
+
+        async function updateOrderStatus(firebaseKey, newStatus) {
+            const order = orders.find(o => o.firebaseKey === firebaseKey);
+            if(!order) return;
+
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
+
+            if(newStatus === 'production') {
+                const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
+                enqueueWhatsAppMessage(order.client.phone, msg);
+            }
+        }
+
+        function openCancelModal(firebaseKey) {
+            document.getElementById('cancel-order-id').value = firebaseKey;
+            document.getElementById('cancel-reason').value = '';
+            document.getElementById('cancel-modal').classList.remove('hidden');
+        }
+
+        function closeCancelModal() { document.getElementById('cancel-modal').classList.add('hidden'); }
+
+        async function confirmOrderCancellation() {
+            const firebaseKey = document.getElementById('cancel-order-id').value;
+            const reason = document.getElementById('cancel-reason').value;
+            
+            if(!reason.trim()) {
+                alert('Por favor, informe o motivo.');
+                return;
+            }
+
+            const order = orders.find(o => o.firebaseKey === firebaseKey);
+            if(order) {
+                await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: 'cancelled' });
+                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.dailyId} foi cancelado.\n\n*Motivo:* ${reason}\n\nQualquer dúvida estamos à disposição!`;
+                enqueueWhatsAppMessage(order.client.phone, cancelMsg);
+            }
+
+            closeCancelModal();
+            alert('Pedido recusado e cliente avisado via WhatsApp.');
+        }
+
+        async function deleteWrongOrder(firebaseKey) {
+            if(confirm('Tem certeza que deseja excluir esta venda do histórico e do caixa?')) {
+                await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`));
+            }
+        }
+
+        async function clearHistoryPeriod(period) {
+            if(confirm(`Tem certeza que deseja limpar o histórico de vendas (${period === 'day' ? 'do dia atual' : 'geral'})?`)) {
+                const now = new Date();
+                for(let order of orders) {
+                    const orderDate = new Date(order.date);
+                    if(period === 'all' || (orderDate.toDateString() === now.toDateString())) {
+                        await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${order.firebaseKey}`));
+                    }
+                }
+                alert('Caixa limpo com sucesso em tempo real!');
+            }
+        }
+
+        function clearDateFilter() {
+            document.getElementById('finance-date-filter').value = '';
+            renderFinanceReports();
         }
 
         function renderFinanceReports() {
-            const valid = orders.filter(o => o.status !== 'cancelled');
-            document.getElementById('rep-day').innerText = `R$ ${valid.reduce((s, o) => s + o.total, 0).toFixed(2)}`;
-            document.getElementById('rep-count').innerText = valid.length;
-            document.getElementById('finance-orders-list').innerHTML = valid.map(o => `<div class="py-2 flex justify-between text-xs"><span>#${o.dailyId} - ${o.client.name}</span><span class="font-bold text-brand-500">R$ ${o.total.toFixed(2)}</span></div>`).join('');
+            const dateFilterInput = document.getElementById('finance-date-filter').value;
+            const validOrders = orders.filter(o => o.status !== 'cancelled');
+
+            const targetDateStr = dateFilterInput ? new Date(dateFilterInput + 'T00:00:00').toDateString() : new Date().toDateString();
+            
+            const filteredDayOrders = validOrders.filter(o => new Date(o.date).toDateString() === targetDateStr);
+            const totalDay = filteredDayOrders.reduce((sum, o) => sum + o.total, 0);
+
+            const now = new Date();
+            const totalWeek = validOrders.filter(o => {
+                const d = new Date(o.date);
+                const diffTime = Math.abs(now - d);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays <= 7;
+            }).reduce((sum, o) => sum + o.total, 0);
+
+            const totalMonth = validOrders.filter(o => {
+                const d = new Date(o.date);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            }).reduce((sum, o) => sum + o.total, 0);
+
+            document.getElementById('rep-day').innerText = `R$ ${totalDay.toFixed(2)}`;
+            document.getElementById('rep-week').innerText = `R$ ${totalWeek.toFixed(2)}`;
+            document.getElementById('rep-month').innerText = `R$ ${totalMonth.toFixed(2)}`;
+            document.getElementById('rep-count').innerText = validOrders.length;
+
+            const financeListContainer = document.getElementById('finance-orders-list');
+            if(validOrders.length === 0) {
+                financeListContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Nenhuma venda registrada no caixa.</p>`;
+            } else {
+                financeListContainer.innerHTML = validOrders.map(o => `
+                    <div class="py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 hover:bg-zinc-900/40 px-3 rounded-xl transition">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-bold text-brand-500">Pedido #${o.dailyId || o.id}</span>
+                                <span class="text-xs font-semibold text-white">${o.client.name}</span>
+                                <span class="text-[10px] text-gray-400">(${new Date(o.date).toLocaleDateString()} ${new Date(o.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})})</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-0.5">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</p>
+                        </div>
+                        <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+                            <span class="text-sm font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
+                            <button onclick="deleteWrongOrder('${o.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-2.5 py-1.5 rounded-lg text-xs transition" title="Excluir venda incorreta"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const productCounts = {};
+            validOrders.forEach(o => {
+                if(o.items) {
+                    o.items.forEach(i => {
+                        productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
+                    });
+                }
+            });
+
+            const sortedProducts = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
+            const topList = document.getElementById('top-products-list');
+            
+            if(sortedProducts.length === 0) {
+                topList.innerHTML = `<p class="text-xs text-gray-500">Nenhum produto vendido ainda.</p>`;
+                return;
+            }
+
+            topList.innerHTML = sortedProducts.map(([name, qty], index) => `
+                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-xl border border-zinc-800">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 bg-brand-500/10 text-brand-500 font-bold text-xs rounded-lg flex items-center justify-center">#${index+1}</span>
+                        <span class="text-sm font-bold">${name}</span>
+                    </div>
+                    <span class="text-xs font-bold text-brand-500">${qty} unidades vendidas</span>
+                </div>
+            `).join('');
         }
 
         function renderAdminMenu() {
-            document.getElementById('admin-menu-list').innerHTML = menuData.map(i => `
-                <div class="p-3 flex justify-between items-center"><span class="text-sm font-bold">${i.name}</span><span class="text-xs text-brand-500">R$ ${i.price.toFixed(2)}</span></div>
+            document.getElementById('admin-menu-list').innerHTML = menuData.map(item => `
+                <div class="p-4 flex items-center justify-between hover:bg-zinc-900/50 transition">
+                    <div class="flex items-center space-x-4">
+                        <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
+                        <div>
+                            <h4 class="text-sm font-bold">${item.name}</h4>
+                            <span class="text-xs text-brand-500 font-bold">R$ ${item.price.toFixed(2)} • ${item.category}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openItemModal(${item.id})" class="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-xl text-xs text-gray-300 transition"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteMenuItem(${item.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
             `).join('');
+        }
+
+        function openItemModal(id = null) {
+            document.getElementById('item-modal').classList.remove('hidden');
+            if(id) {
+                const item = menuData.find(i => i.id === id);
+                document.getElementById('item-modal-title').innerText = 'Editar Item';
+                document.getElementById('item-id').value = item.id;
+                document.getElementById('item-name').value = item.name;
+                document.getElementById('item-category').value = item.category;
+                document.getElementById('item-price').value = item.price;
+                document.getElementById('item-image').value = item.image;
+                document.getElementById('item-desc').value = item.desc;
+            } else {
+                document.getElementById('item-modal-title').innerText = 'Novo Item do Cardápio';
+                document.getElementById('item-id').value = '';
+                document.getElementById('item-name').value = '';
+                document.getElementById('item-price').value = '';
+                document.getElementById('item-image').value = '';
+                document.getElementById('item-desc').value = '';
+            }
+        }
+
+        function closeItemModal() { document.getElementById('item-modal').classList.add('hidden'); }
+
+        async function saveMenuItem(e) {
+            e.preventDefault();
+            const id = document.getElementById('item-id').value;
+            const name = document.getElementById('item-name').value;
+            const category = document.getElementById('item-category').value;
+            const price = parseFloat(document.getElementById('item-price').value);
+            const image = document.getElementById('item-image').value;
+            const desc = document.getElementById('item-desc').value;
+
+            if(id) {
+                const index = menuData.findIndex(i => i.id == id);
+                if(index !== -1) {
+                    menuData[index] = { id: Number(id), name, category, price, image, desc };
+                }
+            } else {
+                menuData.push({ id: Date.now(), name, category, price, image, desc });
+            }
+
+            await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
+            closeItemModal();
+        }
+
+        async function deleteMenuItem(id) {
+            if(confirm('Tem certeza que deseja excluir este item?')) {
+                menuData = menuData.filter(i => i.id !== id);
+                await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
+            }
         }
     </script>
 </body>
