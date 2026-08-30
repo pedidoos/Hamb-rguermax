@@ -90,7 +90,6 @@
                 <button onclick="switchAdminTab('new')" id="btn-tab-new" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-500 text-brand-dark transition flex items-center space-x-2"><i class="fa-solid fa-bell"></i><span>Novos Pedidos</span></button>
                 <button onclick="switchAdminTab('production')" id="btn-tab-production" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-fire-burner"></i><span>Em Produção</span></button>
                 <button onclick="switchAdminTab('delivery')" id="btn-tab-delivery" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-motorcycle"></i><span>Em Rota de Entrega</span></button>
-                <button onclick="switchAdminTab('motoboys')" id="btn-tab-motoboys" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-id-card"></i><span>Motoboys & Taxas</span></button>
                 <button onclick="switchAdminTab('completed')" id="btn-tab-completed" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-circle-check"></i><span>Concluídos</span></button>
                 <button onclick="switchAdminTab('menu-mgr')" id="btn-tab-menu-mgr" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-utensils"></i><span>Gerenciar Cardápio</span></button>
                 <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2"><i class="fa-solid fa-chart-line"></i><span>Financeiro & Caixa</span></button>
@@ -112,28 +111,6 @@
             <div id="admin-sec-delivery" class="hidden space-y-4">
                 <h3 class="text-lg font-bold flex items-center space-x-2 text-blue-500"><i class="fa-solid fa-motorcycle"></i><span>Pedidos em Rota de Entrega</span></h3>
                 <div id="list-delivery-orders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-            </div>
-
-            <div id="admin-sec-motoboys" class="hidden space-y-6">
-                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800">
-                    <h3 class="text-base font-bold mb-4 flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-user-plus"></i><span>Cadastrar Novo Motoboy</span></h3>
-                    <form onsubmit="saveMotoboy(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <input type="text" id="mb-name" required placeholder="Nome do Motoboy" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
-                        <input type="tel" id="mb-phone" required placeholder="WhatsApp com DDD (Ex: 63999999999)" onblur="validatePhoneDDD(this)" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
-                        <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow">Salvar Motoboy</button>
-                    </form>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
-                        <h3 class="text-base font-bold flex items-center space-x-2"><i class="fa-solid id-card text-brand-500"></i><span>Motoboys Cadastrados & Taxas Acumuladas</span></h3>
-                        <div id="motoboys-list" class="space-y-3 divide-y divide-zinc-800/60"></div>
-                    </div>
-                    <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
-                        <h3 class="text-base font-bold flex items-center space-x-2"><i class="fa-solid fa-calendar-days text-brand-500"></i><span>Entregas Realizadas por Motoboy</span></h3>
-                        <div id="motoboys-deliveries-history" class="space-y-3"></div>
-                    </div>
-                </div>
             </div>
 
             <div id="admin-sec-completed" class="hidden space-y-4">
@@ -196,26 +173,6 @@
         </div>
     </main>
 
-    <!-- MODAL DE ESCOLHA DE MOTOBOY AO ENVIAR PARA ROTA -->
-    <div id="motoboy-assign-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
-            <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-motorcycle mr-2"></i> Selecionar Motoboy</h3>
-                <button onclick="closeMotoboyAssignModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <input type="hidden" id="assign-order-key">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Escolha o Entregador Responsável</label>
-                    <select id="select-motoboy-target" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
-                        <!-- Gerado via JS -->
-                    </select>
-                </div>
-                <button onclick="confirmSendToDelivery()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Enviar Cupom para Motoboy & Cliente</button>
-            </div>
-        </div>
-    </div>
-
     <!-- MODAL DE DETALHES DO ITEM (COM ADICIONAIS) -->
     <div id="product-detail-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden relative flex flex-col max-h-[90vh]">
@@ -231,7 +188,9 @@
                 </div>
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-wider text-brand-500 mb-2">Adicionais Opcionais</h4>
-                    <div id="detail-addons" class="space-y-2"></div>
+                    <div id="detail-addons" class="space-y-2">
+                        <!-- Gerado via JS -->
+                    </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-1">Observações do Item (ex: sem cebola)</label>
@@ -271,7 +230,7 @@
         </div>
     </div>
 
-    <!-- CHECKOUT -->
+    <!-- CHECKOUT (DADOS, ENDEREÇO, PAGAMENTO E CUPOM SUPERIOR) -->
     <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="flex justify-between items-center p-4 border-b border-zinc-800">
@@ -280,6 +239,7 @@
             </div>
             
             <div class="p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- CUPOM PRÉVIO NO TOPO DO CHECKOUT -->
                 <div class="bg-zinc-900 border border-dashed border-brand-500/50 p-4 rounded-xl space-y-2 font-mono text-xs">
                     <div class="text-center font-bold text-brand-500 border-b border-zinc-800 pb-2">📋 CUPOM PRÉVIO DO PEDIDO</div>
                     <div id="checkout-cupom-items" class="space-y-1 text-gray-300"></div>
@@ -292,20 +252,20 @@
                 <form onsubmit="submitOrder(event)" id="checkout-form" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Nome Completo</label>
-                        <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <input type="text" id="client-name" required placeholder="Ex: João da Silva" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">WhatsApp <span class="text-red-400">*Obrigatório com DDD</span></label>
-                        <input type="tel" id="client-phone" required placeholder="Ex: 63999999999" onblur="validatePhoneDDD(this)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <input type="tel" id="client-phone" required placeholder="Ex: 63999999999" onblur="validatePhoneDDD(this)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Endereço de Entrega (Rua, Número, Bairro, Ponto de Referência)</label>
-                        <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000, Centro - Próximo à praça" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
+                        <textarea id="client-address" required rows="2" placeholder="Ex: Av. JK, 1000, Centro - Próximo à praça" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-400 mb-1">Forma de Pagamento</label>
-                            <select id="payment-method" onchange="toggleChangeInput()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                            <select id="payment-method" onchange="toggleChangeInput()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                                 <option value="Pix">Pix</option>
                                 <option value="Cartão na Entrega">Cartão na Entrega</option>
                                 <option value="Dinheiro">Dinheiro</option>
@@ -313,7 +273,7 @@
                         </div>
                         <div id="change-box" class="hidden">
                             <label class="block text-xs font-medium text-brand-500 mb-1">Troco para quanto?</label>
-                            <input type="text" id="client-change" placeholder="Ex: R$ 50,00" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                            <input type="text" id="client-change" placeholder="Ex: R$ 50,00" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                         </div>
                     </div>
 
@@ -337,14 +297,14 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Motivo (Enviado via WhatsApp ao cliente)</label>
-                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 text-white"></textarea>
+                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"></textarea>
                 </div>
                 <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Avisar Cliente</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE GERENCIAMENTO DE ITEM -->
+    <!-- MODAL DE GERENCIAMENTO DE ITEM DO CARDÁPIO -->
     <div id="item-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-lg p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -355,12 +315,12 @@
                 <input type="hidden" id="item-id">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Nome do Item</label>
-                    <input type="text" id="item-name" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    <input type="text" id="item-name" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Categoria</label>
-                        <select id="item-category" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <select id="item-category" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                             <option value="Burgers">Burgers</option>
                             <option value="Acompanhamentos">Acompanhamentos</option>
                             <option value="Bebidas">Bebidas</option>
@@ -368,16 +328,16 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Preço (R$)</label>
-                        <input type="number" step="0.01" id="item-price" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <input type="number" step="0.01" id="item-price" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem</label>
-                    <input type="text" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                    <input type="text" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Descrição</label>
-                    <textarea id="item-desc" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
+                    <textarea id="item-desc" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500"></textarea>
                 </div>
                 <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg mt-2">Salvar Item</button>
             </form>
@@ -424,12 +384,12 @@
 
         let menuData = [];
         let orders = [];
-        let motoboys = [];
         let cart = [];
         let currentCategory = 'Todos';
         let alarmInterval = null;
         let selectedProductForDetail = null;
 
+        // Lista padrão de opcionais/adicionais
         const availableAddons = [
             { id: 'bacon', name: 'Bacon Extra', price: 5.00 },
             { id: 'cheddar', name: 'Cheddar Cremoso Extra', price: 4.50 },
@@ -442,7 +402,6 @@
         });
 
         async function initFirebaseListeners() {
-            // Menu Listener
             window.dbOnValue(window.dbRef(window.db, 'maxburger/menu'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -463,20 +422,6 @@
                 }
             });
 
-            // Motoboys Listener
-            window.dbOnValue(window.dbRef(window.db, 'maxburger/motoboys'), (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    motoboys = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] }));
-                } else {
-                    motoboys = [];
-                }
-                if(!document.getElementById('view-admin-dashboard').classList.contains('hidden')) {
-                    renderMotoboyManagement();
-                }
-            });
-
-            // Orders Listener
             window.dbOnValue(window.dbRef(window.db, 'maxburger/orders'), (snapshot) => {
                 const data = snapshot.val();
                 let newOrdersList = [];
@@ -562,7 +507,7 @@
         }
 
         function switchAdminTab(tab) {
-            ['new', 'production', 'delivery', 'motoboys', 'completed', 'menu-mgr', 'finance'].forEach(t => {
+            ['new', 'production', 'delivery', 'completed', 'menu-mgr', 'finance'].forEach(t => {
                 document.getElementById(`admin-sec-${t}`).classList.add('hidden');
                 document.getElementById(`btn-tab-${t}`).className = 'px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2';
             });
@@ -572,7 +517,6 @@
 
             if(tab === 'finance') renderFinanceReports();
             if(tab === 'menu-mgr') renderAdminMenu();
-            if(tab === 'motoboys') renderMotoboyManagement();
         }
 
         function renderCategories() {
@@ -616,6 +560,7 @@
             `).join('');
         }
 
+        // ABRIR SUBPÁGINA DE DETALHES DO HAMBÚRGUER COM ADICIONAIS
         function openProductDetail(id) {
             const product = menuData.find(i => i.id === id);
             if(!product) return;
@@ -781,6 +726,7 @@
             }
         }
 
+        // Validação obrigatória de DDD
         function validatePhoneDDD(input) {
             let val = input.value.replace(/\D/g, '');
             if(val.length < 10) {
@@ -802,17 +748,17 @@
                 return;
             }
 
+            // GERAÇÃO DO NÚMERO DO PEDIDO DIÁRIO (Reinicia em #1 a cada dia)
             const todayStr = new Date().toDateString();
             const todayOrders = orders.filter(o => new Date(o.date).toDateString() === todayStr);
             const dailyOrderNumber = todayOrders.length + 1;
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
             const newOrder = {
-                id: dailyOrderNumber,
+                id: dailyOrderNumber, // #1, #2, #3... reiniciando todo dia
                 client: { name, phone, address, paymentMethod, change: changeVal },
                 items: [...cart],
                 total: subtotal + 5.00,
-                deliveryFee: 5.00,
                 status: 'new',
                 date: new Date().toISOString()
             };
@@ -834,31 +780,6 @@
             await triggerWhatsApp(phone, clienteMsg);
         }
 
-        // CADASTRO DE MOTOBOYS
-        async function saveMotoboy(e) {
-            e.preventDefault();
-            const name = document.getElementById('mb-name').value;
-            const phone = document.getElementById('mb-phone').value.replace(/\D/g, '');
-
-            if(phone.length < 10) {
-                alert('Informe um WhatsApp válido com DDD para o motoboy.');
-                return;
-            }
-
-            const newMbRef = window.dbPush(window.dbRef(window.db, 'maxburger/motoboys'));
-            await window.dbSet(newMbRef, { name, phone });
-
-            document.getElementById('mb-name').value = '';
-            document.getElementById('mb-phone').value = '';
-            alert('Motoboy cadastrado com sucesso!');
-        }
-
-        async function deleteMotoboy(firebaseKey) {
-            if(confirm('Deseja excluir este motoboy?')) {
-                await window.dbRemove(window.dbRef(window.db, `maxburger/motoboys/${firebaseKey}`));
-            }
-        }
-
         function renderAdminDashboard() {
             renderOrderList('new', 'list-new-orders', 'Nenhum pedido novo no momento.');
             renderOrderList('production', 'list-production-orders', 'Nenhum pedido em produção.');
@@ -866,6 +787,7 @@
             renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído ainda.');
         }
 
+        // RENDERIZAÇÃO EM FORMATO DE CUPOM DETALHADO NO PAINEL
         function renderOrderList(statusFilter, elementId, emptyText) {
             const container = document.getElementById(elementId);
             const filtered = orders.filter(o => o.status === statusFilter);
@@ -888,7 +810,6 @@
                         <p><i class="fa-solid fa-phone mr-1 text-brand-500"></i> ${order.client.phone}</p>
                         <p class="text-[11px]"><i class="fa-solid fa-location-dot mr-1 text-brand-500"></i> ${order.client.address}</p>
                         <p class="text-[11px]"><i class="fa-solid fa-wallet mr-1 text-brand-500"></i> Pgto: <strong>${order.client.paymentMethod}</strong> ${order.client.change ? '(Troco: ' + order.client.change + ')' : ''}</p>
-                        ${order.assignedMotoboy ? `<p class="text-[11px] text-amber-400"><i class="fa-solid fa-motorcycle mr-1"></i> Motoboy: ${order.assignedMotoboy.name}</p>` : ''}
                     </div>
 
                     <div class="space-y-1 text-gray-300 border-b border-zinc-800 pb-2">
@@ -925,7 +846,7 @@
                 `;
             } else if(order.status === 'production') {
                 return `
-                    <button onclick="openMotoboyAssignModal('${order.firebaseKey}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow font-sans">Enviar para Rota de Entrega 🛵</button>
+                    <button onclick="updateOrderStatus('${order.firebaseKey}', 'delivery')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow font-sans">Mover para Rota de Entrega 🛵</button>
                 `;
             } else if(order.status === 'delivery') {
                 return `
@@ -935,64 +856,18 @@
             return `<span class="text-xs text-green-500 font-bold block text-center font-sans"><i class="fa-solid fa-check-circle mr-1"></i> Concluído com Sucesso</span>`;
         }
 
-        function openMotoboyAssignModal(firebaseKey) {
-            if(motoboys.length === 0) {
-                alert('⚠️ Cadastre pelo menos um motoboy na aba "Motoboys & Taxas" antes de enviar para entrega!');
-                switchAdminTab('motoboys');
-                return;
-            }
-
-            document.getElementById('assign-order-key').value = firebaseKey;
-            const select = document.getElementById('select-motoboy-target');
-            select.innerHTML = motoboys.map(m => `<option value="${m.firebaseKey}">${m.name} (${m.phone})</option>`).join('');
-            document.getElementById('motoboy-assign-modal').classList.remove('hidden');
-        }
-
-        function closeMotoboyAssignModal() {
-            document.getElementById('motoboy-assign-modal').classList.add('hidden');
-        }
-
-        async function confirmSendToDelivery() {
-            const firebaseKey = document.getElementById('assign-order-key').value;
-            const mbKey = document.getElementById('select-motoboy-target').value;
-            const motoboy = motoboys.find(m => m.firebaseKey === mbKey);
-            const order = orders.find(o => o.firebaseKey === firebaseKey);
-
-            if(!motoboy || !order) return;
-
-            // Atualiza status e vincula motoboy
-            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), {
-                status: 'delivery',
-                assignedMotoboy: { name: motoboy.name, phone: motoboy.phone }
-            });
-
-            closeMotoboyAssignModal();
-
-            // 1. Mensagem para o cliente
-            const clienteMsg = `Oba! 🛵 O seu pedido #${order.id} acabou de sair para entrega com o entregador ${motoboy.name}! Fique atento no endereço: ${order.client.address}.`;
-            await triggerWhatsApp(order.client.phone, clienteMsg);
-
-            // 2. Cupom detalhado para o WhatsApp do Motoboy
-            const motoboyPhoneClean = motoboy.phone.replace(/\D/g, '');
-            const motoboyCupom = `🛵 *NOVA ENTREGA ATRIBUÍDA!* (Cupom #${order.id})\n\n` +
-                `👤 *Cliente:* ${order.client.name}\n` +
-                `📱 *WhatsApp do Cliente:* ${order.client.phone}\n` +
-                `📍 *Endereço:* ${order.client.address}\n` +
-                `💳 *Forma de Pagamento:* ${order.client.paymentMethod} ${order.client.change ? '(Troco para: ' + order.client.change + ')' : ''}\n` +
-                `💰 *Valor Total do Pedido:* R$ ${order.total.toFixed(2)}\n\n` +
-                `Bom trabalho! Dirija com segurança! 🍔`;
-            
-            await triggerWhatsApp(motoboyPhoneClean, motoboyCupom);
-        }
-
         async function updateOrderStatus(firebaseKey, newStatus) {
             const order = orders.find(o => o.firebaseKey === firebaseKey);
             if(!order) return;
 
             await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
 
-            if(newStatus === 'completed') {
-                alert(`Pedido #${order.id} concluído com sucesso e contabilizado para o motoboy ${order.assignedMotoboy ? order.assignedMotoboy.name : 'N/A'}!`);
+            if(newStatus === 'production') {
+                const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.id} está em preparo na brasa!`;
+                await triggerWhatsApp(order.client.phone, msg);
+            } else if(newStatus === 'delivery') {
+                const msg = `Oba! 🛵 O seu pedido #${order.id} acabou de sair para entrega! Fique atento no endereço: ${order.client.address}.`;
+                await triggerWhatsApp(order.client.phone, msg);
             }
         }
 
@@ -1059,64 +934,6 @@
             } catch (error) {
                 console.error('Erro ao conectar com a Evolution API:', error);
             }
-        }
-
-        // RENDERIZAR GESTÃO DE MOTOBOYS E TAXAS ACUMULADAS
-        function renderMotoboyManagement() {
-            const listContainer = document.getElementById('motoboys-list');
-            const historyContainer = document.getElementById('motoboys-deliveries-history');
-
-            if(motoboys.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Nenhum motoboy cadastrado.</p>`;
-                historyContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Nenhum registro de entrega.</p>`;
-                return;
-            }
-
-            const completedOrders = orders.filter(o => o.status === 'completed' && o.assignedMotoboy);
-
-            listContainer.innerHTML = motoboys.map(mb => {
-                const mbDeliveries = completedOrders.filter(o => o.assignedMotoboy.phone === mb.phone);
-                const totalFees = mbDeliveries.reduce((sum, o) => sum + (o.deliveryFee || 5.00), 0);
-
-                return `
-                    <div class="flex justify-between items-center py-3">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">${mb.name}</h4>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1"></i> ${mb.phone}</p>
-                            <span class="text-xs font-bold text-brand-500 mt-1 block">Taxas Acumuladas: R$ ${totalFees.toFixed(2)} (${mbDeliveries.length} entregas)</span>
-                        </div>
-                        <button onclick="deleteMotoboy('${mb.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            }).join('');
-
-            const now = new Date();
-            historyContainer.innerHTML = motoboys.map(mb => {
-                const mbDeliveries = completedOrders.filter(o => o.assignedMotoboy.phone === mb.phone);
-                
-                const todayCount = mbDeliveries.filter(o => new Date(o.date).toDateString() === now.toDateString()).length;
-                const weekCount = mbDeliveries.filter(o => {
-                    const diffTime = Math.abs(now - new Date(o.date));
-                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) <= 7;
-                }).length;
-                const monthCount = mbDeliveries.filter(o => {
-                    const d = new Date(o.date);
-                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-                }).length;
-                const yearCount = mbDeliveries.filter(o => new Date(o.date).getFullYear() === now.getFullYear()).length;
-
-                return `
-                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl space-y-2 font-mono text-xs">
-                        <div class="font-bold text-brand-500 text-sm border-b border-zinc-800 pb-1">🛵 ${mb.name}</div>
-                        <div class="grid grid-cols-2 gap-2 text-gray-300">
-                            <div>Hoje: <strong class="text-white">${todayCount}</strong></div>
-                            <div>Esta Semana: <strong class="text-white">${weekCount}</strong></div>
-                            <div>Este Mês: <strong class="text-white">${monthCount}</strong></div>
-                            <div>Este Ano: <strong class="text-white">${yearCount}</strong></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
         function renderFinanceReports() {
