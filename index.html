@@ -20,6 +20,11 @@
 </head>
 <body class="bg-brand-dark text-gray-100 font-sans min-h-screen flex flex-col">
 
+    <!-- Aviso de Alergênicos Sutil no Topo -->
+    <div class="bg-zinc-900 border-b border-zinc-800 text-center py-1.5 px-4 text-[11px] text-zinc-400">
+        <i class="fa-solid fa-triangle-exclamation text-brand-500 mr-1"></i> **Aviso de Alergênicos:** Nossos produtos podem conter vestígios de glúten, lactose ou castanhas. Consulte a equipe em caso de dúvidas.
+    </div>
+
     <header class="bg-brand-card border-b border-gray-800 sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('menu')">
@@ -30,6 +35,10 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
+                <button onclick="openDeliveryModal()" class="hidden sm:flex bg-zinc-800 hover:bg-zinc-700 px-3 py-2 rounded-xl text-xs font-medium transition items-center space-x-1.5 border border-zinc-700 text-gray-300">
+                    <i class="fa-solid fa-motorcycle text-brand-500"></i>
+                    <span>Taxas de Entrega</span>
+                </button>
                 <button onclick="openCart()" class="relative bg-zinc-800 hover:bg-zinc-700 px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center space-x-2 border border-zinc-700">
                     <i class="fa-solid fa-cart-shopping text-brand-500"></i>
                     <span class="hidden sm:inline">Carrinho</span>
@@ -45,11 +54,24 @@
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
 
         <div id="view-menu" class="space-y-6">
+            <!-- Banner com Status, Tempo Estimado e Cupons Ativos -->
             <div id="store-status-banner" class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center transition-all">
                 <div class="relative z-10 max-w-lg">
-                    <span id="banner-status-badge" class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via WhatsApp</span>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span id="banner-status-badge" class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Aberto agora • Pedidos via WhatsApp</span>
+                        <span class="bg-black/40 text-brand-500 text-xs font-bold px-3 py-1 rounded-full flex items-center"><i class="fa-solid fa-clock mr-1.5"></i> Tempo estimado: 35-50 min</span>
+                    </div>
                     <h2 class="text-2xl sm:text-4xl font-black text-white mb-2">O Verdadeiro Sabor Artesanal</h2>
-                    <p id="banner-status-desc" class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
+                    <p id="banner-status-desc" class="text-gray-200 text-sm sm:text-base mb-4">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
+                    
+                    <!-- Programa de Fidelidade / Cupom Rápido -->
+                    <div class="bg-black/30 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between gap-2 max-w-md">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-ticket text-brand-500"></i>
+                            <span class="text-xs text-white font-medium">Cupom Ativo: <strong class="text-brand-500">MAX10</strong> (-10%)</span>
+                        </div>
+                        <button onclick="applyBannerCoupon()" class="bg-brand-500 hover:bg-brand-600 text-brand-dark px-3 py-1.5 rounded-lg text-xs font-bold transition">Aplicar</button>
+                    </div>
                 </div>
             </div>
 
@@ -330,12 +352,14 @@
         </div>
     </main>
 
+    <!-- Modal de Detalhes e Adicionais -->
     <div id="product-detail-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden my-auto">
             <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/50 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center z-10 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             <div class="h-64 overflow-hidden relative">
                 <img id="detail-img" src="" alt="" class="w-full h-full object-cover">
                 <span id="detail-category" class="absolute bottom-3 left-3 bg-brand-dark/85 backdrop-blur-md text-brand-500 text-xs font-bold px-3 py-1 rounded-full"></span>
+                <span id="detail-badge" class="absolute top-3 left-3 bg-brand-500 text-brand-dark font-bold text-xs px-3 py-1 rounded-full shadow hidden">Mais Pedido</span>
             </div>
             <div class="p-6 space-y-5">
                 <div>
@@ -343,8 +367,9 @@
                     <p id="detail-desc" class="text-sm text-gray-300 leading-relaxed"></p>
                 </div>
 
+                <!-- Seção Clara de Adicionais e Opcionais -->
                 <div class="border-t border-zinc-800 pt-4 space-y-3">
-                    <h4 class="text-xs font-bold text-brand-500 uppercase tracking-wider"><i class="fa-solid fa-plus-circle mr-1"></i> Escolha os Adicionais (Opcional)</h4>
+                    <h4 class="text-xs font-bold text-brand-500 uppercase tracking-wider"><i class="fa-solid fa-plus-circle mr-1"></i> Escolha os Adicionais & Opcionais</h4>
                     <div id="detail-addons-list" class="space-y-2.5 max-h-40 overflow-y-auto pr-1"></div>
                 </div>
 
@@ -374,6 +399,19 @@
         </div>
     </div>
 
+    <!-- Modal de Taxas de Entrega Transparentes -->
+    <div id="delivery-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
+            <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
+                <h3 class="text-lg font-bold text-brand-500"><i class="fa-solid fa-motorcycle mr-2"></i> Taxas de Entrega por Setor</h3>
+                <button onclick="closeDeliveryModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-gray-400 mb-4">Confira abaixo os valores das taxas de entrega por bairro ou setor antes de fechar seu pedido:</p>
+            <div id="modal-sectors-list" class="space-y-2.5 max-h-60 overflow-y-auto mb-4"></div>
+            <button onclick="closeDeliveryModal()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition text-xs shadow">Entendido</button>
+        </div>
+    </div>
+
     <div id="assign-motoboy-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -398,9 +436,17 @@
                 <h3 class="text-lg font-bold flex items-center space-x-2"><i class="fa-solid fa-bag-shopping text-brand-500"></i><span>Sua Sacola</span></h3>
                 <button onclick="closeCart()" class="text-gray-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+            
+            <!-- Espaço visível para cupom de desconto -->
+            <div class="py-3 border-b border-zinc-800 flex gap-2">
+                <input type="text" id="cart-coupon-input" placeholder="Cupom de desconto (ex: MAX10)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs uppercase text-white focus:outline-none focus:border-brand-500">
+                <button onclick="applyCartCoupon()" class="bg-zinc-800 hover:bg-zinc-700 text-brand-500 px-4 py-2 rounded-xl text-xs font-bold transition border border-zinc-700">Aplicar</button>
+            </div>
+
             <div id="cart-items" class="flex-grow overflow-y-auto py-4 space-y-3 divide-y divide-zinc-800/50"></div>
             <div class="pt-4 border-t border-zinc-800 space-y-3">
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-bold">R$ 0,00</span></div>
+                <div id="cart-discount-row" class="hidden flex justify-between text-sm text-green-400"><span>Desconto Cupom</span><span id="cart-discount-display">- R$ 0,00</span></div>
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Taxa de Entrega</span><span id="cart-delivery-display" class="font-bold text-brand-500">R$ 0,00</span></div>
                 <div class="flex justify-between text-base font-black pt-2 border-t border-zinc-800"><span>Total</span><span id="cart-total" class="text-brand-500">R$ 0,00</span></div>
                 <button onclick="openCheckout()" id="btn-proceed-checkout" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
@@ -512,12 +558,21 @@
                     </div>
                 </div>
                 <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Selo de Destaque (Tag Visual)</label>
+                    <select id="item-tag" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
+                        <option value="">Nenhum</option>
+                        <option value="Mais Pedido">Mais Pedido</option>
+                        <option value="Favorito da Galera">Favorito da Galera</option>
+                        <option value="Chef's Choice">Chef's Choice</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem</label>
                     <input type="text" id="item-image" required placeholder="https://..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Descrição</label>
-                    <textarea id="item-desc" required rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Descrição Transparente de Ingredientes</label>
+                    <textarea id="item-desc" required rows="2" placeholder="Ex: Blend bovino 160g, queijo cheddar artesanal, bacon crocante no pão brioche amanteigado" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></textarea>
                 </div>
                 <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3 rounded-xl transition shadow-lg mt-2">Salvar Item</button>
             </form>
@@ -583,6 +638,8 @@
         };
         let cart = [];
         let currentCategory = 'Todos';
+        let appliedCoupon = null;
+        let discountPercent = 0;
         let alarmInterval = null;
         let storeCheckInterval = null;
 
@@ -693,7 +750,6 @@
 
             const banner = document.getElementById('store-status-banner');
             const badge = document.getElementById('banner-status-badge');
-            const desc = document.getElementById('banner-status-desc');
             const liveBadge = document.getElementById('live-store-status-badge');
 
             if (banner) {
@@ -753,7 +809,6 @@
 
         function initAuthListener() {
             window.onAuthStateChanged(window.firebaseAuth, (user) => {
-                const currentViewMenu = document.getElementById('view-menu').classList.contains('hidden');
                 const currentViewLogin = document.getElementById('view-admin-login').classList.contains('hidden');
                 
                 if (user) {
@@ -794,6 +849,7 @@
                     window.dbSet(window.dbRef(window.db, 'maxburger/sectors'), sectors);
                 }
                 renderSectorsList();
+                renderModalSectorsList();
                 populateCheckoutSectors();
             });
 
@@ -803,10 +859,10 @@
                     menuData = Array.isArray(data) ? data : Object.values(data);
                 } else {
                     menuData = [
-                        { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Pão brioche selado na manteiga, burger artesanal 180g, cheddar cremoso e muito bacon crocante.', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
-                        { id: 2, name: 'Max Cheddar Brasa', category: 'Burgers', price: 32.00, desc: 'Blend bovino 180g, queijo cheddar derretido, cebola caramelizada e molho especial da casa.', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' },
-                        { id: 3, name: 'Batata Rústica com Cheddar', category: 'Acompanhamentos', price: 18.50, desc: 'Batatas rústicas temperadas com alecrim, cobertas com cheddar cremoso e bacon em cubos.', image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80' },
-                        { id: 4, name: 'Coca-Cola 350ml', category: 'Bebidas', price: 6.00, desc: 'Lata gelada 350ml.', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' }
+                        { id: 1, name: 'Max Bacon Melt', category: 'Burgers', price: 34.90, desc: 'Blend bovino 180g, queijo cheddar artesanal, bacon crocante no pão brioche amanteigado', tag: 'Mais Pedido', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80' },
+                        { id: 2, name: 'Max Cheddar Brasa', category: 'Burgers', price: 32.00, desc: 'Blend bovino 180g, queijo cheddar derretido, cebola caramelizada e molho especial da casa.', tag: 'Favorito da Galera', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' },
+                        { id: 3, name: 'Batata Rústica com Cheddar', category: 'Acompanhamentos', price: 18.50, desc: 'Batatas rústicas temperadas com alecrim, cobertas com cheddar cremoso e bacon em cubos.', tag: "Chef's Choice", image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80' },
+                        { id: 4, name: 'Coca-Cola 350ml', category: 'Bebidas', price: 6.00, desc: 'Lata gelada 350ml.', tag: '', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' }
                     ];
                     window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
                 }
@@ -998,6 +1054,24 @@
             `).join('');
         }
 
+        function renderModalSectorsList() {
+            const container = document.getElementById('modal-sectors-list');
+            if(!container) return;
+            if(!sectors || sectors.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center">Nenhum setor cadastrado.</p>`;
+                return;
+            }
+            container.innerHTML = sectors.map(s => `
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
+                    <span class="text-sm font-medium text-white">${s.name}</span>
+                    <span class="text-sm font-bold text-brand-500">R$ ${s.price.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+
+        function openDeliveryModal() { document.getElementById('delivery-modal').classList.remove('hidden'); }
+        function closeDeliveryModal() { document.getElementById('delivery-modal').classList.add('hidden'); }
+
         function editSector(key, name, price) {
             document.getElementById('sector-edit-id').value = key;
             document.getElementById('sector-name-input').value = name;
@@ -1187,7 +1261,6 @@
 
             enqueueWhatsAppMessage(motoboy.whatsapp, cupomMsg);
 
-            // AVISO ENVIADO AO CLIENTE (SAIU PARA ENTREGA)
             const clienteSaiuMsg = `Oba! 🛵 Seu pedido #${order.dailyId} acabou de sair para entrega com o entregador ${motoboy.name}! Fique atento(a).`;
             enqueueWhatsAppMessage(order.client.phone, clienteSaiuMsg);
 
@@ -1328,6 +1401,7 @@
                         <div class="h-48 overflow-hidden relative">
                             <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
                             <span class="absolute top-3 left-3 bg-brand-dark/85 backdrop-blur-md text-brand-500 text-xs font-bold px-3 py-1 rounded-full">${item.category}</span>
+                            ${item.tag ? `<span class="absolute bottom-3 left-3 bg-brand-500 text-brand-dark font-black text-[11px] px-2.5 py-1 rounded-full shadow-md"><i class="fa-solid fa-star mr-1"></i> ${item.tag}</span>` : ''}
                         </div>
                         <div class="p-5">
                             <h3 class="font-bold text-lg mb-1">${item.name}</h3>
@@ -1355,6 +1429,14 @@
             document.getElementById('detail-name').innerText = product.name;
             document.getElementById('detail-desc').innerText = product.desc;
             document.getElementById('detail-qty').innerText = currentDetailQty;
+
+            const badgeEl = document.getElementById('detail-badge');
+            if(product.tag) {
+                badgeEl.innerText = product.tag;
+                badgeEl.classList.remove('hidden');
+            } else {
+                badgeEl.classList.add('hidden');
+            }
 
             const addonsContainer = document.getElementById('detail-addons-list');
             addonsContainer.innerHTML = availableAddons.map(addon => `
@@ -1448,6 +1530,30 @@
         function openCart() { document.getElementById('cart-modal').classList.remove('hidden'); renderCartItems(); }
         function closeCart() { document.getElementById('cart-modal').classList.add('hidden'); }
 
+        function applyBannerCoupon() {
+            document.getElementById('cart-coupon-input').value = 'MAX10';
+            applyCartCoupon();
+            openCart();
+        }
+
+        function applyCartCoupon() {
+            const code = document.getElementById('cart-coupon-input').value.trim().toUpperCase();
+            if(code === 'MAX10') {
+                appliedCoupon = 'MAX10';
+                discountPercent = 10;
+                alert('🎉 Cupom MAX10 aplicado com sucesso (-10% no subtotal)!');
+            } else if(code === 'MAX20') {
+                appliedCoupon = 'MAX20';
+                discountPercent = 20;
+                alert('🎉 Cupom MAX20 aplicado com sucesso (-20% no subtotal)!');
+            } else {
+                appliedCoupon = null;
+                discountPercent = 0;
+                alert('❌ Cupom inválido ou expirado.');
+            }
+            renderCartItems();
+        }
+
         function renderCartItems() {
             const container = document.getElementById('cart-items');
             if(!container) return;
@@ -1456,6 +1562,7 @@
                 document.getElementById('cart-subtotal').innerText = 'R$ 0,00';
                 document.getElementById('cart-delivery-display').innerText = 'R$ 0,00';
                 document.getElementById('cart-total').innerText = 'R$ 0,00';
+                document.getElementById('cart-discount-row').classList.add('hidden');
                 return;
             }
 
@@ -1479,11 +1586,22 @@
             `).join('');
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const discountVal = (subtotal * discountPercent) / 100;
+            const discountedSubtotal = subtotal - discountVal;
             const deliveryFee = getCurrentDeliveryFee();
             
             document.getElementById('cart-subtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
+            
+            const discRow = document.getElementById('cart-discount-row');
+            if(discountPercent > 0) {
+                discRow.classList.remove('hidden');
+                document.getElementById('cart-discount-display').innerText = `- R$ ${discountVal.toFixed(2)} (${discountPercent}%)`;
+            } else {
+                discRow.classList.add('hidden');
+            }
+
             document.getElementById('cart-delivery-display').innerText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
-            document.getElementById('cart-total').innerText = `R$ ${(subtotal + deliveryFee).toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `R$ ${(discountedSubtotal + deliveryFee).toFixed(2)}`;
         }
 
         function changeQty(cartKey, delta) {
@@ -1511,12 +1629,14 @@
             const container = document.getElementById('checkout-order-summary');
             if(!container) return;
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const discountVal = (subtotal * discountPercent) / 100;
+            const discountedSubtotal = subtotal - discountVal;
             const deliveryFee = getCurrentDeliveryFee();
-            const total = subtotal + deliveryFee;
+            const total = discountedSubtotal + deliveryFee;
 
             container.innerHTML = `
                 <div class="text-xs font-bold text-brand-500 mb-1 flex items-center justify-between">
-                    <span>CUPOM / RESUMO DOS ITENS</span>
+                    <span>RESUMO DOS ITENS ${appliedCoupon ? `(Cupom: ${appliedCoupon})` : ''}</span>
                     <span>Total: R$ ${total.toFixed(2)}</span>
                 </div>
                 ${cart.map(i => `
@@ -1527,7 +1647,7 @@
                 `).join('')}
                 <div class="flex justify-between text-[11px] text-gray-400 pt-1">
                     <span>Taxa de Entrega: ${deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`}</span>
-                    <span id="cupom-troco-display" class="text-brand-500 font-semibold"></span>
+                    ${discountPercent > 0 ? `<span class="text-green-400 font-semibold">Desconto: -R$ ${discountVal.toFixed(2)}</span>` : ''}
                 </div>
             `;
         }
@@ -1573,6 +1693,8 @@
             }
 
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const discountVal = (subtotal * discountPercent) / 100;
+            const discountedSubtotal = subtotal - discountVal;
             const deliveryFee = getCurrentDeliveryFee();
             
             const todayStr = new Date().toDateString();
@@ -1584,8 +1706,11 @@
                 dailyId: dailyIdNum,
                 client: { name, phone, address, payment, troco, sectorName },
                 items: [...cart],
+                subtotal: subtotal,
+                discount: discountVal,
+                coupon: appliedCoupon || 'Nenhum',
                 deliveryFee: deliveryFee,
-                total: subtotal + deliveryFee,
+                total: discountedSubtotal + deliveryFee,
                 status: 'new',
                 date: new Date().toISOString()
             };
@@ -1594,6 +1719,8 @@
             await window.dbSet(newOrderRef, newOrder);
 
             cart = [];
+            appliedCoupon = null;
+            discountPercent = 0;
             updateCartBadge();
             closeCheckout();
 
@@ -1639,6 +1766,7 @@
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-credit-card mr-1 text-brand-500"></i> ${order.client.payment || 'Não informada'} ${order.client.troco ? `(Troco: ${order.client.troco})` : ''}</p>
                             <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address} (${order.client.sectorName || ''})</p>
                             <p class="text-xs text-brand-500 font-semibold"><i class="fa-solid fa-motorcycle mr-1"></i> Taxa: R$ ${(order.deliveryFee || 5.00).toFixed(2)}</p>
+                            ${order.coupon && order.coupon !== 'Nenhum' ? `<p class="text-xs text-green-400 font-semibold">Cupom: ${order.coupon}</p>` : ''}
                             ${order.motoboy ? `<p class="text-xs text-blue-400 font-semibold mt-1"><i class="fa-solid fa-motorcycle mr-1"></i> Entregador: ${order.motoboy.name}</p>` : ''}
                         </div>
                         <div class="border-t border-zinc-800 pt-3 space-y-1 text-xs text-gray-300">
@@ -1659,24 +1787,16 @@
                         ${order.status === 'new' ? `
                             <div class="flex gap-2">
                                 <button onclick="updateOrderStatus('${order.firebaseKey}', 'production')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold py-2.5 rounded-xl text-xs transition shadow">Aceitar p/ Produção</button>
-                                <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold px-3 py-2.5 rounded-xl text-xs transition border border-red-500/30">Recusar</button>
+                                <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-2.5 rounded-xl text-xs font-bold transition">Recusar</button>
                             </div>
-                        ` : ''}
-
-                        ${order.status === 'production' ? `
+                        ` : order.status === 'production' ? `
                             <button onclick="promptAssignMotoboy('${order.firebaseKey}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center space-x-2">
                                 <i class="fa-solid fa-motorcycle"></i><span>Enviar para Entrega (Motoboy)</span>
                             </button>
-                        ` : ''}
-
-                        ${order.status === 'delivery' ? `
+                        ` : order.status === 'delivery' ? `
                             <button onclick="updateOrderStatus('${order.firebaseKey}', 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center space-x-2">
                                 <i class="fa-solid fa-circle-check"></i><span>Concluir Pedido</span>
                             </button>
-                        ` : ''}
-
-                        ${order.status === 'completed' ? `
-                            <span class="block text-center text-xs text-green-500 font-bold py-1"><i class="fa-solid fa-check-circle mr-1"></i> Pedido Concluído</span>
                         ` : ''}
                     </div>
                 </div>
@@ -1684,117 +1804,84 @@
         }
 
         async function updateOrderStatus(firebaseKey, newStatus) {
-            const order = orders.find(o => o.firebaseKey === firebaseKey);
-            if(!order) return;
-
             await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
-
-            if(newStatus === 'production') {
-                const prodMsg = `Oba! 👨🏻‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
-                enqueueWhatsAppMessage(order.client.phone, prodMsg);
-            } else if(newStatus === 'completed') {
-                const compMsg = `Seu pedido #${order.dailyId} foi entregue com sucesso! Obrigado pela preferência na Max Burger & Grill! 🍔🔥`;
-                enqueueWhatsAppMessage(order.client.phone, compMsg);
+            const order = orders.find(o => o.firebaseKey === firebaseKey);
+            if(order) {
+                let statusMsg = '';
+                if(newStatus === 'production') statusMsg = `👨‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
+                if(newStatus === 'completed') statusMsg = `🎉 Seu pedido #${order.dailyId} foi concluído! Obrigado pela preferência, volte sempre!`;
+                if(statusMsg) enqueueWhatsAppMessage(order.client.phone, statusMsg);
             }
-
-            alert(`Status atualizado para '${newStatus}' com sucesso!`);
         }
 
+        let currentCancelKey = null;
         function openCancelModal(firebaseKey) {
-            document.getElementById('cancel-order-id').value = firebaseKey;
+            currentCancelKey = firebaseKey;
             document.getElementById('cancel-reason').value = '';
             document.getElementById('cancel-modal').classList.remove('hidden');
         }
-
-        function closeCancelModal() {
-            document.getElementById('cancel-modal').classList.add('hidden');
-        }
+        function closeCancelModal() { document.getElementById('cancel-modal').classList.add('hidden'); }
 
         async function confirmOrderCancellation() {
-            const firebaseKey = document.getElementById('cancel-order-id').value;
             const reason = document.getElementById('cancel-reason').value.trim();
             if(!reason) return alert('Informe o motivo do cancelamento.');
-
-            const order = orders.find(o => o.firebaseKey === firebaseKey);
-            if(!order) return;
-
-            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: 'cancelled', cancelReason: reason });
-            closeCancelModal();
-
-            const cancelMsg = `Olá ${order.client.name}, infelizmente precisamos cancelar o seu pedido #${order.dailyId}.\nMotivo: ${reason}`;
-            enqueueWhatsAppMessage(order.client.phone, cancelMsg);
-
-            alert('Pedido cancelado e aviso enviado ao cliente via WhatsApp.');
-        }
-
-        function renderAdminMenu() {
-            const container = document.getElementById('admin-menu-list');
-            if(!container) return;
-            if(menuData.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-gray-500 text-sm">Nenhum item cadastrado.</div>`;
-                return;
+            
+            const order = orders.find(o => o.firebaseKey === currentCancelKey);
+            if(order) {
+                await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${currentCancelKey}`), { 
+                    status: 'cancelled',
+                    cancelReason: reason
+                });
+                const cancelMsg = `⚠️ Olá ${order.client.name}, infelizmente seu pedido #${order.dailyId} precisou ser cancelado.\nMotivo: ${reason}`;
+                enqueueWhatsAppMessage(order.client.phone, cancelMsg);
             }
-
-            container.innerHTML = menuData.map(item => `
-                <div class="p-4 flex items-center justify-between gap-4">
-                    <div class="flex items-center space-x-3">
-                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-xl object-cover">
-                        <div>
-                            <h4 class="font-bold text-sm text-white">${item.name}</h4>
-                            <p class="text-xs text-brand-500">R$ ${item.price.toFixed(2)} • ${item.category}</p>
-                        </div>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="editMenuItem(${item.id})" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 p-2 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteMenuItem(${item.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
+            closeCancelModal();
+            alert('Pedido cancelado e cliente avisado com sucesso.');
         }
 
-        function openItemModal() {
-            document.getElementById('item-modal-title').innerText = 'Novo Item do Cardápio';
-            document.getElementById('item-id').value = '';
-            document.getElementById('item-name').value = '';
-            document.getElementById('item-category').value = 'Burgers';
-            document.getElementById('item-price').value = '';
-            document.getElementById('item-image').value = '';
-            document.getElementById('item-desc').value = '';
+        function openItemModal(item = null) {
+            if(item) {
+                document.getElementById('item-modal-title').innerText = 'Editar Item do Cardápio';
+                document.getElementById('item-id').value = item.id;
+                document.getElementById('item-name').value = item.name;
+                document.getElementById('item-category').value = item.category;
+                document.getElementById('item-price').value = item.price;
+                document.getElementById('item-image').value = item.image;
+                document.getElementById('item-desc').value = item.desc;
+                document.getElementById('item-tag').value = item.tag || '';
+            } else {
+                document.getElementById('item-modal-title').innerText = 'Novo Item do Cardápio';
+                document.getElementById('item-id').value = '';
+                document.getElementById('item-name').value = '';
+                document.getElementById('item-category').value = 'Burgers';
+                document.getElementById('item-price').value = '';
+                document.getElementById('item-image').value = '';
+                document.getElementById('item-desc').value = '';
+                document.getElementById('item-tag').value = '';
+            }
             document.getElementById('item-modal').classList.remove('hidden');
         }
 
         function closeItemModal() { document.getElementById('item-modal').classList.add('hidden'); }
 
-        function editMenuItem(id) {
-            const item = menuData.find(i => i.id === id);
-            if(!item) return;
-            document.getElementById('item-modal-title').innerText = 'Editar Item do Cardápio';
-            document.getElementById('item-id').value = item.id;
-            document.getElementById('item-name').value = item.name;
-            document.getElementById('item-category').value = item.category;
-            document.getElementById('item-price').value = item.price;
-            document.getElementById('item-image').value = item.image;
-            document.getElementById('item-desc').value = item.desc;
-            document.getElementById('item-modal').classList.remove('hidden');
-        }
-
         async function saveMenuItem(e) {
             e.preventDefault();
-            const idVal = document.getElementById('item-id').value;
+            const id = document.getElementById('item-id').value;
             const name = document.getElementById('item-name').value.trim();
             const category = document.getElementById('item-category').value;
             const price = parseFloat(document.getElementById('item-price').value);
             const image = document.getElementById('item-image').value.trim();
             const desc = document.getElementById('item-desc').value.trim();
+            const tag = document.getElementById('item-tag').value;
 
-            if(idVal) {
-                const index = menuData.findIndex(i => i.id == idVal);
+            if(id) {
+                const index = menuData.findIndex(i => i.id == id);
                 if(index !== -1) {
-                    menuData[index] = { id: Number(idVal), name, category, price, image, desc };
+                    menuData[index] = { id: parseInt(id), name, category, price, image, desc, tag };
                 }
             } else {
                 const newId = menuData.length > 0 ? Math.max(...menuData.map(i => i.id)) + 1 : 1;
-                menuData.push({ id: newId, name, category, price, image, desc });
+                menuData.push({ id: newId, name, category, price, image, desc, tag });
             }
 
             await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
@@ -1809,97 +1896,113 @@
             }
         }
 
+        function renderAdminMenu() {
+            const container = document.getElementById('admin-menu-list');
+            if(!container) return;
+            container.innerHTML = menuData.map(item => `
+                <div class="p-4 flex justify-between items-center hover:bg-zinc-900/50 transition">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-xl">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">${item.name} ${item.tag ? `<span class="text-[10px] bg-brand-500/20 text-brand-500 px-2 py-0.5 rounded-full ml-1">${item.tag}</span>` : ''}</h4>
+                            <p class="text-xs text-gray-400">R$ ${item.price.toFixed(2)} • ${item.category}</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick='openItemModal(${JSON.stringify(item)})' class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteMenuItem(${item.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function renderFinanceReports() {
             const dateFilterInput = document.getElementById('finance-date-filter');
             const filterDateStr = dateFilterInput ? dateFilterInput.value : '';
-            
+
             const now = new Date();
-            let dayTotal = 0;
-            let weekTotal = 0;
-            let monthTotal = 0;
-            let countTotal = 0;
-
             const validOrders = orders.filter(o => o.status !== 'cancelled');
-            const productSalesMap = {};
 
-            validOrders.forEach(order => {
-                const orderDate = new Date(order.date);
-                const orderTotal = order.total || 0;
-
+            let filteredDayOrders = validOrders.filter(o => {
+                const orderDate = new Date(o.date);
                 if(filterDateStr) {
-                    if(orderDate.toDateString() === new Date(filterDateStr).toDateString()) {
-                        dayTotal += orderTotal;
-                    }
-                } else {
-                    if(orderDate.toDateString() === now.toDateString()) {
-                        dayTotal += orderTotal;
-                    }
+                    return orderDate.toISOString().split('T')[0] === filterDateStr;
                 }
-
-                const diffDays = Math.ceil(Math.abs(now - orderDate) / (1000 * 60 * 60 * 24));
-                if(diffDays <= 7) weekTotal += orderTotal;
-                if(orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()) monthTotal += orderTotal;
-
-                countTotal++;
-
-                order.items.forEach(item => {
-                    if(!productSalesMap[item.name]) {
-                        productSalesMap[item.name] = { qty: 0, revenue: 0 };
-                    }
-                    productSalesMap[item.name].qty += item.qty;
-                    productSalesMap[item.name].revenue += item.price * item.qty;
-                });
+                return orderDate.toDateString() === now.toDateString();
             });
+
+            let weekOrders = validOrders.filter(o => {
+                const diffDays = Math.ceil(Math.abs(now - new Date(o.date)) / (1000 * 60 * 60 * 24));
+                return diffDays <= 7;
+            });
+
+            let monthOrders = validOrders.filter(o => {
+                const orderDate = new Date(o.date);
+                return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+            });
+
+            const dayTotal = filteredDayOrders.reduce((sum, o) => sum + o.total, 0);
+            const weekTotal = weekOrders.reduce((sum, o) => sum + o.total, 0);
+            const monthTotal = monthOrders.reduce((sum, o) => sum + o.total, 0);
 
             document.getElementById('rep-day').innerText = `R$ ${dayTotal.toFixed(2)}`;
             document.getElementById('rep-week').innerText = `R$ ${weekTotal.toFixed(2)}`;
             document.getElementById('rep-month').innerText = `R$ ${monthTotal.toFixed(2)}`;
-            document.getElementById('rep-count').innerText = countTotal;
+            document.getElementById('rep-count').innerText = validOrders.length;
 
-            const ordersListContainer = document.getElementById('finance-orders-list');
-            if(validOrders.length === 0) {
-                ordersListContainer.innerHTML = `<p class="text-xs text-gray-500 py-4 text-center">Nenhuma venda registrada.</p>`;
-            } else {
-                ordersListContainer.innerHTML = validOrders.map(o => `
-                    <div class="flex justify-between items-center py-2 text-xs">
-                        <div>
-                            <span class="font-bold text-white">#${o.dailyId || o.id} - ${o.client.name}</span>
-                            <span class="text-gray-400 block">${new Date(o.date).toLocaleString()} • ${o.client.payment || 'Dinheiro'}</span>
+            const listContainer = document.getElementById('finance-orders-list');
+            if(listContainer) {
+                listContainer.innerHTML = validOrders.length === 0 ? '<p class="text-xs text-gray-500 text-center py-4">Nenhuma venda registrada no caixa.</p>' :
+                    validOrders.map(o => `
+                        <div class="py-2.5 flex justify-between items-center text-xs">
+                            <div>
+                                <span class="font-bold text-white">#${o.dailyId || o.id} - ${o.client.name}</span>
+                                <span class="text-gray-400 block">${new Date(o.date).toLocaleString()} • ${o.client.payment}</span>
+                            </div>
+                            <span class="font-black text-brand-500 text-sm">R$ ${o.total.toFixed(2)}</span>
                         </div>
-                        <span class="font-bold text-brand-500">R$ ${o.total.toFixed(2)}</span>
-                    </div>
-                `).join('');
+                    `).join('');
             }
 
-            const sortedProducts = Object.keys(productSalesMap).map(name => ({
-                name, ...productSalesMap[name]
-            })).sort((a, b) => b.qty - a.qty);
+            const productCounts = {};
+            validOrders.forEach(o => {
+                o.items.forEach(i => {
+                    productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
+                });
+            });
 
+            const sortedProducts = Object.keys(productCounts).sort((a, b) => productCounts[b] - productCounts[a]);
             const topProductsContainer = document.getElementById('top-products-list');
-            if(sortedProducts.length === 0) {
-                topProductsContainer.innerHTML = `<p class="text-xs text-gray-500">Sem dados de produtos.</p>`;
-            } else {
-                topProductsContainer.innerHTML = sortedProducts.slice(0, 3).map((p, index) => `
-                    <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                            <span class="w-6 h-6 rounded-full bg-brand-500 text-brand-dark font-black text-xs flex items-center justify-center">${index + 1}</span>
-                            <span class="text-xs font-bold text-white">${p.name}</span>
+            if(topProductsContainer) {
+                topProductsContainer.innerHTML = sortedProducts.length === 0 ? '<p class="text-xs text-gray-500">Nenhum dado de vendas ainda.</p>' :
+                    sortedProducts.slice(0, 3).map((name, idx) => `
+                        <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
+                            <span class="text-xs font-bold text-white">${idx + 1}º - ${name}</span>
+                            <span class="text-xs font-black text-brand-500">${productCounts[name]} unidades vendidas</span>
                         </div>
-                        <span class="text-xs font-bold text-brand-500">${p.qty} vendidos (R$ ${p.revenue.toFixed(2)})</span>
-                    </div>
-                `).join('');
+                    `).join('');
             }
         }
 
         function clearDateFilter() {
-            const dateFilterInput = document.getElementById('finance-date-filter');
-            if(dateFilterInput) dateFilterInput.value = '';
+            const dateInput = document.getElementById('finance-date-filter');
+            if(dateInput) dateInput.value = '';
             renderFinanceReports();
         }
 
         async function clearHistoryPeriod(period) {
-            if(confirm(`Deseja limpar os registros do histórico (${period === 'day' ? 'hoje' : 'tudo'})?`)) {
-                alert('Ação restrita. Utilize o painel do Firebase para limpeza em massa segura.');
+            if(confirm(period === 'day' ? 'Deseja limpar os pedidos de hoje?' : 'Deseja apagar todo o histórico de pedidos e caixa?')) {
+                if(period === 'all') {
+                    await window.dbSet(window.dbRef(window.db, 'maxburger/orders'), null);
+                } else {
+                    const now = new Date();
+                    for(let o of orders) {
+                        if(new Date(o.date).toDateString() === now.toDateString()) {
+                            await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${o.firebaseKey}`));
+                        }
+                    }
+                }
+                alert('Caixa limpo com sucesso!');
             }
         }
     </script>
