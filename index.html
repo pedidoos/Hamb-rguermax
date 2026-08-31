@@ -45,11 +45,11 @@
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
 
         <div id="view-menu" class="space-y-6">
-            <div class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center">
+            <div id="store-status-banner" class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center transition-all">
                 <div class="relative z-10 max-w-lg">
-                    <span class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via WhatsApp</span>
+                    <span id="banner-status-badge" class="bg-black/30 text-brand-50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Aberto agora • Pedidos via WhatsApp</span>
                     <h2 class="text-2xl sm:text-4xl font-black text-white mb-2">O Verdadeiro Sabor Artesanal</h2>
-                    <p class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
+                    <p id="banner-status-desc" class="text-gray-200 text-sm sm:text-base">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
                 </div>
             </div>
 
@@ -117,6 +117,54 @@
             </div>
 
             <div id="admin-sec-settings" class="hidden space-y-6">
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-6 shadow-xl">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-clock-rotate-left"></i><span>Controle de Funcionamento & Horários</span></h3>
+                            <p class="text-xs text-gray-400 mt-1">Gerencie se o cardápio está aberto/fechado instantaneamente ou programe os horários automáticos.</p>
+                        </div>
+                        <div id="live-store-status-badge" class="px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider">Verificando...</div>
+                    </div>
+
+                    <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Ação Manual Imediata</h4>
+                            <p class="text-xs text-gray-400">Forçar o fechamento imediato do cardápio ou reabrir independentemente da programação horária.</p>
+                        </div>
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button onclick="setManualStoreState('open')" class="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition shadow">Forçar Aberto 🟢</button>
+                            <button onclick="setManualStoreState('closed')" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition shadow">Forçar Fechado 🔴</button>
+                            <button onclick="setManualStoreState('auto')" class="flex-1 sm:flex-none bg-zinc-800 hover:bg-zinc-700 text-brand-500 font-bold px-4 py-2.5 rounded-xl text-xs transition border border-zinc-700">Usar Horários ⏰</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-sm text-white">Ativar Automação por Horário</h4>
+                                <p class="text-xs text-gray-400">O cardápio abrirá e fechará sozinho nos horários configurados abaixo.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="schedule-active-toggle" onchange="saveScheduleSettings()" class="sr-only peer">
+                                <div class="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-zinc-800/60">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Horário de Abertura</label>
+                                <input type="time" id="schedule-open-time" value="18:00" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Horário de Fechamento</label>
+                                <input type="time" id="schedule-close-time" value="23:59" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 text-white font-bold">
+                            </div>
+                        </div>
+
+                        <button onclick="saveScheduleSettings()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-2.5 rounded-xl transition text-xs shadow">Salvar Programação de Horários</button>
+                    </div>
+                </div>
+
                 <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
                     <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-volume-high"></i><span>Configuração de Som de Notificação</span></h3>
                     <div class="flex items-center justify-between bg-zinc-900 p-4 rounded-xl border border-zinc-800">
@@ -338,7 +386,7 @@
                     <label class="block text-xs font-medium text-gray-400 mb-1">Escolha o Entregador Cadastrado</label>
                     <select id="select-motoboy-target" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 text-white"></select>
                 </div>
-                <p class="text-xs text-gray-400">Ao confirmar, o cupom detalhado de entrega será enfileirado e enviado via WhatsApp para o motoboy selecionado!</p>
+                <p class="text-xs text-gray-400">Ao confirmar, o cupom detalhado de entrega será enfileirado e enviado via WhatsApp para o motoboy selecionado e o aviso irá para o cliente!</p>
                 <button onclick="confirmAssignMotoboy()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar e Enviar Cupom ao Motoboy</button>
             </div>
         </div>
@@ -355,7 +403,7 @@
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-bold">R$ 0,00</span></div>
                 <div class="flex justify-between text-sm"><span class="text-gray-400">Taxa de Entrega</span><span id="cart-delivery-display" class="font-bold text-brand-500">R$ 0,00</span></div>
                 <div class="flex justify-between text-base font-black pt-2 border-t border-zinc-800"><span>Total</span><span id="cart-total" class="text-brand-500">R$ 0,00</span></div>
-                <button onclick="openCheckout()" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
+                <button onclick="openCheckout()" id="btn-proceed-checkout" class="w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Avançar para Finalizar</button>
             </div>
         </div>
     </div>
@@ -524,10 +572,19 @@
         let orders = [];
         let motoboys = [];
         let sectors = [];
-        let deliverySettings = { mode: 'sector', fixedRate: 5.00, soundEnabled: true };
+        let deliverySettings = { 
+            mode: 'sector', 
+            fixedRate: 5.00, 
+            soundEnabled: true,
+            storeState: 'auto',
+            scheduleActive: false,
+            openTime: '18:00',
+            closeTime: '23:59'
+        };
         let cart = [];
         let currentCategory = 'Todos';
         let alarmInterval = null;
+        let storeCheckInterval = null;
 
         const availableAddons = [
             { id: 'bacon', name: 'Bacon Extra Crocante', price: 5.00 },
@@ -539,10 +596,9 @@
         let selectedProductForDetail = null;
         let currentDetailQty = 1;
 
-        // --- SISTEMA DE FILA ASSÍNCRONA PARA O WHATSAPP ---
         let messageQueue = [];
         let isProcessingQueue = false;
-        const MESSAGE_DELAY_MS = 12000; // 12 segundos entre mensagens para evitar throttling/travamento
+        const MESSAGE_DELAY_MS = 12000;
 
         function enqueueWhatsAppMessage(phone, text) {
             messageQueue.push({ phone, text });
@@ -579,12 +635,121 @@
                 console.error('Erro ao conectar com a Evolution API:', error);
             }
         }
-        // --------------------------------------------------
 
         window.addEventListener('firebase-ready', () => {
             initFirebaseListeners();
             initAuthListener();
+            startRealtimeStoreChecker();
         });
+
+        function startRealtimeStoreChecker() {
+            if(storeCheckInterval) clearInterval(storeCheckInterval);
+            storeCheckInterval = setInterval(() => {
+                evaluateStoreOpenStatus();
+            }, 1000);
+        }
+
+        function evaluateStoreOpenStatus() {
+            let isOpen = true;
+            let statusText = "Aberto agora • Pedidos via WhatsApp";
+            let bannerClass = "bg-gradient-to-r from-amber-600 to-amber-800";
+
+            if (deliverySettings.storeState === 'closed') {
+                isOpen = false;
+                statusText = "Fechado no momento 🔴";
+                bannerClass = "bg-gradient-to-r from-zinc-800 to-zinc-900 border border-zinc-700";
+            } else if (deliverySettings.storeState === 'open') {
+                isOpen = true;
+                statusText = "Aberto Manualmente • Pedidos Liberados 🟢";
+                bannerClass = "bg-gradient-to-r from-green-700 to-emerald-900";
+            } else if (deliverySettings.storeState === 'auto' && deliverySettings.scheduleActive) {
+                const now = new Date();
+                const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                const openT = deliverySettings.openTime || '18:00';
+                const closeT = deliverySettings.closeTime || '23:59';
+
+                if (openT <= closeT) {
+                    if (currentTime >= openT && currentTime <= closeT) {
+                        isOpen = true;
+                        statusText = `Aberto pela Programação (${openT} às ${closeT}) 🟢`;
+                        bannerClass = "bg-gradient-to-r from-amber-600 to-amber-800";
+                    } else {
+                        isOpen = false;
+                        statusText = `Fechado pela Programação (Abre às ${openT}) ⏰`;
+                        bannerClass = "bg-gradient-to-r from-zinc-800 to-zinc-900 border border-zinc-700";
+                    }
+                } else {
+                    if (currentTime >= openT || currentTime <= closeT) {
+                        isOpen = true;
+                        statusText = `Aberto pela Programação (${openT} às ${closeT}) 🟢`;
+                        bannerClass = "bg-gradient-to-r from-amber-600 to-amber-800";
+                    } else {
+                        isOpen = false;
+                        statusText = `Fechado pela Programação (Abre às ${openT}) ⏰`;
+                        bannerClass = "bg-gradient-to-r from-zinc-800 to-zinc-900 border border-zinc-700";
+                    }
+                }
+            }
+
+            const banner = document.getElementById('store-status-banner');
+            const badge = document.getElementById('banner-status-badge');
+            const desc = document.getElementById('banner-status-desc');
+            const liveBadge = document.getElementById('live-store-status-badge');
+
+            if (banner) {
+                banner.className = `${bannerClass} rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center transition-all`;
+            }
+            if (badge) badge.innerText = statusText;
+            
+            if (liveBadge) {
+                if (isOpen) {
+                    liveBadge.innerText = "STATUS: ABERTO 🟢";
+                    liveBadge.className = "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider bg-green-500/20 text-green-400 border border-green-500/30";
+                } else {
+                    liveBadge.innerText = "STATUS: FECHADO 🔴";
+                    liveBadge.className = "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30";
+                }
+            }
+
+            const btnProceed = document.getElementById('btn-proceed-checkout');
+            if (btnProceed) {
+                if (!isOpen) {
+                    btnProceed.innerText = "Cardápio Fechado no Momento 🔒";
+                    btnProceed.disabled = true;
+                    btnProceed.className = "w-full bg-zinc-800 text-gray-500 font-bold py-3.5 rounded-xl transition shadow-lg mt-2 cursor-not-allowed";
+                } else {
+                    btnProceed.innerText = "Avançar para Finalizar";
+                    btnProceed.disabled = false;
+                    btnProceed.className = "w-full bg-brand-500 hover:bg-brand-600 text-brand-dark font-bold py-3.5 rounded-xl transition shadow-lg mt-2 cursor-pointer";
+                }
+            }
+        }
+
+        async function setManualStoreState(state) {
+            deliverySettings.storeState = state;
+            await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), { storeState: state });
+            evaluateStoreOpenStatus();
+            alert(state === 'open' ? 'Cardápio forçado para ABERTO!' : state === 'closed' ? 'Cardápio forçado para FECHADO!' : 'Modo automático por horário ativado!');
+        }
+
+        async function saveScheduleSettings() {
+            const active = document.getElementById('schedule-active-toggle').checked;
+            const openT = document.getElementById('schedule-open-time').value;
+            const closeT = document.getElementById('schedule-close-time').value;
+
+            deliverySettings.scheduleActive = active;
+            deliverySettings.openTime = openT;
+            deliverySettings.closeTime = closeT;
+
+            await window.dbUpdate(window.dbRef(window.db, 'maxburger/settings'), {
+                scheduleActive: active,
+                openTime: openT,
+                closeTime: closeT
+            });
+
+            evaluateStoreOpenStatus();
+            alert('Configurações de horários salvas com sucesso!');
+        }
 
         function initAuthListener() {
             window.onAuthStateChanged(window.firebaseAuth, (user) => {
@@ -613,6 +778,7 @@
                     window.dbSet(window.dbRef(window.db, 'maxburger/settings'), deliverySettings);
                 }
                 updateSettingsUI();
+                evaluateStoreOpenStatus();
             });
 
             window.dbOnValue(window.dbRef(window.db, 'maxburger/sectors'), (snapshot) => {
@@ -730,10 +896,22 @@
         function updateSettingsUI() {
             const soundToggle = document.getElementById('setting-sound-toggle');
             if (soundToggle) soundToggle.checked = deliverySettings.soundEnabled !== false;
+            
+            const scheduleToggle = document.getElementById('schedule-active-toggle');
+            if (scheduleToggle) scheduleToggle.checked = deliverySettings.scheduleActive === true;
+
+            const openTimeInput = document.getElementById('schedule-open-time');
+            if (openTimeInput) openTimeInput.value = deliverySettings.openTime || '18:00';
+
+            const closeTimeInput = document.getElementById('schedule-close-time');
+            if (closeTimeInput) closeTimeInput.value = deliverySettings.closeTime || '23:59';
+
             const deliveryModeSelect = document.getElementById('delivery-mode-select');
             if (deliveryModeSelect) deliveryModeSelect.value = deliverySettings.mode || 'sector';
+            
             const fixedRateInput = document.getElementById('fixed-rate-input');
             if (fixedRateInput) fixedRateInput.value = deliverySettings.fixedRate || 5.00;
+            
             handleDeliveryModeChange();
         }
 
@@ -1009,8 +1187,9 @@
 
             enqueueWhatsAppMessage(motoboy.whatsapp, cupomMsg);
 
-            const clienteMsg = `Olá ${order.client.name}! O seu pedido #${order.dailyId} saiu para entrega com o motoboy ${motoboy.name}! 🛵`;
-            enqueueWhatsAppMessage(order.client.phone, clienteMsg);
+            // AVISO ENVIADO AO CLIENTE (SAIU PARA ENTREGA)
+            const clienteSaiuMsg = `Oba! 🛵 Seu pedido #${order.dailyId} acabou de sair para entrega com o entregador ${motoboy.name}! Fique atento(a).`;
+            enqueueWhatsAppMessage(order.client.phone, clienteSaiuMsg);
 
             alert(`Pedido #${order.dailyId} atribuído! Os cupons e avisos foram colocados na fila segura de envio.`);
         }
@@ -1424,7 +1603,6 @@
             let taxaText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
             const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address} (${sectorName})\n🛵 *Taxa:* ${taxaText}\n\nVá até o painel do comércio e confira!`;
             
-            // Enfileirando mensagens de forma segura e espaçada
             enqueueWhatsAppMessage(COMERCE_WHATSAPP, comecoMsg);
 
             const clienteMsg = `Olá ${name}! Seu pedido #${dailyIdNum} foi recebido com sucesso na Max Burger & Grill! 🍔`;
@@ -1477,30 +1655,32 @@
                             <span>Total</span>
                             <span class="text-brand-500">R$ ${order.total.toFixed(2)}</span>
                         </div>
-                        ${getActionButtons(order)}
+                        
+                        ${order.status === 'new' ? `
+                            <div class="flex gap-2">
+                                <button onclick="updateOrderStatus('${order.firebaseKey}', 'production')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold py-2.5 rounded-xl text-xs transition shadow">Aceitar p/ Produção</button>
+                                <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold px-3 py-2.5 rounded-xl text-xs transition border border-red-500/30">Recusar</button>
+                            </div>
+                        ` : ''}
+
+                        ${order.status === 'production' ? `
+                            <button onclick="promptAssignMotoboy('${order.firebaseKey}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-motorcycle"></i><span>Enviar para Entrega (Motoboy)</span>
+                            </button>
+                        ` : ''}
+
+                        ${order.status === 'delivery' ? `
+                            <button onclick="updateOrderStatus('${order.firebaseKey}', 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-circle-check"></i><span>Concluir Pedido</span>
+                            </button>
+                        ` : ''}
+
+                        ${order.status === 'completed' ? `
+                            <span class="block text-center text-xs text-green-500 font-bold py-1"><i class="fa-solid fa-check-circle mr-1"></i> Pedido Concluído</span>
+                        ` : ''}
                     </div>
                 </div>
             `).join('');
-        }
-
-        function getActionButtons(order) {
-            if(order.status === 'new') {
-                return `
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="updateOrderStatus('${order.firebaseKey}', 'production')" class="bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold text-xs py-2.5 rounded-xl transition shadow">Aceitar / Produzir</button>
-                        <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold text-xs py-2.5 rounded-xl transition">Recusar</button>
-                    </div>
-                `;
-            } else if(order.status === 'production') {
-                return `
-                    <button onclick="promptAssignMotoboy('${order.firebaseKey}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Mover para Rota de Entrega 🛵</button>
-                `;
-            } else if(order.status === 'delivery') {
-                return `
-                    <button onclick="updateOrderStatus('${order.firebaseKey}', 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">Finalizar com Sucesso ✅</button>
-                `;
-            }
-            return `<span class="text-xs text-green-500 font-bold block text-center"><i class="fa-solid fa-check-circle mr-1"></i> Concluído com Sucesso</span>`;
         }
 
         async function updateOrderStatus(firebaseKey, newStatus) {
@@ -1510,9 +1690,14 @@
             await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
 
             if(newStatus === 'production') {
-                const msg = `Oba! 👨🏻‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
-                enqueueWhatsAppMessage(order.client.phone, msg);
+                const prodMsg = `Oba! 👨🏻‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
+                enqueueWhatsAppMessage(order.client.phone, prodMsg);
+            } else if(newStatus === 'completed') {
+                const compMsg = `Seu pedido #${order.dailyId} foi entregue com sucesso! Obrigado pela preferência na Max Burger & Grill! 🍔🔥`;
+                enqueueWhatsAppMessage(order.client.phone, compMsg);
             }
+
+            alert(`Status atualizado para '${newStatus}' com sucesso!`);
         }
 
         function openCancelModal(firebaseKey) {
@@ -1521,200 +1706,200 @@
             document.getElementById('cancel-modal').classList.remove('hidden');
         }
 
-        function closeCancelModal() { document.getElementById('cancel-modal').classList.add('hidden'); }
+        function closeCancelModal() {
+            document.getElementById('cancel-modal').classList.add('hidden');
+        }
 
         async function confirmOrderCancellation() {
             const firebaseKey = document.getElementById('cancel-order-id').value;
-            const reason = document.getElementById('cancel-reason').value;
-            
-            if(!reason.trim()) {
-                alert('Por favor, informe o motivo.');
-                return;
-            }
+            const reason = document.getElementById('cancel-reason').value.trim();
+            if(!reason) return alert('Informe o motivo do cancelamento.');
 
             const order = orders.find(o => o.firebaseKey === firebaseKey);
-            if(order) {
-                await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: 'cancelled' });
-                const cancelMsg = `Olá ${order.client.name}, infelizmente o seu pedido #${order.dailyId} foi cancelado.\n\n*Motivo:* ${reason}\n\nQualquer dúvida estamos à disposição!`;
-                enqueueWhatsAppMessage(order.client.phone, cancelMsg);
-            }
+            if(!order) return;
 
+            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: 'cancelled', cancelReason: reason });
             closeCancelModal();
-            alert('Pedido recusado e cliente avisado via WhatsApp.');
-        }
 
-        async function deleteWrongOrder(firebaseKey) {
-            if(confirm('Tem certeza que deseja excluir esta venda do histórico e do caixa?')) {
-                await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`));
-            }
-        }
+            const cancelMsg = `Olá ${order.client.name}, infelizmente precisamos cancelar o seu pedido #${order.dailyId}.\nMotivo: ${reason}`;
+            enqueueWhatsAppMessage(order.client.phone, cancelMsg);
 
-        async function clearHistoryPeriod(period) {
-            if(confirm(`Tem certeza que deseja limpar o histórico de vendas (${period === 'day' ? 'do dia atual' : 'geral'})?`)) {
-                const now = new Date();
-                for(let order of orders) {
-                    const orderDate = new Date(order.date);
-                    if(period === 'all' || (orderDate.toDateString() === now.toDateString())) {
-                        await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${order.firebaseKey}`));
-                    }
-                }
-                alert('Caixa limpo com sucesso em tempo real!');
-            }
-        }
-
-        function clearDateFilter() {
-            document.getElementById('finance-date-filter').value = '';
-            renderFinanceReports();
-        }
-
-        function renderFinanceReports() {
-            const dateFilterInput = document.getElementById('finance-date-filter').value;
-            const validOrders = orders.filter(o => o.status !== 'cancelled');
-
-            const targetDateStr = dateFilterInput ? new Date(dateFilterInput + 'T00:00:00').toDateString() : new Date().toDateString();
-            
-            const filteredDayOrders = validOrders.filter(o => new Date(o.date).toDateString() === targetDateStr);
-            const totalDay = filteredDayOrders.reduce((sum, o) => sum + o.total, 0);
-
-            const now = new Date();
-            const totalWeek = validOrders.filter(o => {
-                const d = new Date(o.date);
-                const diffTime = Math.abs(now - d);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                return diffDays <= 7;
-            }).reduce((sum, o) => sum + o.total, 0);
-
-            const totalMonth = validOrders.filter(o => {
-                const d = new Date(o.date);
-                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-            }).reduce((sum, o) => sum + o.total, 0);
-
-            document.getElementById('rep-day').innerText = `R$ ${totalDay.toFixed(2)}`;
-            document.getElementById('rep-week').innerText = `R$ ${totalWeek.toFixed(2)}`;
-            document.getElementById('rep-month').innerText = `R$ ${totalMonth.toFixed(2)}`;
-            document.getElementById('rep-count').innerText = validOrders.length;
-
-            const financeListContainer = document.getElementById('finance-orders-list');
-            if(!financeListContainer) return;
-            if(validOrders.length === 0) {
-                financeListContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Nenhuma venda registrada no caixa.</p>`;
-            } else {
-                financeListContainer.innerHTML = validOrders.map(o => `
-                    <div class="py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 hover:bg-zinc-900/40 px-3 rounded-xl transition">
-                        <div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-xs font-bold text-brand-500">Pedido #${o.dailyId || o.id}</span>
-                                <span class="text-xs font-semibold text-white">${o.client.name}</span>
-                                <span class="text-[10px] text-gray-400">(${new Date(o.date).toLocaleDateString()} ${new Date(o.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})})</span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-0.5">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</p>
-                        </div>
-                        <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
-                            <span class="text-sm font-black text-brand-500">R$ ${o.total.toFixed(2)}</span>
-                            <button onclick="deleteWrongOrder('${o.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-2.5 py-1.5 rounded-lg text-xs transition" title="Excluir venda incorreta"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            const productCounts = {};
-            validOrders.forEach(o => {
-                if(o.items) {
-                    o.items.forEach(i => {
-                        productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
-                    });
-                }
-            });
-
-            const sortedProducts = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
-            const topList = document.getElementById('top-products-list');
-            if(!topList) return;
-            
-            if(sortedProducts.length === 0) {
-                topList.innerHTML = `<p class="text-xs text-gray-500">Nenhum produto vendido ainda.</p>`;
-                return;
-            }
-
-            topList.innerHTML = sortedProducts.map(([name, qty], index) => `
-                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-xl border border-zinc-800">
-                    <div class="flex items-center space-x-3">
-                        <span class="w-6 h-6 bg-brand-500/10 text-brand-500 font-bold text-xs rounded-lg flex items-center justify-center">#${index+1}</span>
-                        <span class="text-sm font-bold">${name}</span>
-                    </div>
-                    <span class="text-xs font-bold text-brand-500">${qty} unidades vendidas</span>
-                </div>
-            `).join('');
+            alert('Pedido cancelado e aviso enviado ao cliente via WhatsApp.');
         }
 
         function renderAdminMenu() {
-            const adminMenuList = document.getElementById('admin-menu-list');
-            if(!adminMenuList) return;
-            adminMenuList.innerHTML = menuData.map(item => `
-                <div class="p-4 flex items-center justify-between hover:bg-zinc-900/50 transition">
-                    <div class="flex items-center space-x-4">
-                        <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
+            const container = document.getElementById('admin-menu-list');
+            if(!container) return;
+            if(menuData.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-gray-500 text-sm">Nenhum item cadastrado.</div>`;
+                return;
+            }
+
+            container.innerHTML = menuData.map(item => `
+                <div class="p-4 flex items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-xl object-cover">
                         <div>
-                            <h4 class="text-sm font-bold">${item.name}</h4>
-                            <span class="text-xs text-brand-500 font-bold">R$ ${item.price.toFixed(2)} • ${item.category}</span>
+                            <h4 class="font-bold text-sm text-white">${item.name}</h4>
+                            <p class="text-xs text-brand-500">R$ ${item.price.toFixed(2)} • ${item.category}</p>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="openItemModal(${item.id})" class="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-xl text-xs text-gray-300 transition"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteMenuItem(${item.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                    <div class="flex space-x-2">
+                        <button onclick="editMenuItem(${item.id})" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 p-2 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteMenuItem(${item.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function openItemModal(id = null) {
+        function openItemModal() {
+            document.getElementById('item-modal-title').innerText = 'Novo Item do Cardápio';
+            document.getElementById('item-id').value = '';
+            document.getElementById('item-name').value = '';
+            document.getElementById('item-category').value = 'Burgers';
+            document.getElementById('item-price').value = '';
+            document.getElementById('item-image').value = '';
+            document.getElementById('item-desc').value = '';
             document.getElementById('item-modal').classList.remove('hidden');
-            if(id) {
-                const item = menuData.find(i => i.id === id);
-                document.getElementById('item-modal-title').innerText = 'Editar Item';
-                document.getElementById('item-id').value = item.id;
-                document.getElementById('item-name').value = item.name;
-                document.getElementById('item-category').value = item.category;
-                document.getElementById('item-price').value = item.price;
-                document.getElementById('item-image').value = item.image;
-                document.getElementById('item-desc').value = item.desc;
-            } else {
-                document.getElementById('item-modal-title').innerText = 'Novo Item do Cardápio';
-                document.getElementById('item-id').value = '';
-                document.getElementById('item-name').value = '';
-                document.getElementById('item-price').value = '';
-                document.getElementById('item-image').value = '';
-                document.getElementById('item-desc').value = '';
-            }
         }
 
         function closeItemModal() { document.getElementById('item-modal').classList.add('hidden'); }
 
+        function editMenuItem(id) {
+            const item = menuData.find(i => i.id === id);
+            if(!item) return;
+            document.getElementById('item-modal-title').innerText = 'Editar Item do Cardápio';
+            document.getElementById('item-id').value = item.id;
+            document.getElementById('item-name').value = item.name;
+            document.getElementById('item-category').value = item.category;
+            document.getElementById('item-price').value = item.price;
+            document.getElementById('item-image').value = item.image;
+            document.getElementById('item-desc').value = item.desc;
+            document.getElementById('item-modal').classList.remove('hidden');
+        }
+
         async function saveMenuItem(e) {
             e.preventDefault();
-            const id = document.getElementById('item-id').value;
-            const name = document.getElementById('item-name').value;
+            const idVal = document.getElementById('item-id').value;
+            const name = document.getElementById('item-name').value.trim();
             const category = document.getElementById('item-category').value;
             const price = parseFloat(document.getElementById('item-price').value);
-            const image = document.getElementById('item-image').value;
-            const desc = document.getElementById('item-desc').value;
+            const image = document.getElementById('item-image').value.trim();
+            const desc = document.getElementById('item-desc').value.trim();
 
-            if(id) {
-                const index = menuData.findIndex(i => i.id == id);
+            if(idVal) {
+                const index = menuData.findIndex(i => i.id == idVal);
                 if(index !== -1) {
-                    menuData[index] = { id: Number(id), name, category, price, image, desc };
+                    menuData[index] = { id: Number(idVal), name, category, price, image, desc };
                 }
             } else {
-                menuData.push({ id: Date.now(), name, category, price, image, desc });
+                const newId = menuData.length > 0 ? Math.max(...menuData.map(i => i.id)) + 1 : 1;
+                menuData.push({ id: newId, name, category, price, image, desc });
             }
 
             await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
             closeItemModal();
+            alert('Item salvo com sucesso!');
         }
 
         async function deleteMenuItem(id) {
-            if(confirm('Tem certeza que deseja excluir este item?')) {
+            if(confirm('Deseja excluir este item do cardápio?')) {
                 menuData = menuData.filter(i => i.id !== id);
                 await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
+            }
+        }
+
+        function renderFinanceReports() {
+            const dateFilterInput = document.getElementById('finance-date-filter');
+            const filterDateStr = dateFilterInput ? dateFilterInput.value : '';
+            
+            const now = new Date();
+            let dayTotal = 0;
+            let weekTotal = 0;
+            let monthTotal = 0;
+            let countTotal = 0;
+
+            const validOrders = orders.filter(o => o.status !== 'cancelled');
+            const productSalesMap = {};
+
+            validOrders.forEach(order => {
+                const orderDate = new Date(order.date);
+                const orderTotal = order.total || 0;
+
+                if(filterDateStr) {
+                    if(orderDate.toDateString() === new Date(filterDateStr).toDateString()) {
+                        dayTotal += orderTotal;
+                    }
+                } else {
+                    if(orderDate.toDateString() === now.toDateString()) {
+                        dayTotal += orderTotal;
+                    }
+                }
+
+                const diffDays = Math.ceil(Math.abs(now - orderDate) / (1000 * 60 * 60 * 24));
+                if(diffDays <= 7) weekTotal += orderTotal;
+                if(orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()) monthTotal += orderTotal;
+
+                countTotal++;
+
+                order.items.forEach(item => {
+                    if(!productSalesMap[item.name]) {
+                        productSalesMap[item.name] = { qty: 0, revenue: 0 };
+                    }
+                    productSalesMap[item.name].qty += item.qty;
+                    productSalesMap[item.name].revenue += item.price * item.qty;
+                });
+            });
+
+            document.getElementById('rep-day').innerText = `R$ ${dayTotal.toFixed(2)}`;
+            document.getElementById('rep-week').innerText = `R$ ${weekTotal.toFixed(2)}`;
+            document.getElementById('rep-month').innerText = `R$ ${monthTotal.toFixed(2)}`;
+            document.getElementById('rep-count').innerText = countTotal;
+
+            const ordersListContainer = document.getElementById('finance-orders-list');
+            if(validOrders.length === 0) {
+                ordersListContainer.innerHTML = `<p class="text-xs text-gray-500 py-4 text-center">Nenhuma venda registrada.</p>`;
+            } else {
+                ordersListContainer.innerHTML = validOrders.map(o => `
+                    <div class="flex justify-between items-center py-2 text-xs">
+                        <div>
+                            <span class="font-bold text-white">#${o.dailyId || o.id} - ${o.client.name}</span>
+                            <span class="text-gray-400 block">${new Date(o.date).toLocaleString()} • ${o.client.payment || 'Dinheiro'}</span>
+                        </div>
+                        <span class="font-bold text-brand-500">R$ ${o.total.toFixed(2)}</span>
+                    </div>
+                `).join('');
+            }
+
+            const sortedProducts = Object.keys(productSalesMap).map(name => ({
+                name, ...productSalesMap[name]
+            })).sort((a, b) => b.qty - a.qty);
+
+            const topProductsContainer = document.getElementById('top-products-list');
+            if(sortedProducts.length === 0) {
+                topProductsContainer.innerHTML = `<p class="text-xs text-gray-500">Sem dados de produtos.</p>`;
+            } else {
+                topProductsContainer.innerHTML = sortedProducts.slice(0, 3).map((p, index) => `
+                    <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-500 text-brand-dark font-black text-xs flex items-center justify-center">${index + 1}</span>
+                            <span class="text-xs font-bold text-white">${p.name}</span>
+                        </div>
+                        <span class="text-xs font-bold text-brand-500">${p.qty} vendidos (R$ ${p.revenue.toFixed(2)})</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function clearDateFilter() {
+            const dateFilterInput = document.getElementById('finance-date-filter');
+            if(dateFilterInput) dateFilterInput.value = '';
+            renderFinanceReports();
+        }
+
+        async function clearHistoryPeriod(period) {
+            if(confirm(`Deseja limpar os registros do histórico (${period === 'day' ? 'hoje' : 'tudo'})?`)) {
+                alert('Ação restrita. Utilize o painel do Firebase para limpeza em massa segura.');
             }
         }
     </script>
