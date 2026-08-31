@@ -592,12 +592,10 @@
                 const currentViewLogin = document.getElementById('view-admin-login').classList.contains('hidden');
                 
                 if (user) {
-                    // Usuário autenticado
                     if (!currentViewLogin) {
                         switchView('admin-dashboard');
                     }
                 } else {
-                    // Usuário deslogado - protege rotas do painel administrativo
                     const isDashboardVisible = !document.getElementById('view-admin-dashboard').classList.contains('hidden');
                     if (isDashboardVisible) {
                         switchView('admin-login');
@@ -868,7 +866,6 @@
         }
 
         function openAdminLogin() { 
-            // Se já estiver logado, vai direto para o painel
             if (window.firebaseAuth.currentUser) {
                 switchView('admin-dashboard');
             } else {
@@ -1426,6 +1423,8 @@
             let trocoText = troco ? `💵 *Troco para:* ${troco}\n` : '';
             let taxaText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
             const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address} (${sectorName})\n🛵 *Taxa:* ${taxaText}\n\nVá até o painel do comércio e confira!`;
+            
+            // Enfileirando mensagens de forma segura e espaçada
             enqueueWhatsAppMessage(COMERCE_WHATSAPP, comecoMsg);
 
             const clienteMsg = `Olá ${name}! Seu pedido #${dailyIdNum} foi recebido com sucesso na Max Burger & Grill! 🍔`;
