@@ -19,8 +19,6 @@
     </script>
 </head>
 <body class="bg-brand-dark text-gray-100 font-sans min-h-screen flex flex-col">
-    
-    </div>
 
     <header class="bg-brand-card border-b border-gray-800 sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -51,7 +49,6 @@
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
 
         <div id="view-menu" class="space-y-6">
-            <!-- Banner com Status, Tempo Estimado e Cupons Ativos -->
             <div id="store-status-banner" class="bg-gradient-to-r from-amber-600 to-amber-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-center transition-all">
                 <div class="relative z-10 max-w-lg">
                     <div class="flex flex-wrap gap-2 mb-3">
@@ -61,7 +58,6 @@
                     <h2 class="text-2xl sm:text-4xl font-black text-white mb-2">O Verdadeiro Sabor Artesanal</h2>
                     <p id="banner-status-desc" class="text-gray-200 text-sm sm:text-base mb-4">Burgers suculentos na brasa. Acompanhe seu pedido em tempo real!</p>
                     
-                    <!-- Programa de Fidelidade / Cupom Rápido -->
                     <div class="bg-black/30 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between gap-2 max-w-md">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-ticket text-brand-500"></i>
@@ -115,6 +111,7 @@
                 <button onclick="switchAdminTab('completed')" id="btn-tab-completed" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-circle-check"></i><span>Concluídos</span></button>
                 <button onclick="switchAdminTab('menu-mgr')" id="btn-tab-menu-mgr" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-utensils"></i><span>Gerenciar Cardápio</span></button>
                 <button onclick="switchAdminTab('finance')" id="btn-tab-finance" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-chart-line"></i><span>Financeiro & Caixa</span></button>
+                <button onclick="switchAdminTab('printer')" id="btn-tab-printer" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 transition flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-print text-brand-500"></i><span>Impressora Térmica</span></button>
             </div>
 
             <div id="admin-sec-new" class="space-y-4">
@@ -346,10 +343,36 @@
                     <div id="top-products-list" class="space-y-3"></div>
                 </div>
             </div>
+
+            <!-- Seção exclusiva de conexão de impressora -->
+            <div id="admin-sec-printer" class="hidden space-y-6">
+                <div class="bg-brand-card p-6 rounded-2xl border border-zinc-800 space-y-4">
+                    <h3 class="text-lg font-bold flex items-center space-x-2 text-brand-500"><i class="fa-solid fa-print"></i><span>Configuração de Impressora Térmica</span></h3>
+                    <p class="text-xs text-gray-400">Conecte sua impressora térmica via Web Bluetooth para emissão direta de comandas e recibos.</p>
+                    
+                    <div class="printer-integration-card bg-zinc-900 p-4 rounded-xl border border-zinc-800 mb-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-semibold text-white flex items-center gap-2">
+                                <span>🖨️</span> Impressora Térmica Bluetooth
+                            </h3>
+                            <span id="printerStatus" class="text-xs px-2 py-1 rounded-full bg-zinc-800 text-gray-400">Desconectada</span>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button id="connectPrinterBtn" onclick="connectPrinter()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 rounded-lg transition-colors">
+                                Conectar Impressora
+                            </button>
+                            <button id="testPrintBtn" onclick="testPrint()" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 text-sm font-medium py-2 px-3 rounded-lg transition-colors" disabled>
+                                Testar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- Modal de Detalhes e Adicionais -->
+    <!-- Modais e Restante do Layout -->
     <div id="product-detail-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden my-auto">
             <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/50 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center z-10 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -364,7 +387,6 @@
                     <p id="detail-desc" class="text-sm text-gray-300 leading-relaxed"></p>
                 </div>
 
-                <!-- Seção Clara de Adicionais e Opcionais -->
                 <div class="border-t border-zinc-800 pt-4 space-y-3">
                     <h4 class="text-xs font-bold text-brand-500 uppercase tracking-wider"><i class="fa-solid fa-plus-circle mr-1"></i> Escolha os Adicionais & Opcionais</h4>
                     <div id="detail-addons-list" class="space-y-2.5 max-h-40 overflow-y-auto pr-1"></div>
@@ -396,7 +418,6 @@
         </div>
     </div>
 
-    <!-- Modal de Taxas de Entrega Transparentes -->
     <div id="delivery-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
             <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
@@ -434,7 +455,6 @@
                 <button onclick="closeCart()" class="text-gray-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <!-- Espaço visível para cupom de desconto -->
             <div class="py-3 border-b border-zinc-800 flex gap-2">
                 <input type="text" id="cart-coupon-input" placeholder="Cupom de desconto (ex: MAX10)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs uppercase text-white focus:outline-none focus:border-brand-500">
                 <button onclick="applyCartCoupon()" class="bg-zinc-800 hover:bg-zinc-700 text-brand-500 px-4 py-2 rounded-xl text-xs font-bold transition border border-zinc-700">Aplicar</button>
@@ -508,23 +528,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div id="cancel-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-brand-card w-full max-w-md p-6 rounded-2xl border border-zinc-800 shadow-2xl relative">
-            <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-4">
-                <h3 class="text-lg font-bold text-red-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Recusar / Cancelar Pedido</h3>
-                <button onclick="closeCancelModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <input type="hidden" id="cancel-order-id">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Motivo (Enviado via WhatsApp ao cliente)</label>
-                    <textarea id="cancel-reason" rows="3" required placeholder="Ex: Infelizmente acabaram os pães brioche..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 text-white"></textarea>
-                </div>
-                <button onclick="confirmOrderCancellation()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Confirmar Cancelamento & Avisar Cliente</button>
-            </div>
         </div>
     </div>
 
@@ -653,6 +656,46 @@
         let messageQueue = [];
         let isProcessingQueue = false;
         const MESSAGE_DELAY_MS = 12000;
+
+        // Web Bluetooth Printer Variables
+        let bluetoothDevice = null;
+        let bluetoothCharacteristic = null;
+
+        async function connectPrinter() {
+            try {
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'e7810a71-73ae-499d-8c15-faa9aef0c3f2']
+                });
+
+                const server = await bluetoothDevice.gatt.connect();
+                const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+                bluetoothCharacteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
+
+                document.getElementById('printerStatus').innerText = 'Conectada';
+                document.getElementById('printerStatus').className = 'text-xs px-2 py-1 rounded-full bg-green-100 text-green-700';
+                document.getElementById('testPrintBtn').removeAttribute('disabled');
+            } catch (error) {
+                console.error('Erro ao conectar impressora:', error);
+                alert('Falha ao conectar com a impressora.');
+            }
+        }
+
+        async function testPrint() {
+            if (!bluetoothCharacteristic) return;
+            
+            const encoder = new TextEncoder();
+            let commands = '\x1B\x40';
+            commands += 'TESTE DE IMPRESSAO\n';
+            commands += '--------------------------------\n';
+            commands += 'Integrado com sucesso via Web Bluetooth!\n\n\n';
+
+            try {
+                await bluetoothCharacteristic.writeValue(encoder.encode(commands));
+            } catch (error) {
+                console.error('Erro ao enviar dados para impressora:', error);
+            }
+        }
 
         function enqueueWhatsAppMessage(phone, text) {
             messageQueue.push({ phone, text });
@@ -1145,7 +1188,7 @@
         }
 
         function switchAdminTab(tab) {
-            ['new', 'production', 'delivery', 'settings', 'motoboys', 'motoboy-deliveries', 'completed', 'menu-mgr', 'finance'].forEach(t => {
+            ['new', 'production', 'delivery', 'settings', 'motoboys', 'motoboy-deliveries', 'completed', 'menu-mgr', 'finance', 'printer'].forEach(t => {
                 const el = document.getElementById(`admin-sec-${t}`);
                 if(el) el.classList.add('hidden');
                 const btn = document.getElementById(`btn-tab-${t}`);
@@ -1659,347 +1702,6 @@
             } else {
                 trocoContainer.classList.add('hidden');
                 document.getElementById('client-troco').value = '';
-            }
-        }
-
-        async function submitOrder(e) {
-            e.preventDefault();
-            const name = document.getElementById('client-name').value.trim();
-            const phone = document.getElementById('client-phone').value.replace(/\D/g, '');
-            const address = document.getElementById('client-address').value.trim();
-            const payment = document.getElementById('client-payment').value;
-            const troco = payment === 'Dinheiro' ? document.getElementById('client-troco').value.trim() : '';
-
-            if(phone.length < 10) {
-                alert('Atenção: É obrigatório informar o número do WhatsApp com o DDD (ex: 63999999999)!');
-                document.getElementById('client-phone').focus();
-                return;
-            }
-
-            let sectorName = 'Não se aplica';
-            const mode = deliverySettings.mode || 'sector';
-            if(mode === 'sector') {
-                const sectorSelect = document.getElementById('client-sector');
-                if(sectorSelect && sectorSelect.options.length > 0) {
-                    sectorName = sectorSelect.options[sectorSelect.selectedIndex].text.split(' (Taxa')[0];
-                }
-            } else if(mode === 'fixed') {
-                sectorName = 'Taxa Fixa';
-            } else if(mode === 'free') {
-                sectorName = 'Entrega Grátis';
-            }
-
-            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            const discountVal = (subtotal * discountPercent) / 100;
-            const discountedSubtotal = subtotal - discountVal;
-            const deliveryFee = getCurrentDeliveryFee();
-            
-            const todayStr = new Date().toDateString();
-            const todayOrders = orders.filter(o => new Date(o.date).toDateString() === todayStr);
-            const dailyIdNum = todayOrders.length + 1;
-
-            const newOrder = {
-                id: Date.now(),
-                dailyId: dailyIdNum,
-                client: { name, phone, address, payment, troco, sectorName },
-                items: [...cart],
-                subtotal: subtotal,
-                discount: discountVal,
-                coupon: appliedCoupon || 'Nenhum',
-                deliveryFee: deliveryFee,
-                total: discountedSubtotal + deliveryFee,
-                status: 'new',
-                date: new Date().toISOString()
-            };
-
-            const newOrderRef = window.dbPush(window.dbRef(window.db, 'maxburger/orders'));
-            await window.dbSet(newOrderRef, newOrder);
-
-            cart = [];
-            appliedCoupon = null;
-            discountPercent = 0;
-            updateCartBadge();
-            closeCheckout();
-
-            alert(`🎉 Pedido #${dailyIdNum} realizado com sucesso! Acompanhe as novidades.`);
-
-            let trocoText = troco ? `💵 *Troco para:* ${troco}\n` : '';
-            let taxaText = deliveryFee === 0 ? 'Grátis' : `R$ ${deliveryFee.toFixed(2)}`;
-            const comecoMsg = `🚨 *NOVO PEDIDO EM ABERTO!* (#${dailyIdNum})\n\n👤 *Cliente:* ${name}\n📱 *Tel:* ${phone}\n💳 *Pagamento:* ${payment}\n${trocoText}📍 *Endereço:* ${address} (${sectorName})\n🛵 *Taxa:* ${taxaText}\n\nVá até o painel do comércio e confira!`;
-            
-            enqueueWhatsAppMessage(COMERCE_WHATSAPP, comecoMsg);
-
-            const clienteMsg = `Olá ${name}! Seu pedido #${dailyIdNum} foi recebido com sucesso na Max Burger & Grill! 🍔`;
-            enqueueWhatsAppMessage(phone, clienteMsg);
-        }
-
-        function renderAdminDashboard() {
-            renderOrderList('new', 'list-new-orders', 'Nenhum pedido novo no momento.');
-            renderOrderList('production', 'list-production-orders', 'Nenhum pedido em produção.');
-            renderOrderList('delivery', 'list-delivery-orders', 'Nenhum pedido em rota de entrega.');
-            renderOrderList('completed', 'list-completed-orders', 'Nenhum pedido concluído ainda.');
-        }
-
-        function renderOrderList(statusFilter, elementId, emptyText) {
-            const container = document.getElementById(elementId);
-            if(!container) return;
-            const filtered = orders.filter(o => o.status === statusFilter);
-
-            if(filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-sm">${emptyText}</div>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map(order => `
-                <div class="bg-brand-card p-5 rounded-2xl border border-zinc-800 flex flex-col justify-between shadow-md">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-bold bg-zinc-800 text-brand-500 px-3 py-1 rounded-full">Pedido #${order.dailyId || order.id}</span>
-                            <span class="text-[10px] text-gray-400">${new Date(order.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                        </div>
-                        <div class="space-y-1 mb-4">
-                            <h4 class="font-bold text-sm">${order.client.name}</h4>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-phone mr-1 text-brand-500"></i> ${order.client.phone}</p>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-credit-card mr-1 text-brand-500"></i> ${order.client.payment || 'Não informada'} ${order.client.troco ? `(Troco: ${order.client.troco})` : ''}</p>
-                            <p class="text-xs text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i> ${order.client.address} (${order.client.sectorName || ''})</p>
-                            <p class="text-xs text-brand-500 font-semibold"><i class="fa-solid fa-motorcycle mr-1"></i> Taxa: R$ ${(order.deliveryFee || 5.00).toFixed(2)}</p>
-                            ${order.coupon && order.coupon !== 'Nenhum' ? `<p class="text-xs text-green-400 font-semibold">Cupom: ${order.coupon}</p>` : ''}
-                            ${order.motoboy ? `<p class="text-xs text-blue-400 font-semibold mt-1"><i class="fa-solid fa-motorcycle mr-1"></i> Entregador: ${order.motoboy.name}</p>` : ''}
-                        </div>
-                        <div class="border-t border-zinc-800 pt-3 space-y-1 text-xs text-gray-300">
-                            ${order.items.map(i => `
-                                <div>
-                                    <div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty).toFixed(2)}</span></div>
-                                    ${i.addons && i.addons.length > 0 ? `<p class="text-[10px] text-gray-500">Adicionais: ${i.addons.map(a => a.name).join(', ')}</p>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="border-t border-zinc-800 pt-3 mt-4 space-y-3">
-                        <div class="flex justify-between items-center text-sm font-black">
-                            <span>Total</span>
-                            <span class="text-brand-500">R$ ${order.total.toFixed(2)}</span>
-                        </div>
-                        
-                        ${order.status === 'new' ? `
-                            <div class="flex gap-2">
-                                <button onclick="updateOrderStatus('${order.firebaseKey}', 'production')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-brand-dark font-bold py-2.5 rounded-xl text-xs transition shadow">Aceitar p/ Produção</button>
-                                <button onclick="openCancelModal('${order.firebaseKey}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-2.5 rounded-xl text-xs font-bold transition">Recusar</button>
-                            </div>
-                        ` : order.status === 'production' ? `
-                            <button onclick="promptAssignMotoboy('${order.firebaseKey}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-motorcycle"></i><span>Enviar para Entrega (Motoboy)</span>
-                            </button>
-                        ` : order.status === 'delivery' ? `
-                            <button onclick="updateOrderStatus('${order.firebaseKey}', 'completed')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-circle-check"></i><span>Concluir Pedido</span>
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function updateOrderStatus(firebaseKey, newStatus) {
-            await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${firebaseKey}`), { status: newStatus });
-            const order = orders.find(o => o.firebaseKey === firebaseKey);
-            if(order) {
-                let statusMsg = '';
-                if(newStatus === 'production') statusMsg = `👨‍🍳 Seu pedido #${order.dailyId} foi aceito e já está em preparo na brasa!`;
-                if(newStatus === 'completed') statusMsg = `🎉 Seu pedido #${order.dailyId} foi concluído! Obrigado pela preferência, volte sempre!`;
-                if(statusMsg) enqueueWhatsAppMessage(order.client.phone, statusMsg);
-            }
-        }
-
-        let currentCancelKey = null;
-        function openCancelModal(firebaseKey) {
-            currentCancelKey = firebaseKey;
-            document.getElementById('cancel-reason').value = '';
-            document.getElementById('cancel-modal').classList.remove('hidden');
-        }
-        function closeCancelModal() { document.getElementById('cancel-modal').classList.add('hidden'); }
-
-        async function confirmOrderCancellation() {
-            const reason = document.getElementById('cancel-reason').value.trim();
-            if(!reason) return alert('Informe o motivo do cancelamento.');
-            
-            const order = orders.find(o => o.firebaseKey === currentCancelKey);
-            if(order) {
-                await window.dbUpdate(window.dbRef(window.db, `maxburger/orders/${currentCancelKey}`), { 
-                    status: 'cancelled',
-                    cancelReason: reason
-                });
-                const cancelMsg = `⚠️ Olá ${order.client.name}, infelizmente seu pedido #${order.dailyId} precisou ser cancelado.\nMotivo: ${reason}`;
-                enqueueWhatsAppMessage(order.client.phone, cancelMsg);
-            }
-            closeCancelModal();
-            alert('Pedido cancelado e cliente avisado com sucesso.');
-        }
-
-        function openItemModal(item = null) {
-            if(item) {
-                document.getElementById('item-modal-title').innerText = 'Editar Item do Cardápio';
-                document.getElementById('item-id').value = item.id;
-                document.getElementById('item-name').value = item.name;
-                document.getElementById('item-category').value = item.category;
-                document.getElementById('item-price').value = item.price;
-                document.getElementById('item-image').value = item.image;
-                document.getElementById('item-desc').value = item.desc;
-                document.getElementById('item-tag').value = item.tag || '';
-            } else {
-                document.getElementById('item-modal-title').innerText = 'Novo Item do Cardápio';
-                document.getElementById('item-id').value = '';
-                document.getElementById('item-name').value = '';
-                document.getElementById('item-category').value = 'Burgers';
-                document.getElementById('item-price').value = '';
-                document.getElementById('item-image').value = '';
-                document.getElementById('item-desc').value = '';
-                document.getElementById('item-tag').value = '';
-            }
-            document.getElementById('item-modal').classList.remove('hidden');
-        }
-
-        function closeItemModal() { document.getElementById('item-modal').classList.add('hidden'); }
-
-        async function saveMenuItem(e) {
-            e.preventDefault();
-            const id = document.getElementById('item-id').value;
-            const name = document.getElementById('item-name').value.trim();
-            const category = document.getElementById('item-category').value;
-            const price = parseFloat(document.getElementById('item-price').value);
-            const image = document.getElementById('item-image').value.trim();
-            const desc = document.getElementById('item-desc').value.trim();
-            const tag = document.getElementById('item-tag').value;
-
-            if(id) {
-                const index = menuData.findIndex(i => i.id == id);
-                if(index !== -1) {
-                    menuData[index] = { id: parseInt(id), name, category, price, image, desc, tag };
-                }
-            } else {
-                const newId = menuData.length > 0 ? Math.max(...menuData.map(i => i.id)) + 1 : 1;
-                menuData.push({ id: newId, name, category, price, image, desc, tag });
-            }
-
-            await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
-            closeItemModal();
-            alert('Item salvo com sucesso!');
-        }
-
-        async function deleteMenuItem(id) {
-            if(confirm('Deseja excluir este item do cardápio?')) {
-                menuData = menuData.filter(i => i.id !== id);
-                await window.dbSet(window.dbRef(window.db, 'maxburger/menu'), menuData);
-            }
-        }
-
-        function renderAdminMenu() {
-            const container = document.getElementById('admin-menu-list');
-            if(!container) return;
-            container.innerHTML = menuData.map(item => `
-                <div class="p-4 flex justify-between items-center hover:bg-zinc-900/50 transition">
-                    <div class="flex items-center space-x-3">
-                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-xl">
-                        <div>
-                            <h4 class="font-bold text-sm text-white">${item.name} ${item.tag ? `<span class="text-[10px] bg-brand-500/20 text-brand-500 px-2 py-0.5 rounded-full ml-1">${item.tag}</span>` : ''}</h4>
-                            <p class="text-xs text-gray-400">R$ ${item.price.toFixed(2)} • ${item.category}</p>
-                        </div>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick='openItemModal(${JSON.stringify(item)})' class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteMenuItem(${item.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderFinanceReports() {
-            const dateFilterInput = document.getElementById('finance-date-filter');
-            const filterDateStr = dateFilterInput ? dateFilterInput.value : '';
-
-            const now = new Date();
-            const validOrders = orders.filter(o => o.status !== 'cancelled');
-
-            let filteredDayOrders = validOrders.filter(o => {
-                const orderDate = new Date(o.date);
-                if(filterDateStr) {
-                    return orderDate.toISOString().split('T')[0] === filterDateStr;
-                }
-                return orderDate.toDateString() === now.toDateString();
-            });
-
-            let weekOrders = validOrders.filter(o => {
-                const diffDays = Math.ceil(Math.abs(now - new Date(o.date)) / (1000 * 60 * 60 * 24));
-                return diffDays <= 7;
-            });
-
-            let monthOrders = validOrders.filter(o => {
-                const orderDate = new Date(o.date);
-                return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
-            });
-
-            const dayTotal = filteredDayOrders.reduce((sum, o) => sum + o.total, 0);
-            const weekTotal = weekOrders.reduce((sum, o) => sum + o.total, 0);
-            const monthTotal = monthOrders.reduce((sum, o) => sum + o.total, 0);
-
-            document.getElementById('rep-day').innerText = `R$ ${dayTotal.toFixed(2)}`;
-            document.getElementById('rep-week').innerText = `R$ ${weekTotal.toFixed(2)}`;
-            document.getElementById('rep-month').innerText = `R$ ${monthTotal.toFixed(2)}`;
-            document.getElementById('rep-count').innerText = validOrders.length;
-
-            const listContainer = document.getElementById('finance-orders-list');
-            if(listContainer) {
-                listContainer.innerHTML = validOrders.length === 0 ? '<p class="text-xs text-gray-500 text-center py-4">Nenhuma venda registrada no caixa.</p>' :
-                    validOrders.map(o => `
-                        <div class="py-2.5 flex justify-between items-center text-xs">
-                            <div>
-                                <span class="font-bold text-white">#${o.dailyId || o.id} - ${o.client.name}</span>
-                                <span class="text-gray-400 block">${new Date(o.date).toLocaleString()} • ${o.client.payment}</span>
-                            </div>
-                            <span class="font-black text-brand-500 text-sm">R$ ${o.total.toFixed(2)}</span>
-                        </div>
-                    `).join('');
-            }
-
-            const productCounts = {};
-            validOrders.forEach(o => {
-                o.items.forEach(i => {
-                    productCounts[i.name] = (productCounts[i.name] || 0) + i.qty;
-                });
-            });
-
-            const sortedProducts = Object.keys(productCounts).sort((a, b) => productCounts[b] - productCounts[a]);
-            const topProductsContainer = document.getElementById('top-products-list');
-            if(topProductsContainer) {
-                topProductsContainer.innerHTML = sortedProducts.length === 0 ? '<p class="text-xs text-gray-500">Nenhum dado de vendas ainda.</p>' :
-                    sortedProducts.slice(0, 3).map((name, idx) => `
-                        <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between items-center">
-                            <span class="text-xs font-bold text-white">${idx + 1}º - ${name}</span>
-                            <span class="text-xs font-black text-brand-500">${productCounts[name]} unidades vendidas</span>
-                        </div>
-                    `).join('');
-            }
-        }
-
-        function clearDateFilter() {
-            const dateInput = document.getElementById('finance-date-filter');
-            if(dateInput) dateInput.value = '';
-            renderFinanceReports();
-        }
-
-        async function clearHistoryPeriod(period) {
-            if(confirm(period === 'day' ? 'Deseja limpar os pedidos de hoje?' : 'Deseja apagar todo o histórico de pedidos e caixa?')) {
-                if(period === 'all') {
-                    await window.dbSet(window.dbRef(window.db, 'maxburger/orders'), null);
-                } else {
-                    const now = new Date();
-                    for(let o of orders) {
-                        if(new Date(o.date).toDateString() === now.toDateString()) {
-                            await window.dbRemove(window.dbRef(window.db, `maxburger/orders/${o.firebaseKey}`));
-                        }
-                    }
-                }
-                alert('Caixa limpo com sucesso!');
             }
         }
     </script>
